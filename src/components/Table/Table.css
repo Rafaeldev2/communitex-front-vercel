@@ -1,0 +1,194 @@
+/* Container principal */
+.petrobras-table-container {
+  width: 100%;
+  margin: 1.5rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--light-gray);
+}
+
+/* Barra de pesquisa */
+.table-search {
+  padding: 1rem;
+  background-color: var(--light-gray);
+  border-bottom: 1px solid var(--medium-gray);
+}
+
+.search-input-container {
+  position: relative;
+  max-width: 300px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border: 1px solid var(--medium-gray);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--petrobras-green);
+  box-shadow: 0 0 0 2px rgba(0, 64, 26, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-gray);
+}
+
+/* Tabela */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.petrobras-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.petrobras-table th,
+.petrobras-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--medium-gray);
+}
+
+.petrobras-table th {
+  background-color: var(--white);
+  color: var(--white);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.petrobras-table tbody tr:hover {
+  background-color: rgba(0, 64, 26, 0.05);
+}
+
+/* Cabeçalho sortable */
+.sortable {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sortable:hover {
+  background-color: var(--petrobras-dark-green);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sort-icon {
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* Ações */
+.actions-cell {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.edit-btn {
+  color: var(--petrobras-green);
+}
+
+.edit-btn:hover {
+  background-color: rgba(0, 64, 26, 0.1);
+}
+
+.delete-btn {
+  color: var(--error-red);
+}
+
+.delete-btn:hover {
+  background-color: rgba(211, 47, 47, 0.1);
+}
+
+/* Mensagem sem dados */
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-gray);
+  font-style: italic;
+}
+
+/* Paginação */
+.table-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--light-gray);
+  border-top: 1px solid var(--medium-gray);
+  gap: 1rem;
+}
+
+.pagination-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--white);
+  border: 1px solid var(--medium-gray);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background-color: var(--petrobras-green);
+  color: var(--white);
+  border-color: var(--petrobras-green);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 0.9rem;
+  color: var(--text-gray);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .petrobras-table th,
+  .petrobras-table td {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .sort-icon {
+    margin-left: 0;
+    margin-top: 0.25rem;
+  }
+}

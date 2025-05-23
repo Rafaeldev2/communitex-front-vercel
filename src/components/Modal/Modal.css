@@ -1,0 +1,115 @@
+/* Variáveis de cores */
+:root {
+  --petrobras-green: #00401A;
+  --petrobras-dark-green: #002E12;
+  --petrobras-yellow: #FFCC29;
+  --petrobras-light-yellow: #FFE082;
+  --white: #FFFFFF;
+  --light-gray: #F5F5F5;
+  --medium-gray: #E0E0E0;
+  --dark-gray: #333333;
+  --text-gray: #666666;
+}
+
+/* Overlay (fundo escuro) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+/* Container principal do modal */
+.modal-container {
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+/* Tamanhos do modal */
+.modal-container.small {
+  max-width: 400px;
+}
+
+.modal-container.medium {
+  max-width: 600px;
+}
+
+.modal-container.large {
+  max-width: 800px;
+}
+
+/* Cabeçalho do modal */
+.modal-header {
+  background-color: var(--petrobras-green);
+  color: var(--white);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: 1rem;
+  transition: color 0.2s;
+}
+
+.modal-close-btn:hover {
+  color: var(--petrobras-yellow);
+}
+
+/* Conteúdo do modal */
+.modal-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* Animações */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .modal-container {
+    max-width: 100% !important;
+    max-height: 85vh;
+  }
+  
+  .modal-content {
+    padding: 1rem;
+  }
+}

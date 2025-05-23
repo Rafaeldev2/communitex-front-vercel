@@ -1,29 +1,98 @@
-/* Estilos globais */
-body {
+* {
   margin: 0;
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Variáveis de cores */
+:root {
+  --petrobras-green: #00401A;
+  --petrobras-dark-green: #002E12;
+  --petrobras-yellow: #FFCC29;
+  --petrobras-light-yellow: #FFE082;
+  --white: #FFFFFF;
+  --light-gray: #F5F5F5;
+  --medium-gray: #E0E0E0;
+  --dark-gray: #333333;
+  --disabled-bg: #E0E0E0;
+  --disabled-text: #9E9E9E;
+  --text-gray: #666666;
+  --error-red: #D32F2F;
+  --success-green: #388E3C;
 }
 
 .app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  font-family: var(--font-main);
+  background-color: var(--color-background);
+  color: var(--color-text);
 }
 
-.main-content {
+.content {
   flex: 1;
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
+  padding: var(--spacing-large);
 }
 
-/* Cores do tema Petrobras */
-:root {
-  --petrobras-blue: #003554;
-  --petrobras-dark-blue: #00263a;
-  --petrobras-light-blue: #00a5e3;
-  --petrobras-green: #009739;
+.petrobras-button {
+  padding: var(--spacing-small) var(--spacing-medium);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.petrobras-button.primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+}
+
+.petrobras-button.secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.petrobras-button:hover {
+  opacity: 0.9;
+}
+
+.petrobras-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--spacing-large);
+}
+
+.petrobras-table th,
+.petrobras-table td {
+  padding: var(--spacing-medium);
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.petrobras-table th {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+}
+
+.petrobras-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-small);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-medium);
+  margin-top: var(--spacing-large);
 }
