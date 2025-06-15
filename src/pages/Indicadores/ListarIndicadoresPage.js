@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import Table from '../../components/Table/Table';
 import Button from '../../components/Button/Button';
 import localStorageService from '../../services/localStorageService';
-import './IndicadoresPage.css';
 
-const IndicadoresPage = () => {
+
+import './ListarIndicadoresPage.css';
+
+const ListarIndicadoresPage = () => {
   const [indicadores, setIndicadores] = useState([]);
   const [comunidades, setComunidades] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentIndicador, setCurrentIndicador] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -27,50 +28,49 @@ const IndicadoresPage = () => {
 
   // Configuração das colunas da tabela
   const columns = [
-    { 
-      key: 'comunidadeId', 
-      title: 'Comunidade', 
+    {
+      key: 'comunidadeId',
+      title: 'Comunidade',
       sortable: true,
       render: (value) => {
         const comunidade = comunidades.find(c => c.id === value);
         return comunidade ? comunidade.nome : 'N/A';
       }
     },
-    { 
-      key: 'ano', 
-      title: 'Ano', 
-      sortable: true 
+    {
+      key: 'ano',
+      title: 'Ano',
+      sortable: true
     },
-    { 
-      key: 'idh', 
-      title: 'IDH', 
+    {
+      key: 'idh',
+      title: 'IDH',
       sortable: true,
       render: (value) => value ? value.toFixed(3) : '-'
     },
-    { 
-      key: 'rendaMedia', 
-      title: 'Renda Média (R$)', 
+    {
+      key: 'rendaMedia',
+      title: 'Renda Média (R$)',
       sortable: true,
       render: (value) => value ? `R$ ${value.toFixed(2)}` : '-'
     },
-    { 
-      key: 'escolaridadeMedia', 
-      title: 'Escolaridade (anos)', 
+    {
+      key: 'escolaridadeMedia',
+      title: 'Escolaridade (anos)',
       sortable: true,
       render: (value) => value || '-'
     },
-    { 
-      key: 'taxaDesemprego', 
-      title: 'Desemprego (%)', 
+    {
+      key: 'taxaDesemprego',
+      title: 'Desemprego (%)',
       sortable: true,
       render: (value) => value ? `${value}%` : '-'
     }
   ];
 
-  // Manipuladores de ações
+   // Manipuladores de ações
   const handleAddNew = () => {
-    setCurrentIndicador(null);
-    setIsModalOpen(true);
+    navigate('/indicadores/cadastro');
   };
 
   const handleSave = (indicador) => {
@@ -81,15 +81,13 @@ const IndicadoresPage = () => {
       escolaridadeMedia: parseFloat(indicador.escolaridadeMedia) || null,
       taxaDesemprego: parseFloat(indicador.taxaDesemprego) || null
     });
-    
+
     setIndicadores(localStorageService.getItems('indicadores'));
-    setIsModalOpen(false);
     setCurrentIndicador(null);
   };
 
   const handleEdit = (indicador) => {
     setCurrentIndicador(indicador);
-    setIsModalOpen(true);
   };
 
   const handleDelete = (indicador) => {
@@ -106,10 +104,10 @@ const IndicadoresPage = () => {
   // Filtra os indicadores baseado no termo de pesquisa
   const filteredIndicadores = indicadores.filter(indicador => {
     if (!searchTerm) return true;
-    
+
     const comunidadeNome = comunidades.find(c => c.id === indicador.comunidadeId)?.nome.toLowerCase() || '';
     const observacoes = indicador.observacoes?.toLowerCase() || '';
-    
+
     return (
       comunidadeNome.includes(searchTerm) ||
       indicador.ano.toString().includes(searchTerm) ||
@@ -128,9 +126,9 @@ const IndicadoresPage = () => {
           <h1>Indicadores Socioeconômicos</h1>
           <p>Gerencie os dados socioeconômicos das comunidades</p>
         </div>
-        
+
         <div className="header-actions">
-          <Button 
+          <Button
             variant="primary"
             onClick={handleAddNew}
           >
@@ -152,9 +150,8 @@ const IndicadoresPage = () => {
         />
       </div>
 
-
     </div>
   );
 };
 
-export default IndicadoresPage;
+export default ListarIndicadoresPage;

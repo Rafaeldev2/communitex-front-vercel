@@ -27,7 +27,7 @@ const Menu = () => {
         </li>
         <li className="menu-item">
           <NavLink 
-            to="/municipio" 
+            to="/municipios" 
             className={({ isActive }) => 
               `menu-link ${isActive ? 'active' : ''}`
             }
@@ -37,7 +37,7 @@ const Menu = () => {
         </li>
         <li className="menu-item">
           <NavLink 
-            to="/bairro" 
+            to="/bairros" 
             className={({ isActive }) => 
               `menu-link ${isActive ? 'active' : ''}`
             }
@@ -57,7 +57,7 @@ const Menu = () => {
         </li>
         <li className="menu-item">
           <NavLink 
-            to="/comunidade" 
+            to="/comunidades" 
             className={({ isActive }) => 
               `menu-link ${isActive ? 'active' : ''}`
             }
