@@ -27,8 +27,14 @@ const deleteItem = (key, id) => {
   localStorage.setItem(key, JSON.stringify(items));
 };
 
+const getItemById = (key, id) => {
+  const items = getItems(key);
+  return items.find(item => item.id === id);
+};
+
 export default {
   getItems,
   saveItem,
-  deleteItem
+  deleteItem,
+  getItemById
 };

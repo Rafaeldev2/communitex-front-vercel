@@ -1,11 +1,18 @@
-import React from 'react';
+import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Menu from './components/Menu/Menu';
 import Footer from './components/Footer/Footer';
 import Home from './components/Home/Home';
-import IndicadoresPage from './pages/Indicadores/IndicadoresPage';
-
-import './App.css';
+import CadastroIndicadores from './pages/Indicadores/CadastrosIndicadores';
+import ListarIndicadoresPage from './pages/Indicadores/ListarIndicadoresPage';
+import CadastroComunidadePage from './pages/Communidade/CadastroComunidadePage';
+import ListarComunidadePage from './pages/Communidade/ListarComunidadePage';
+import ListarBairroPage from './pages/Bairro/ListarBairroPage';
+import CadastroBairroPage from './pages/Bairro/CadastroBairroPage';
+import ListarUFPage from './pages/UF/ListarUFPage';
+import CadastroUFPage from './pages/UF/CadastroUFPage';
+import ListarMunicipioPage from './pages/Municipio/ListarMunicipioPage';
+import CadastroMunicipioPage from './pages/Municipio/CadastroMunicipioPage';
 
 function App() {
   return (
@@ -14,10 +21,22 @@ function App() {
         <Menu />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/indicadores" element={<IndicadoresPage />} />
-          {/* outras rotas */}
+          <Route path="/indicadores" element={<ListarIndicadoresPage />} />
+          <Route path="/indicadores/cadastro" element={<CadastroIndicadores />} />
+          <Route path="/indicadores/cadastro/:id" element={<CadastroIndicadores />} />
+          <Route path="/comunidades" element={<ListarComunidadePage />} />
+          <Route path="/comunidades/cadastro" element={<CadastroComunidadePage />} />
+          <Route path="/comunidades/cadastro/:id" element={<CadastroComunidadePage />} />
+          <Route path="/bairros" element={<ListarBairroPage />} />
+          <Route path="/bairros/cadastro" element={<CadastroBairroPage />} />
+          <Route path="/bairros/cadastro/:id" element={<CadastroBairroPage />} />
+          <Route path="/uf" element={<ListarUFPage />} />
+          <Route path="/uf/cadastro" element={<CadastroUFPage />} />
+          <Route path="/uf/cadastro/:id" element={<CadastroUFPage />} />
+          <Route path="/municipios" element={<ListarMunicipioPage />} />
+          <Route path="/municipios/cadastro" element={<CadastroMunicipioPage />} />
+          <Route path="/municipios/cadastro/:id" element={<CadastroMunicipioPage />} />
         </Routes>
-
         <Footer />
       </div>
     </Router>
