@@ -11,6 +11,7 @@ function Listagem({
   columns,
   data = [],
   onEdit,
+  onPointInterest,
   onDelete,
   onSort,
   onSearch,
@@ -43,6 +44,7 @@ function Listagem({
           data={data}
           onSort={onSort}
           onEdit={onEdit}
+          onPointInterest={onPointInterest}
           onDelete={onDelete}
           onSearch={onSearch}
           onLocation={onLocation}

@@ -64,6 +64,10 @@ const ListarBairroPage = () => {
   const handleEdit = (bairro) => {
     navigate(`/bairros/cadastro/${bairro.id}`);
   };
+  
+  const handlePointInterest = (bairro) =>{
+    navigate(`bairros/cadastroPontoInterrese/${bairro.id}`);
+  }
 
   const handleDelete = (bairro) => {
     if (window.confirm(`Deseja excluir o bairro ${bairro.nome}?`)) {
@@ -99,6 +103,7 @@ const ListarBairroPage = () => {
       handleAddNew={handleAddNew}
       onDelete={handleDelete}
       onEdit={handleEdit}
+      onPointInterest={handlePointInterest}
       onSearch={handleSearch}
       columns={columns}
       data={filteredBairros}

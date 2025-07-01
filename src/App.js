@@ -34,6 +34,7 @@ function App() {
           <Route path="/bairros" element={<ListarBairroPage />} />
           <Route path="/bairros/cadastro" element={<CadastroBairroPage />} />
           <Route path="/bairros/cadastro/:id" element={<CadastroBairroPage />} />
+          <Route path="bairros/cadastroPontoInterrese/:id" element={<CadastroBairroPage/>} />
           <Route path="/uf" element={<ListarUFPage />} />
           <Route path="/uf/cadastro" element={<CadastroUFPage />} />
           <Route path="/uf/cadastro/:id" element={<CadastroUFPage />} />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Table.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSort, faSortUp, faSortDown, faEdit, faTrash, faSearch, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortUp, faSortDown, faEdit, faTrash, faSearch, faLocationDot, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const Table = ({
   columns,
@@ -9,6 +9,7 @@ const Table = ({
   onEdit,
   onDelete,
   onLocation,
+  onPointInterest,
   onSort,
   onSearch,
   enablePagination = true,
@@ -104,7 +105,7 @@ const Table = ({
                   </div>
                 </th>
               ))}
-              {(onEdit || onDelete || onLocation) && <th>Ações</th>}
+              {(onEdit || onDelete || onLocation || onPointInterest) && <th>Ações</th>}
             </tr>
           </thead>
           <tbody>
@@ -138,6 +139,15 @@ const Table = ({
                           <FontAwesomeIcon icon={faEdit} />
                         </button>
                       )}
+                       {onPointInterest && (
+                        <button 
+                          onClick={() => onPointInterest(row)}
+                          className="action-btn create-btn"
+                          title="Cadastrar ponto de interesse"
+                        >
+                          <FontAwesomeIcon icon={faPlus} />
+                        </button>
+                      )}
                       {onDelete && (
                         <button
                           onClick={() => onDelete(row)}
@@ -153,7 +163,7 @@ const Table = ({
               ))
             ) : (
               <tr>
-                <td colSpan={columns.length + ((onEdit || onDelete) ? 1 : 0)} className="no-data">
+                <td colSpan={columns.length + ((onEdit || onDelete || onPointInterest) ? 1 : 0)} className="no-data">
                   Nenhum registro encontrado
                 </td>
               </tr>
