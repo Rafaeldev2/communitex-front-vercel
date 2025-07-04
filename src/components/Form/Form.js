@@ -66,12 +66,16 @@ const Form = ({ fields, initialData, onSubmit, onCancel, submitLabel = 'Salvar' 
     }
   };
 
+  const getOnChange = (field) => {
+    return field.onChange ? field.onChange : handleInputChange;
+  };
+
   const renderField = (field) => {
     const commonProps = {
       id: field.name,
       name: field.name,
-      value: formData[field.name] || '',
-      onChange: handleInputChange,
+      value: field.value !== undefined ? field.value : (formData[field.name] || ''),
+      onChange: getOnChange(field),
       className: errors[field.name] ? 'error' : '',
       placeholder: field.placeholder,
       required: field.required,
