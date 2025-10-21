@@ -5,18 +5,18 @@ import Footer from './components/Footer/Footer';
 import Home from './components/Home/Home';
 import CadastroIndicadores from './pages/Indicadores/CadastrosIndicadores';
 import ListarIndicadoresPage from './pages/Indicadores/ListarIndicadoresPage';
-import CadastroComunidadePage from './pages/Communidade/CadastroComunidadePage';
-import ListarComunidadePage from './pages/Communidade/ListarComunidadePage';
-import ListarBairroPage from './pages/Bairro/ListarBairroPage';
-import CadastroBairroPage from './pages/Bairro/CadastroBairroPage';
-import ListarUFPage from './pages/UF/ListarUFPage';
-import CadastroUFPage from './pages/UF/CadastroUFPage';
-import ListarMunicipioPage from './pages/Municipio/ListarMunicipioPage';
-import CadastroMunicipioPage from './pages/Municipio/CadastroMunicipioPage';
+import CadastroComunidadePage from './pages/enderecoCompleto/Communidade/CadastroComunidadePage';
+import ListarComunidadePage from './pages/enderecoCompleto/Communidade/ListarComunidadePage';
+import ListarBairroPage from './pages/enderecoCompleto/Bairro/ListarBairroPage';
+import CadastroBairroPage from './pages/enderecoCompleto/Bairro/CadastroBairroPage';
+import ListarUFPage from './pages/enderecoCompleto/UF/ListarUFPage';
+import CadastroUFPage from './pages/enderecoCompleto/UF/CadastroUFPage';
+import ListarMunicipioPage from './pages/enderecoCompleto/Municipio/ListarMunicipioPage';
+import CadastroMunicipioPage from './pages/enderecoCompleto/Municipio/CadastroMunicipioPage';
 import SocioeconomicCharts from './components/Grafico/SocioeconomicCharts';
 import Mapa from './pages/Mapa/Mapa';
 import LoginPage from './pages/Login/LoginPage';
-import PontoDeInterrese from './pages/PontoDeInterrese/PontoDeInterrese';
+import PontoDeInterrese from './pages/enderecoCompleto/PontoDeInterrese/PontoDeInterrese';
 
 function App() {
   return (

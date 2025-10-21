@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Table from '../../components/Table/Table';
-import Form from '../../components/Form/Form';
-import Button from '../../components/Button/Button';
-import localStorageService from '../../services/localStorageService';
+import Table from '../../../components/Table/Table';
+import Form from '../../../components/Form/Form';
+import Button from '../../../components/Button/Button';
+import localStorageService from '../../../services/localStorageService';
 
 const LogradouroPage = () => {
   const [logradouros, setLogradouros] = useState([]);
