@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Table from '../../../components/Table/Table';
-import Button from '../../../components/Button/Button';
-import Listagem from '../../../components/Listagem/Listagem';
-import localStorageService from '../../../services/localStorageService';
+import Table from '../../../../components/Table/Table';
+import Button from '../../../../components/Button/Button';
+import Listagem from '../../../../components/Listagem/Listagem';
+import localStorageService from '../../../../services/localStorageService';
 import './ListarUFPage.css';
 
 const ListarUFPage = () => {

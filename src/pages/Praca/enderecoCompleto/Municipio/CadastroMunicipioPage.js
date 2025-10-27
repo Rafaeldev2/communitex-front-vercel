@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Form from '../../../components/Form/Form';
-import Cadastro from '../../../components/Cadastro/Cadastro';
-import localStorageService from '../../../services/localStorageService';
+import Form from '../../../../components/Form/Form';
+import Cadastro from '../../../../components/Cadastro/Cadastro';
+import localStorageService from '../../../../services/localStorageService';
 import './CadastroMunicipioPage.css';
 
 const CadastroMunicipioPage = () => {

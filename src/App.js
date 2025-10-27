@@ -5,18 +5,18 @@ import Footer from './components/Footer/Footer';
 import Home from './components/Home/Home';
 import CadastroIndicadores from './pages/Indicadores/CadastrosIndicadores';
 import ListarIndicadoresPage from './pages/Indicadores/ListarIndicadoresPage';
-import CadastroComunidadePage from './pages/enderecoCompleto/Communidade/CadastroComunidadePage';
-import ListarComunidadePage from './pages/enderecoCompleto/Communidade/ListarComunidadePage';
-import ListarBairroPage from './pages/enderecoCompleto/Bairro/ListarBairroPage';
-import CadastroBairroPage from './pages/enderecoCompleto/Bairro/CadastroBairroPage';
-import ListarUFPage from './pages/enderecoCompleto/UF/ListarUFPage';
-import CadastroUFPage from './pages/enderecoCompleto/UF/CadastroUFPage';
-import ListarMunicipioPage from './pages/enderecoCompleto/Municipio/ListarMunicipioPage';
-import CadastroMunicipioPage from './pages/enderecoCompleto/Municipio/CadastroMunicipioPage';
+import CadastroComunidadePage from './pages/Praca/enderecoCompleto/Communidade/CadastroComunidadePage';
+import ListarComunidadePage from './pages/Praca/enderecoCompleto/Communidade/ListarComunidadePage';
+import ListarBairroPage from './pages/Praca/enderecoCompleto/Bairro/ListarBairroPage';
+import CadastroBairroPage from './pages/Praca/enderecoCompleto/Bairro/CadastroBairroPage';
+import ListarUFPage from './pages/Praca/enderecoCompleto/UF/ListarUFPage';
+import CadastroUFPage from './pages/Praca/enderecoCompleto/UF/CadastroUFPage';
+import ListarMunicipioPage from './pages/Praca/enderecoCompleto/Municipio/ListarMunicipioPage';
+import CadastroMunicipioPage from './pages/Praca/enderecoCompleto/Municipio/CadastroMunicipioPage';
 import SocioeconomicCharts from './components/Grafico/SocioeconomicCharts';
 import Mapa from './pages/Mapa/Mapa';
 import LoginPage from './pages/Login/LoginPage';
-import PontoDeInterrese from './pages/enderecoCompleto/PontoDeInterrese/PontoDeInterrese';
+import PontoDeInterrese from './pages/Praca/enderecoCompleto/PontoDeInterrese/PontoDeInterrese';
 
 function App() {
   return (

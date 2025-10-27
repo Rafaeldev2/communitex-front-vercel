@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Listagem from '../../../components/Listagem/Listagem';
-import localStorageService from '../../../services/localStorageService';
+import Listagem from '../../../../components/Listagem/Listagem';
+import localStorageService from '../../../../services/localStorageService';
 import './ListarComunidadePage.css';
 
 const ListarComunidadePage = () => {
