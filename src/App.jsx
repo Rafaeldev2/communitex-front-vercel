@@ -15,7 +15,7 @@ import ListarMunicipioPage from './pages/Municipio/ListarMunicipioPage';
 import CadastroMunicipioPage from './pages/Municipio/CadastroMunicipioPage';
 import SocioeconomicCharts from './components/Grafico/SocioeconomicCharts';
 import Mapa from './pages/Mapa/Mapa';
-import LoginPage from './pages/Login/LoginPage';
+import LoginPage from './pages/Login/LoginPage.jsx';
 import PontoDeInterrese from './pages/PontoDeInterrese/PontoDeInterrese';
 
 function App() {

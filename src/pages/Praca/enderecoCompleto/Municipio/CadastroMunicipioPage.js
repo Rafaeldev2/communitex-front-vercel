@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Form from '../../../../components/Form/Form';
-import Cadastro from '../../../../components/Cadastro/Cadastro';
+import Cadastro from '../../../../components/Cadastro/Cadastro.jsx';
 import localStorageService from '../../../../services/localStorageService';
 import './CadastroMunicipioPage.css';
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Cadastro from '../../../../components/Cadastro/Cadastro';
+import Cadastro from '../../../../components/Cadastro/Cadastro.jsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import localStorageService from '../../../../services/localStorageService';
 import './PontoDeInterrese.css';
