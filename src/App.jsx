@@ -13,15 +13,6 @@ function App() {
   return (
       <Router>
           <div className="app-container">
-              <Menu />
-              <Routes>
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/" element={<Home />} />
-                  <Route path="/pracas" element={<CadastroPraca />} />
-                  <Route path="/relatorios" element={<SocioeconomicCharts/>} />
-                  <Route path='/maps' element={<Mapa/>}/>
-              </Routes>
-              <Footer />
           </div>
       </Router>
   )

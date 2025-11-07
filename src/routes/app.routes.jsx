@@ -1,0 +1,20 @@
+import Footer from "../components/Footer/Footer.jsx";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Menu from "../components/Menu/Menu.jsx";
+
+function appRoutes () {
+    return(
+        <Router>
+            <Menu />
+            <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/pracas" element={<CadastroPraca />} />
+                <Route path="/relatorios" element={<SocioeconomicCharts/>} />
+                <Route path='/maps' element={<Mapa/>}/>
+            </Routes>
+            <Footer />
+        </Router>
+        )
+}
+export default appRoutes
