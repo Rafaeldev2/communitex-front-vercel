@@ -1,3 +1,4 @@
+import {Route, Routes} from "react-router-dom";
 
 function AuthRoutes() {
     return (
@@ -8,4 +9,4 @@ function AuthRoutes() {
     );
 }
 
-export AuthRoutes
+export default AuthRoutes
