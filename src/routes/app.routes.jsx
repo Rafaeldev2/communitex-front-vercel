@@ -9,8 +9,7 @@ import Mapa from "../pages/Mapa/Mapa.jsx";
 
 function appRoutes () {
     return(
-        <Router>
-            <Menu />
+
             <Routes>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/" element={<Home />} />
@@ -18,8 +17,7 @@ function appRoutes () {
                 <Route path="/relatorios" element={<SocioeconomicCharts/>} />
                 <Route path='/maps' element={<Mapa/>}/>
             </Routes>
-            <Footer />
-        </Router>
+
         )
 }
 export default appRoutes

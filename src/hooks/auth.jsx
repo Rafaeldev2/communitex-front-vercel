@@ -2,7 +2,7 @@ import {createContext, useContext, useEffect, useState} from "react";
 
 const AuthContext = createContext({});
 
-import { api } from "../services/api";
+/*import { api } from "../services/api";*/
 
 function AuthProvider({ children }) {
     const [data, setData] = useState({});

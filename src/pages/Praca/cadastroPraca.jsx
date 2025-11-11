@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import './PracaSTYLE.css';
 
 function CadastroPraca() {
     const [pracas, setPracas] = useState([]);
@@ -217,10 +218,10 @@ function CadastroPraca() {
             </div>
 
 
-            <section className='pracas'>
+            <section className="pracas">
                 {console.log(pracas)}
                 {pracas.map((praca) => (
-                    <div key={praca.id} className='praca'>
+                    <div key={praca.id} className="praca">
                         <h2>{praca.nome}</h2>
                         <p>{praca.logradouro}</p>
                         <p>{praca.bairro}</p>

@@ -1,3 +1,4 @@
+/*
 export const petrobrasTheme = {
   colors: {
     primary: '#00401A', // Verde Petrobras
@@ -18,4 +19,4 @@ export const petrobrasTheme = {
     large: '24px',
     xlarge: '32px'
   }
-};
+};*/
