@@ -1,5 +1,13 @@
 import {Route, Routes} from "react-router-dom";
 
+function SignIn() {
+    return null;
+}
+
+function SignUp() {
+    return null;
+}
+
 function AuthRoutes() {
     return (
         <Routes>

@@ -1,6 +1,7 @@
+import React from "react";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import './PracaSTYLE.css';
+import "./PracaSTYLE.css";
 
 function CadastroPraca() {
     const [pracas, setPracas] = useState([]);
