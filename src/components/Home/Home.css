@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* Estilo base */
 .home-container {
   max-width: 1200px;

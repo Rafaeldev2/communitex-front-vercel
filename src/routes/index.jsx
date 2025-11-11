@@ -7,7 +7,8 @@ function IndexRoutes() {
   
     return (
       <>
-        {user ? <AppRoutes /> : <AuthRoutes />}
+        {/*{user ? <AppRoutes /> : <AuthRoutes />}*/}
+          <AppRoutes />
       </>
     );
   }

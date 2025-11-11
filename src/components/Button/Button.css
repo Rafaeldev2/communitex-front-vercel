@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* Estilo base do botão */
 .petrobras-btn {
   display: inline-flex;

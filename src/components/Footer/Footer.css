@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* Estilo base do footer */
 .petrobras-footer {
   background-color: var(--petrobras-green);

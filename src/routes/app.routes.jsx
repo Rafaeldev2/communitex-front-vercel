@@ -4,8 +4,15 @@ import LoginPage from "../pages/Login/LoginPage.jsx";
 import CadastroPraca from "../pages/Praca/cadastroPraca.jsx";
 import SocioeconomicCharts from "../components/Grafico/SocioeconomicCharts.jsx";
 import Mapa from "../pages/Mapa/Mapa.jsx";
+import {useEffect} from "react";
 
 function AppRoutes () {
+
+    useEffect(() => {
+        console.log("|Passou por aqui - APP Routes")
+    }, []);
+
+
     return(
 
             <Routes>

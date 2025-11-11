@@ -18,12 +18,12 @@ const Menu = () => {
       <ul className="menu-items">
         <li className="menu-item">
           <NavLink
-            to="/uf"
+            to="/pracas"
             className={({ isActive }) =>
               `menu-link ${isActive ? 'active' : ''}`
             }
           >
-            UFs
+            Praças
           </NavLink>
         </li>
         <li className="menu-item">
@@ -33,7 +33,7 @@ const Menu = () => {
               `menu-link ${isActive ? 'active' : ''}`
             }
           >
-            Municípios
+            Empresas
           </NavLink>
         </li>
         <li className="menu-item">
@@ -43,7 +43,7 @@ const Menu = () => {
               `menu-link ${isActive ? 'active' : ''}`
             }
           >
-            Bairros
+            Locação
           </NavLink>
         </li>
         <li className="menu-item">
