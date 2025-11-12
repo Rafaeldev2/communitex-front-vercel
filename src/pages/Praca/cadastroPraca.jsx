@@ -128,7 +128,7 @@ function CadastroPraca() {
 
     return (
         <div className='app-container'>
-            <h1 className={"text-3xl font"}>CRUD de Praças</h1>
+            <h1 className={"text-base md:text-lg lg:text-xl"}>CRUD de Praças</h1>
 
             <div className='form'>
                 <div className="input-container">

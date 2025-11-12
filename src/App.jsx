@@ -10,9 +10,9 @@ function App() {
   return (
       <BrowserRouter>
           <Menu/>
-          <AuthProvider>
+            <AuthProvider>
               <IndexRoutes />
-          </AuthProvider>
+            </AuthProvider>
           <Footer/>
       </BrowserRouter>
   );
