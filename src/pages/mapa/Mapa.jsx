@@ -1,5 +1,5 @@
 import React from 'react';
-import MapaLocalizacao from '../../components/Mapa/MapaLocalizacao';
+import MapaLocalizacao from '../../components/otherComponents/Mapa/MapaLocalizacao';
 function Mapa() {
     const latitude = -27.449001246230775;
     const longitude = -48.39939854274588;

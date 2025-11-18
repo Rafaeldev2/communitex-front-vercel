@@ -1,61 +1,78 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+
+// Layouts
 import PublicLayout from "./layouts/PublicLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import EmpresaLayout from "./layouts/EmpresaLayout";
-import RoleProtected from "./RoleProtected";
 
-import Home from "../components/Home/Home.jsx";
-import LoginPage from "../pages/Login/LoginPage.jsx";
-import Mapa from "../pages/Mapa/Mapa.jsx";
+// Componentes de proteção
+import ProtectedRoute from "../components/ProtectedRoute";
+import RoleBasedRoute from "../components/RoleBasedRoute";
 
-import Dashboard from "../pages/Dashboard/Dashboard.jsx";
-import Perfil from "../pages/Perfil/Perfil.jsx";
+// Páginas públicas
+import Home from "../pages/Home/Home";
+import LoginPage from "../pages/Login/LoginPage";
+import Mapa from "../pages/Mapa/Mapa";
 
+// Páginas autenticadas (compartilhadas)
+import Dashboard from "../pages/Dashboard/Dashboard";
+import Perfil from "../pages/Perfil/Perfil";
 
-import MinhasAdocoes from "../pages/Empresa/MinhasAdocoes.jsx";
-import CadastroPraca from "../pages/Praca/cadastroPraca.jsx";
+// Páginas de empresa
+import MinhasAdocoes from "../pages/Empresa/MinhasAdocoes";
+import CadastroPraca from "../pages/Praca/cadastroPraca";
 
+// Páginas de administrador
+import CrudPracas from "../pages/Admin/CrudPracas";
+import CrudEmpresas from "../pages/Admin/CrudEmpresas";
+import CrudAdocoes from "../pages/Admin/CrudAdocoes";
+import CrudRepresentantes from "../pages/Admin/CrudRepresentantes";
 
-import CrudPracas from "../pages/Admin/CrudPracas.jsx";
-import CrudEmpresas from "../pages/Admin/CrudEmpresas.jsx";
-import CrudAdocoes from "../pages/Admin/CrudAdocoes.jsx";
-import CrudRepresentantes from "../pages/Admin/CrudRepresentantes.jsx";
+// Página de erro
+import NotFound from "../pages/NotFound";
 
 export default function AppRoutes() {
+
     return (
         <Routes>
-
+            {/* ==================== ROTAS PÚBLICAS ==================== */}
             <Route element={<PublicLayout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/maps" element={<Mapa />} />
+                <Route path="/mapa" element={<Mapa />} />
             </Route>
 
+            {/* ==================== ROTAS AUTENTICADAS ==================== */}
+            <Route element={<ProtectedRoute />}>
+                <Route element={<AuthLayout />}>
+                    {/* Rotas compartilhadas por todos os usuários autenticados */}
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/perfil" element={<Perfil />} />
 
-            <Route element={<AuthLayout />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/perfil" element={<Perfil />} />
-
-
-                <Route element={<RoleProtected roles={['EMPRESA']} />}>
-                    <Route element={<EmpresaLayout />}>
-                        <Route path="/empresa/pracas" element={<CadastroPraca />} />
-                        <Route path="/empresa/minhas-adocoes" element={<MinhasAdocoes />} />
+                    {/* ==================== ROTAS DE EMPRESA ==================== */}
+                    <Route element={<RoleBasedRoute allowedRoles={["EMPRESA", "ROLE_EMPRESA"]} />}>
+                        <Route element={<EmpresaLayout />}>
+                            <Route path="/empresa/pracas" element={<CadastroPraca />} />
+                            <Route path="/empresa/minhas-adocoes" element={<MinhasAdocoes />} />
+                        </Route>
                     </Route>
-                </Route>
 
-
-                <Route element={<RoleProtected roles={['ADMIN']} />}>
-                    <Route element={<AdminLayout />}>
-                        <Route path="/admin/pracas" element={<CrudPracas />} />
-                        <Route path="/admin/empresas" element={<CrudEmpresas />} />
-                        <Route path="/admin/adocoes" element={<CrudAdocoes />} />
-                        <Route path="/admin/representantes" element={<CrudRepresentantes />} />
+                    {/* ==================== ROTAS DE ADMINISTRADOR ==================== */}
+                    <Route element={<RoleBasedRoute allowedRoles={["ADMIN", "ROLE_ADMIN"]} />}>
+                        <Route element={<AdminLayout />}>
+                            <Route path="/admin/pracas" element={<CrudPracas />} />
+                            <Route path="/admin/empresas" element={<CrudEmpresas />} />
+                            <Route path="/admin/adocoes" element={<CrudAdocoes />} />
+                            <Route path="/admin/representantes" element={<CrudRepresentantes />} />
+                        </Route>
                     </Route>
                 </Route>
             </Route>
 
+            {/* ==================== ROTA DE ERRO 404 ==================== */}
+            <Route path="/404" element={<NotFound />} />
+            <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
     );
 }

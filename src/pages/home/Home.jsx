@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import PetrobrasLogo from '../../assets/logo/logo.png';
 import SystemImage from '../../assets/logo/logo.png';
-import Button from '../../components/Button/Button.jsx';
+import Button from '../../components/otherComponents/Button/Button.jsx';
 
 const Home = () => {
   const navigate = useNavigate();

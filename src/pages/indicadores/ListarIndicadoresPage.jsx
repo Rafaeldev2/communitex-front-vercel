@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Listagem from '../../components/Listagem/Listagem';
+import Listagem from '../../components/otherComponents/Listagem/Listagem';
 import localStorageService from '../../services/localStorageService';
 import './ListarIndicadoresPage.css';
 

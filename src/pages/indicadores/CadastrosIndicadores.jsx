@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Cadastro from '../../components/Cadastro/Cadastro.jsx';
+import Cadastro from '../../components/otherComponents/Cadastro/Cadastro.jsx';
 import localStorageService from '../../services/localStorageService.js';
 import './CadastroIndicadores.css';
 
