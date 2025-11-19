@@ -1,10 +1,7 @@
 import { Outlet } from "react-router-dom";
 import SidebarEmpresa from "../../components/Sidebars/SidebarEmpresa";
 
-/**
- * Layout para páginas de empresas
- * Inclui Sidebar específica para empresas
- */
+
 export default function EmpresaLayout() {
     return (
         <div className="flex min-h-screen bg-gray-50">

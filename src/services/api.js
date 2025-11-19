@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Configuração base da API
 const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
     headers: {
@@ -8,7 +7,7 @@ const api = axios.create({
     },
 });
 
-// Interceptor para adicionar token em todas as requisições
+
 api.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem("@communitex:token");
@@ -24,7 +23,7 @@ api.interceptors.request.use(
     }
 );
 
-// Interceptor para tratar respostas e renovar token automaticamente
+
 api.interceptors.response.use(
     (response) => {
         return response;
@@ -40,7 +39,7 @@ api.interceptors.response.use(
                 const refreshToken = localStorage.getItem("@communitex:refreshToken");
 
                 if (!refreshToken) {
-                    // Se não houver refresh token, redireciona para login
+
                     localStorage.removeItem("@communitex:token");
                     localStorage.removeItem("@communitex:refreshToken");
                     localStorage.removeItem("@communitex:user");
@@ -48,7 +47,7 @@ api.interceptors.response.use(
                     return Promise.reject(error);
                 }
 
-                // Tenta renovar o token
+
                 const response = await axios.post(
                     `${import.meta.env.VITE_API_URL || "http://localhost:8080"}/api/auth/refresh`,
                     { refreshToken }
@@ -56,17 +55,17 @@ api.interceptors.response.use(
 
                 const { accessToken, refreshToken: newRefreshToken } = response.data;
 
-                // Atualiza os tokens no localStorage
+
                 localStorage.setItem("@communitex:token", accessToken);
                 localStorage.setItem("@communitex:refreshToken", newRefreshToken);
 
-                // Atualiza o header da requisição original
+
                 originalRequest.headers.Authorization = `Bearer ${accessToken}`;
 
-                // Refaz a requisição original
+
                 return api(originalRequest);
             } catch (refreshError) {
-                // Se falhar ao renovar, limpa tudo e redireciona para login
+
                 localStorage.removeItem("@communitex:token");
                 localStorage.removeItem("@communitex:refreshToken");
                 localStorage.removeItem("@communitex:user");
@@ -75,7 +74,7 @@ api.interceptors.response.use(
             }
         }
 
-        // Se for 403, usuário não tem permissão
+
         if (error.response?.status === 403) {
             console.error("Acesso negado: você não tem permissão para acessar este recurso");
         }

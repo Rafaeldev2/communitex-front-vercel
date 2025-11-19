@@ -11,9 +11,9 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import RoleBasedRoute from "../components/RoleBasedRoute";
 
 // Páginas públicas
-import Home from "../pages/Home/Home";
-import LoginPage from "../pages/Login/LoginPage";
-import Mapa from "../pages/Mapa/Mapa";
+import Home from "../pages/Home/Home"; // Assumindo que Home.jsx existe
+import LoginPage from "../pages/login/LoginPage.jsx";
+import Mapa from "../pages/mapa/Mapa.jsx"; // Assumindo que Mapa.jsx existe
 
 // Páginas autenticadas (compartilhadas)
 import Dashboard from "../pages/Dashboard/Dashboard";
@@ -21,19 +21,18 @@ import Perfil from "../pages/Perfil/Perfil";
 
 // Páginas de empresa
 import MinhasAdocoes from "../pages/Empresa/MinhasAdocoes";
-import CadastroPraca from "../pages/Praca/cadastroPraca";
+import CadastroPraca from "../pages/Empresa/CadastroPraca"; // Corrigido o caminho
 
 // Páginas de administrador
-import CrudPracas from "../pages/Admin/CrudPracas";
-import CrudEmpresas from "../pages/Admin/CrudEmpresas";
-import CrudAdocoes from "../pages/Admin/CrudAdocoes";
-import CrudRepresentantes from "../pages/Admin/CrudRepresentantes";
+import GerenciarPracas from "../pages/Admin/GerenciarPracas";
+import GerenciarEmpresas from "../pages/Admin/GerenciarEmpresas";
+import GerenciarAdocoes from "../pages/Admin/GerenciarAdocoes";
+import GerenciarRepresentantes from "../pages/Admin/GerenciarRepresentantes";
 
-// Página de erro
+
 import NotFound from "../pages/NotFound";
 
 export default function AppRoutes() {
-
     return (
         <Routes>
             {/* ==================== ROTAS PÚBLICAS ==================== */}
@@ -61,10 +60,10 @@ export default function AppRoutes() {
                     {/* ==================== ROTAS DE ADMINISTRADOR ==================== */}
                     <Route element={<RoleBasedRoute allowedRoles={["ADMIN", "ROLE_ADMIN"]} />}>
                         <Route element={<AdminLayout />}>
-                            <Route path="/admin/pracas" element={<CrudPracas />} />
-                            <Route path="/admin/empresas" element={<CrudEmpresas />} />
-                            <Route path="/admin/adocoes" element={<CrudAdocoes />} />
-                            <Route path="/admin/representantes" element={<CrudRepresentantes />} />
+                            <Route path="/admin/pracas" element={<GerenciarPracas />} />
+                            <Route path="/admin/empresas" element={<GerenciarEmpresas />} />
+                            <Route path="/admin/adocoes" element={<GerenciarAdocoes />} />
+                            <Route path="/admin/representantes" element={<GerenciarRepresentantes />} />
                         </Route>
                     </Route>
                 </Route>
