@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { api } from "../api.js";
 
 const authService = {
 
@@ -113,6 +113,10 @@ const authService = {
 
     decodeToken(token) {
         try {
+            if (!token || typeof token !== "string" || token.split(".").length !== 3) {
+                throw new Error("Token inválido");
+            }
+
             const base64Url = token.split(".")[1];
             const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
             const jsonPayload = decodeURIComponent(
@@ -125,6 +129,11 @@ const authService = {
             const payload = JSON.parse(jsonPayload);
 
 
+            if (payload.exp && payload.exp < Date.now() / 1000) {
+                throw new Error("Token expirado");
+                this.logout();
+            }
+
             return {
                 username: payload.sub,
                 role: payload.authorities?.[0] || payload.role || "ROLE_USER",
@@ -133,6 +142,7 @@ const authService = {
             };
         } catch (error) {
             console.error("Erro ao decodificar token:", error);
+            this.logout();
             return null;
         }
     },

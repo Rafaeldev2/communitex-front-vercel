@@ -1,7 +1,7 @@
 import React from "react";
 import {useEffect, useState} from "react";
-import axios from "axios";
 import "./PracaSTYLE.css";
+import pracaService from "../../services/pracaService/pracaService";
 
 function CadastroPraca() {
     const [pracas, setPracas] = useState([]);
@@ -17,10 +17,12 @@ function CadastroPraca() {
     const [inputFotoUrl, setInputFotoUrl] = useState('')
     const [inputStatus, setInputStatus] = useState('')
 
+
+
     const fetchPracas = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/pracas');
-            setPracas(response.data);
+            const data = await pracaService.getAll();
+            setPracas(data);
         } catch (error) {
             console.error('Erro ao buscar praças:', error);
         }
@@ -47,11 +49,9 @@ function CadastroPraca() {
                 fotoUrl: inputFotoUrl,
                 status: inputStatus
             };
-            const response = await axios.post('http://localhost:8080/api/pracas', praca);
-            if (response.status === 201) {
-                fetchPracas();
-                limparForm();
-            }
+            await pracaService.create(praca);
+            await fetchPracas();
+            limparForm();
         } catch (error) {
             console.error('Erro ao adicionar praca:', error);
         }
@@ -70,12 +70,10 @@ function CadastroPraca() {
                 fotoUrl: inputFotoUrl,
                 status: inputStatus
             };
-            const response = await axios.put(`http://localhost:8080/api/pracas/${pracaSelecionada.id}`, praca);
-            if (response.status === 200) {
-                fetchPracas();
-                setPracaSelecionada(null);
-                limparForm();
-            }
+            await pracaService.update(pracaSelecionada.id, praca);
+            await fetchPracas();
+            setPracaSelecionada(null);
+            limparForm();
         } catch (error) {
             console.error('Erro ao atualizar praca:', error);
         }
@@ -83,20 +81,18 @@ function CadastroPraca() {
 
     const buscarPracaPorId = async (id) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/pracas/${id}`);
-            setPracaSelecionada(response.data);
-            exibirPraca(response.data);
+            const praca = await pracaService.getById(id);
+            setPracaSelecionada(praca);
+            exibirPraca(praca);
         } catch (error) {
-            console.error('Erro ao buscar cliente por ID:', error);
+            console.error('Erro ao buscar praça por ID:', error);
         }
     };
 
     const deletarPraca = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:8080/api/pracas/${id}`);
-            if (response.status === 200) {
-                fetchPracas();
-            }
+            await pracaService.delete(id); // ✅ CORRETO
+            await fetchPracas();
         } catch (error) {
             console.error('Erro ao deletar praca:', error);
         }

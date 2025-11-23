@@ -1,0 +1,1690 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Communitex API",
+    "description": "API do projeto Communitex - Sistema de Gestão para adocão de praças",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Representantes",
+      "description": "Endpoints para gerenciamento de representantes de empresas"
+    },
+    {
+      "name": "Adoções",
+      "description": "Endpoints para gerenciamento de adoções"
+    },
+    {
+      "name": "Praças",
+      "description": "Endpoints para gerenciamento de praças"
+    },
+    {
+      "name": "Empresas",
+      "description": "Endpoints para gerenciamento de empresas"
+    },
+    {
+      "name": "Autenticação",
+      "description": "Endpoints para autenticação e gerenciamento de usuários"
+    }
+  ],
+  "paths": {
+    "/api/representantes/{id}": {
+      "get": {
+        "tags": [
+          "Representantes"
+        ],
+        "summary": "Buscar representante por ID",
+        "operationId": "findById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Representante encontrado com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Representante não encontrado",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Representantes"
+        ],
+        "summary": "Atualizar representante existente",
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepresentanteEmpresaRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Representante atualizado com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Representante não encontrado",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Representantes"
+        ],
+        "summary": "Excluir representante",
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Representante excluído com sucesso"
+          },
+          "404": {
+            "description": "Representante não encontrado"
+          }
+        }
+      }
+    },
+    "/api/pracas/{id}": {
+      "get": {
+        "tags": [
+          "Praças"
+        ],
+        "summary": "Buscar praça por ID",
+        "operationId": "findById_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Praça encontrada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracaResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Praça não encontrada",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracaResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Praças"
+        ],
+        "summary": "Atualizar praça existente",
+        "operationId": "update_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PracaRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Praça atualizada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracaResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Praça não encontrada",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracaResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Praças"
+        ],
+        "summary": "Excluir praça",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Praça excluída com sucesso"
+          },
+          "404": {
+            "description": "Praça não encontrada"
+          }
+        }
+      }
+    },
+    "/api/empresas/{id}": {
+      "get": {
+        "tags": [
+          "Empresas"
+        ],
+        "summary": "Buscar empresa por ID",
+        "operationId": "findById_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Empresa encontrada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmpresaResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Empresa não encontrada",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmpresaResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Empresas"
+        ],
+        "summary": "Atualizar empresa existente",
+        "operationId": "update_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmpresaRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Empresa atualizada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmpresaResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Empresa não encontrada",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmpresaResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Empresas"
+        ],
+        "summary": "Excluir empresa",
+        "operationId": "delete_2",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Empresa não encontrada"
+          },
+          "204": {
+            "description": "Empresa excluída com sucesso"
+          }
+        }
+      }
+    },
+    "/api/adocoes/{id}": {
+      "get": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Buscar adoção por ID",
+        "operationId": "findById_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Adoção não encontrada",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdocaoResponseDTO"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Adoção encontrada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdocaoResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Atualizar adoção existente",
+        "operationId": "update_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdocaoRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Adoção atualizada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdocaoResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Adoção não encontrada",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdocaoResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Excluir adoção",
+        "operationId": "delete_3",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Adoção excluída com sucesso"
+          },
+          "404": {
+            "description": "Adoção não encontrada"
+          }
+        }
+      }
+    },
+    "/api/adocoes/{id}/finalizar": {
+      "put": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Finalização da adoção",
+        "operationId": "finalizeAdoption",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Adoção finalizada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdocaoResponseDTO"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Adoção não encontrada",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdocaoResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/representantes": {
+      "get": {
+        "tags": [
+          "Representantes"
+        ],
+        "summary": "Listar todos os representantes",
+        "operationId": "findAll",
+        "responses": {
+          "200": {
+            "description": "Lista de representantes retornada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Representantes"
+        ],
+        "summary": "Criar novo representante",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RepresentanteEmpresaRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Representante criado com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/pracas": {
+      "get": {
+        "tags": [
+          "Praças"
+        ],
+        "summary": "Listar todas as praças",
+        "operationId": "findAll_1",
+        "responses": {
+          "200": {
+            "description": "Lista de praças retornada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PracaResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Praças"
+        ],
+        "summary": "Criar nova praça",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PracaRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracaResponseDTO"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Praça criada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PracaResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/empresas": {
+      "get": {
+        "tags": [
+          "Empresas"
+        ],
+        "summary": "Listar todas as empresas",
+        "operationId": "findAll_2",
+        "responses": {
+          "200": {
+            "description": "Lista de empresas retornada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmpresaResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Empresas"
+        ],
+        "summary": "Criar nova empresa",
+        "operationId": "create_2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmpresaRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Empresa criada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmpresaResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmpresaResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Autenticação"
+        ],
+        "summary": "Registrar novo usuário",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário registrado com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Nome de usuário já existe ou dados inválidos",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "tags": [
+          "Autenticação"
+        ],
+        "summary": "Renovar token de acesso",
+        "operationId": "refreshToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "401": {
+            "description": "Refresh token inválido ou expirado",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Token renovado com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Autenticação"
+        ],
+        "summary": "Autenticar usuário",
+        "operationId": "createAuthenticationToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Autenticação realizada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/adocoes": {
+      "get": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Listar todas as adoções",
+        "operationId": "findAll_3",
+        "responses": {
+          "200": {
+            "description": "Lista de adoções retornada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Criar nova adoção",
+        "operationId": "create_3",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdocaoRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Adoção criada com sucesso",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdocaoResponseDTO"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdocaoResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/adocoes/status": {
+      "get": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Buscar adoções por status",
+        "operationId": "findByStatus",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Busca de adoção por status não encontrada!",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoStatusResponseDTO"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Busca de adoção por status encontrada com sucesso!",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoStatusResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/adocoes/praca/{pracaId}": {
+      "get": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Buscar adoções por praça",
+        "operationId": "findByPracas",
+        "parameters": [
+          {
+            "name": "pracaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Busca de adoção por praça encontrada com sucesso!",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoResponseDTO"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Busca de adoção por praça não encontrada!",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/adocoes/periodo": {
+      "get": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Buscar por periodo",
+        "operationId": "findByPeriodo",
+        "parameters": [
+          {
+            "name": "inicio",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "fim",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Busca por periodo não encontrada!",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoResponseDTO"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Busca por periodo encontrada com sucesso!",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/adocoes/filtro/prestes-a-vencer": {
+      "get": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Busca de adoções que estão preste a vencer",
+        "operationId": "findAdocoesByPrazoEStatus",
+        "parameters": [
+          {
+            "name": "dias",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 7
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PROPOSTA",
+                "EM_ANALISE",
+                "APROVADA",
+                "CONCLUIDA",
+                "REJEITADA",
+                "FINALIZADA"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Busca de adoções preste a vencer não encontrada",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoResponseDTO"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Busca de adoções preste a vencer realizada com sucesso!",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/adocoes/empresa/{empresaId}": {
+      "get": {
+        "tags": [
+          "Adoções"
+        ],
+        "summary": "Buscar adoções por empresa",
+        "operationId": "findByEmpresas",
+        "parameters": [
+          {
+            "name": "empresaId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "description": "Busca de adoção por empresa não encontrada!",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoResponseDTO"
+                  }
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "Busca de adoção por empresa encontrada com sucesso!",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdocaoResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Adocao": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dataInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataFim": {
+            "type": "string",
+            "format": "date"
+          },
+          "descricaoProjeto": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PROPOSTA",
+              "EM_ANALISE",
+              "APROVADA",
+              "CONCLUIDA",
+              "REJEITADA",
+              "FINALIZADA"
+            ]
+          }
+        }
+      },
+      "Empresa": {
+        "required": [
+          "cnpj",
+          "email",
+          "razaoSocial"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "razaoSocial": {
+            "type": "string"
+          },
+          "cnpj": {
+            "pattern": "\\d{14}",
+            "type": "string"
+          },
+          "nomeFantasia": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telefone": {
+            "pattern": "\\d{10,11}",
+            "type": "string"
+          }
+        }
+      },
+      "RepresentanteEmpresa": {
+        "required": [
+          "ativo",
+          "email",
+          "nome"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "string"
+          },
+          "empresa": {
+            "$ref": "#/components/schemas/Empresa"
+          }
+        }
+      },
+      "Praca": {
+        "required": [
+          "cidade",
+          "nome",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "logradouro": {
+            "type": "string"
+          },
+          "bairro": {
+            "type": "string"
+          },
+          "cidade": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "descricao": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string"
+          },
+          "fotoUrl": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DISPONIVEL",
+              "EM_PROCESSO",
+              "ADOTADA"
+            ]
+          }
+        }
+      },
+      "RepresentanteEmpresaRequestDTO": {
+        "required": [
+          "ativo",
+          "email",
+          "empresaId",
+          "nome"
+        ],
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "string"
+          },
+          "empresaId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "RepresentanteEmpresaResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "ativo": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "string"
+          },
+          "empresaId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "empresaNomeFantasia": {
+            "type": "string"
+          }
+        }
+      },
+      "PracaRequestDTO": {
+        "required": [
+          "cidade",
+          "nome"
+        ],
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string"
+          },
+          "logradouro": {
+            "type": "string"
+          },
+          "bairro": {
+            "type": "string"
+          },
+          "cidade": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "descricao": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string"
+          },
+          "fotoUrl": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DISPONIVEL",
+              "EM_PROCESSO",
+              "ADOTADA"
+            ]
+          }
+        }
+      },
+      "PracaResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nome": {
+            "type": "string"
+          },
+          "logradouro": {
+            "type": "string"
+          },
+          "bairro": {
+            "type": "string"
+          },
+          "cidade": {
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double"
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "fotoUrl": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DISPONIVEL",
+              "EM_PROCESSO",
+              "ADOTADA"
+            ]
+          }
+        }
+      },
+      "EmpresaRequestDTO": {
+        "required": [
+          "cnpj",
+          "email",
+          "razaoSocial"
+        ],
+        "type": "object",
+        "properties": {
+          "razaoSocial": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          },
+          "nomeFantasia": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telefone": {
+            "type": "string"
+          },
+          "representanteEmpresa": {
+            "$ref": "#/components/schemas/RepresentanteEmpresa"
+          }
+        }
+      },
+      "EmpresaResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "nomeSocial": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          },
+          "nomeFantasia": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "telefone": {
+            "type": "string"
+          },
+          "representanteEmpresa": {
+            "$ref": "#/components/schemas/RepresentanteEmpresa"
+          },
+          "adocaos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Adocao"
+            }
+          }
+        }
+      },
+      "AdocaoRequestDTO": {
+        "required": [
+          "dataInicio",
+          "descricaoProjeto",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "dataInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataFim": {
+            "type": "string",
+            "format": "date"
+          },
+          "descricaoProjeto": {
+            "maxLength": 1000,
+            "minLength": 0,
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PROPOSTA",
+              "EM_ANALISE",
+              "APROVADA",
+              "CONCLUIDA",
+              "REJEITADA",
+              "FINALIZADA"
+            ]
+          },
+          "empresa": {
+            "$ref": "#/components/schemas/Empresa"
+          },
+          "praca": {
+            "$ref": "#/components/schemas/Praca"
+          }
+        }
+      },
+      "AdocaoResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "dataInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataFim": {
+            "type": "string",
+            "format": "date"
+          },
+          "descricaoProjeto": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PROPOSTA",
+              "EM_ANALISE",
+              "APROVADA",
+              "CONCLUIDA",
+              "REJEITADA",
+              "FINALIZADA"
+            ]
+          },
+          "empresa": {
+            "$ref": "#/components/schemas/Empresa"
+          },
+          "praca": {
+            "$ref": "#/components/schemas/Praca"
+          }
+        }
+      },
+      "RegisterRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "RefreshRequest": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "AdocaoStatusResponseDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "descricaoProjeto": {
+            "type": "string"
+          },
+          "dataInicio": {
+            "type": "string",
+            "format": "date"
+          },
+          "dataFim": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PROPOSTA",
+              "EM_ANALISE",
+              "APROVADA",
+              "CONCLUIDA",
+              "REJEITADA",
+              "FINALIZADA"
+            ]
+          },
+          "nomeEmpresa": {
+            "type": "string"
+          },
+          "nomePraca": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
