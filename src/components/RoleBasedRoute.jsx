@@ -1,39 +1,24 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import Loading from './Loading';
 
-
-export default function RoleBasedRoute({ allowedRoles, redirectTo = "/dashboard" }) {
-    const { user, loading, hasAnyRole } = useAuth();
-
+function RoleBasedRoute({ allowedRoles = [] }) {
+    const { user, loading, hasRole } = useAuth();
 
     if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <div className="text-center">
-                    <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
-                    <p className="mt-4 text-gray-600 font-medium">Verificando permissões...</p>
-                </div>
-            </div>
-        );
+        return <Loading />;
     }
-
 
     if (!user) {
         return <Navigate to="/login" replace />;
     }
 
-    if (!hasAnyRole(allowedRoles)) {
-        return (
-            <Navigate
-                to={redirectTo}
-                replace
-                state={{
-                    message: "Você não tem permissão para acessar esta página.",
-                    from: window.location.pathname
-                }}
-            />
-        );
+    if (!hasRole(allowedRoles)) {
+        return <Navigate to="/acesso-negado" replace />;
     }
 
     return <Outlet />;
 }
+
+export default RoleBasedRoute;

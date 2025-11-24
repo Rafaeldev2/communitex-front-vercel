@@ -1,18 +1,15 @@
-import { Outlet } from "react-router-dom";
-import Menu from "../../components/Menu/Menu";
-import Footer from "../../components/Footer/Footer";
+import React from 'react';
+import BaseLayout from '../BaseLayout';
+import Menu from '../../components/Menu/Menu';
 
-
-export default function PublicLayout() {
+function PublicLayout() {
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50">
-            <Menu />
-
-            <main className="flex-grow">
-                <Outlet />
-            </main>
-
-            <Footer />
-        </div>
+        <BaseLayout
+            header={<Menu />}
+            sidebar={null}
+            showFooter={true}
+        />
     );
 }
+
+export default PublicLayout;

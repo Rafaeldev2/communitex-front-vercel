@@ -99,7 +99,6 @@ const authService = {
         }
     },
 
-
     getCurrentUser() {
         try {
             const user = localStorage.getItem("@communitex:user");

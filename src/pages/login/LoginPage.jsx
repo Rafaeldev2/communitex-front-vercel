@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth.jsx";
 
-/**
- * Página de Login
- * Integrada com o sistema de autenticação
- */
+
 export default function LoginPage() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -16,7 +13,7 @@ export default function LoginPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Pega a rota de origem ou redireciona para dashboard
+
     const from = location.state?.from?.pathname || "/dashboard";
 
     const handleSubmit = async (e) => {
@@ -28,7 +25,7 @@ export default function LoginPage() {
             const result = await signIn({ username, password });
 
             if (result.success) {
-                // Redireciona baseado na role do usuário
+
                 const userRole = result.user?.role;
 
                 if (userRole?.includes("ADMIN")) {
@@ -50,10 +47,10 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 to-blue-50 px-4">
+        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br bg-amber-400 px-4 rounded-3xl">
             <div className="w-full max-w-md">
                 <div className="bg-white rounded-2xl shadow-xl p-8">
-                    {/* Header */}
+
                     <div className="text-center mb-8">
                         <h1 className="text-3xl font-bold text-gray-800 mb-2">
                             Bem-vindo ao Communitex
@@ -63,7 +60,7 @@ export default function LoginPage() {
                         </p>
                     </div>
 
-                    {/* Mensagem de erro */}
+
                     {error && (
                         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
                             <p className="text-red-800 text-sm font-medium">{error}</p>
@@ -72,7 +69,7 @@ export default function LoginPage() {
 
                     {/* Formulário */}
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Campo de usuário */}
+
                         <div>
                             <label
                                 htmlFor="username"
@@ -86,13 +83,13 @@ export default function LoginPage() {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-transparent transition-all outline-none text-gray-800"
                                 placeholder="Digite seu usuário"
                                 disabled={isLoading}
                             />
                         </div>
 
-                        {/* Campo de senha */}
+
                         <div>
                             <label
                                 htmlFor="password"
@@ -106,7 +103,7 @@ export default function LoginPage() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all outline-none"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:border-transparent transition-all outline-none text-gray-600"
                                 placeholder="Digite sua senha"
                                 disabled={isLoading}
                             />
@@ -116,7 +113,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                            className="w-full bg-blue-600 hover:bg-blue-900 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                         >
                             {isLoading ? (
                                 <>
@@ -154,7 +151,7 @@ export default function LoginPage() {
                             Não tem uma conta?{" "}
                             <a
                                 href="/registro"
-                                className="text-green-600 hover:text-green-700 font-medium"
+                                className="text-blue-600 hover:text-blue-900 font-medium"
                             >
                                 Registre-se
                             </a>
@@ -162,7 +159,7 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                {/* Informações de teste */}
+
                 <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <p className="text-sm text-blue-800 font-medium mb-2">
                         Credenciais de teste:

@@ -1,72 +1,64 @@
-import './Footer.css';
-import PetrobrasLogo from '../../assets/logo/logo.png';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Footer = () => {
-  return (
-    <footer className="petrobras-footer">
-      <div className="footer-container">
-        <div className="footer-logo-section">
-          <img 
-            src={PetrobrasLogo} 
-            alt="Petrobras" 
-            className="footer-logo"
-          />
-          <p className="footer-slogan">Energia que transforma</p>
-        </div>
 
-        <div className="footer-links-section">
-          <div className="footer-links-column">
-            <h4 className="footer-title">Navegação</h4>
-            <ul className="footer-links">
-              <li><a href="/uf">UFs</a></li>
-              <li><a href="/municipios">Municípios</a></li>
-              <li><a href="/bairros">Bairros</a></li>
-            </ul>
-          </div>
+function Footer() {
+    return (
+        <footer className="bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800 mt-auto">
+            <div className="container-custom py-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div className="md:col-span-2">
+                        <h3 className="font-sans font-bold text-lg text-primary-600 dark:text-primary-400 mb-4">
+                            Communitex
+                        </h3>
+                        <p className="text-neutral-600 dark:text-neutral-400 text-sm mb-4">
+                            Sistema de gestão para adoção de praças públicas,
+                            conectando empresas e comunidades.
+                        </p>
+                    </div>
 
-          <div className="footer-links-column">
-            <h4 className="footer-title">Recursos</h4>
-            <ul className="footer-links">
-              <li><a href="/comunidades">Comunidades</a></li>
-              <li><a href="/indicadores">Indicadores</a></li>
-              <li><a href="/ajuda">Ajuda</a></li>
-              <li><a href="/documentacao">Documentação</a></li>
-            </ul>
-          </div>
+                    <div>
+                        <h4 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+                            Links Rápidos
+                        </h4>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link to="/" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 text-sm transition-colors">
+                                    Início
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/sobre" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 text-sm transition-colors">
+                                    Sobre
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/contato" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 text-sm transition-colors">
+                                    Contato
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
 
-          <div className="footer-links-column">
-            <h4 className="footer-title">Institucional</h4>
-            <ul className="footer-links">
-              <li><a href="/public">Sobre o Sistema</a></li>
-              <li><a href="/privacidade">Política de Privacidade</a></li>
-              <li><a href="/termos">Termos de Uso</a></li>
-              <li><a href="/contato">Contato</a></li>
-            </ul>
-          </div>
-        </div>
+                    <div>
+                        <h4 className="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+                            Contato
+                        </h4>
+                        <ul className="space-y-2 text-sm text-neutral-600 dark:text-neutral-400">
+                            <li>contato@communitex.com.br</li>
+                            <li>(11) 9999-9999</li>
+                        </ul>
+                    </div>
+                </div>
 
-        <div className="footer-social-section">
-          <div className="social-icons">
-            <a href="https://facebook.com/petrobras" aria-label="Facebook">
-              <i className="fab fa-facebook-f"></i>
-            </a>
-            <a href="https://twitter.com/petrobras" aria-label="Twitter">
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a href="https://linkedin.com/company/petrobras" aria-label="LinkedIn">
-              <i className="fab fa-linkedin-in"></i>
-            </a>
-            <a href="https://instagram.com/petrobras" aria-label="Instagram">
-              <i className="fab fa-instagram"></i>
-            </a>
-          </div>
-          <p className="footer-copyright">
-            © {new Date().getFullYear()} Petrobras - Todos os direitos reservados
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
-};
+                <div className="border-t border-neutral-200 dark:border-neutral-800 mt-8 pt-6 text-center">
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                        © {new Date().getFullYear()} CommuniTex. Todos os direitos reservados.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    );
+}
 
 export default Footer;

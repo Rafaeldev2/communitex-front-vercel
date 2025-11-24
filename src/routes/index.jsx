@@ -1,77 +1,89 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import React from 'react';
+            import { Routes, Route, Navigate } from 'react-router-dom';
+            import { useAuth } from '../hooks/useAuth';
 
-// Layouts
-import PublicLayout from "./layouts/PublicLayout";
-import AuthLayout from "./layouts/AuthLayout";
-import AdminLayout from "./layouts/AdminLayout";
-import EmpresaLayout from "./layouts/EmpresaLayout";
+            // Layouts
+            import PublicLayout from './layouts/publicLayout';
+            import AuthLayout from './layouts/authLayout';
+            import AdminLayout from './layouts/adminLayout';
+            import EmpresaLayout from './layouts/empresaLayout';
 
-// Componentes de proteção
-import ProtectedRoute from "../components/ProtectedRoute";
-import RoleBasedRoute from "../components/RoleBasedRoute";
+            // Components
+            import Loading from '../components/Loading';
+            import ProtectedRoute from '../components/ProtectedRoute';
+            import RoleBasedRoute from '../components/RoleBasedRoute';
+            import UnauthorizedAccess from '../components/UnauthorizedAccess';
+            import NotFound from '../pages/NotFound';
 
-// Páginas públicas
-import Home from "../pages/Home/Home"; // Assumindo que Home.jsx existe
-import LoginPage from "../pages/login/LoginPage.jsx";
-import Mapa from "../pages/mapa/Mapa.jsx"; // Assumindo que Mapa.jsx existe
+            // Pages - Public
+            import Home from '../pages/home/Home';
 
-// Páginas autenticadas (compartilhadas)
-import Dashboard from "../pages/Dashboard/Dashboard";
-import Perfil from "../pages/Perfil/Perfil";
+            // Pages - Auth
+            import LoginPage from '../pages/login/LoginPage';
 
-// Páginas de empresa
-import MinhasAdocoes from "../pages/Empresa/MinhasAdocoes";
-import CadastroPraca from "../pages/Empresa/CadastroPraca"; // Corrigido o caminho
+            // Pages - Admin
+            import DashboardAdmin from '../pages/admin/DashboardAdmin';
+            import CadastroPraca from '../pages/praca/cadastroPraca';
+            import CadastroEmpresas from '../pages/empresa/cadastroEmpresa';
+            import CadastroRepresentantes from '../pages/representante/cadastroRepresentante.jsx';
+            import CadastroAdocoes from '../pages/adocoes/cadastroAdocoes';
 
-// Páginas de administrador
-import GerenciarPracas from "../pages/Admin/GerenciarPracas";
-import GerenciarEmpresas from "../pages/Admin/GerenciarEmpresas";
-import GerenciarAdocoes from "../pages/Admin/GerenciarAdocoes";
-import GerenciarRepresentantes from "../pages/Admin/GerenciarRepresentantes";
+            function AppRoutes() {
+                const { loading } = useAuth();
 
+                if (loading) {
+                    return <Loading />;
+                }
 
-import NotFound from "../pages/NotFound";
-
-export default function AppRoutes() {
-    return (
-        <Routes>
-            {/* ==================== ROTAS PÚBLICAS ==================== */}
-            <Route element={<PublicLayout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/mapa" element={<Mapa />} />
-            </Route>
-
-            {/* ==================== ROTAS AUTENTICADAS ==================== */}
-            <Route element={<ProtectedRoute />}>
-                <Route element={<AuthLayout />}>
-                    {/* Rotas compartilhadas por todos os usuários autenticados */}
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/perfil" element={<Perfil />} />
-
-                    {/* ==================== ROTAS DE EMPRESA ==================== */}
-                    <Route element={<RoleBasedRoute allowedRoles={["EMPRESA", "ROLE_EMPRESA"]} />}>
-                        <Route element={<EmpresaLayout />}>
-                            <Route path="/empresa/pracas" element={<CadastroPraca />} />
-                            <Route path="/empresa/minhas-adocoes" element={<MinhasAdocoes />} />
+                return (
+                    <Routes>
+                        {/* Public Routes */}
+                        <Route element={<PublicLayout />}>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/sobre" element={<div className="card">Página Sobre</div>} />
+                            <Route path="/pracas" element={<div className="card">Praças Públicas</div>} />
+                            <Route path="/contato" element={<div className="card">Contato</div>} />
                         </Route>
-                    </Route>
 
-                    {/* ==================== ROTAS DE ADMINISTRADOR ==================== */}
-                    <Route element={<RoleBasedRoute allowedRoles={["ADMIN", "ROLE_ADMIN"]} />}>
-                        <Route element={<AdminLayout />}>
-                            <Route path="/admin/pracas" element={<GerenciarPracas />} />
-                            <Route path="/admin/empresas" element={<GerenciarEmpresas />} />
-                            <Route path="/admin/adocoes" element={<GerenciarAdocoes />} />
-                            <Route path="/admin/representantes" element={<GerenciarRepresentantes />} />
+                        {/* Auth Routes */}
+                        <Route element={<AuthLayout />}>
+                            <Route path="/login" element={<LoginPage />} />
+                            <Route path="/registro" element={<div>Registro</div>} />
+                            <Route path="/recuperar-senha" element={<div>Recuperar Senha</div>} />
                         </Route>
-                    </Route>
-                </Route>
-            </Route>
 
-            {/* ==================== ROTA DE ERRO 404 ==================== */}
-            <Route path="/404" element={<NotFound />} />
-            <Route path="*" element={<Navigate to="/404" replace />} />
-        </Routes>
-    );
-}
+                        {/* Admin Routes */}
+                        <Route element={<ProtectedRoute />}>
+                            <Route element={<RoleBasedRoute allowedRoles={['ADMIN']} />}>
+                                <Route path="/admin" element={<AdminLayout />}>
+                                    <Route index element={<DashboardAdmin />} />
+                                    <Route path="pracas" element={<CadastroPraca />} />
+                                    <Route path="empresas" element={<CadastroEmpresas />} />
+                                    <Route path="representantes" element={<CadastroRepresentantes />} />
+                                    <Route path="adocoes" element={<CadastroAdocoes />} />
+                                    <Route path="usuarios" element={<div className="card">Página de Usuários</div>} />
+                                </Route>
+                            </Route>
+                        </Route>
+
+                        {/* Empresa Routes */}
+                        <Route element={<ProtectedRoute />}>
+                            <Route element={<RoleBasedRoute allowedRoles={['EMPRESA']} />}>
+                                <Route path="/empresa" element={<EmpresaLayout />}>
+                                    <Route index element={<div className="card">Dashboard Empresa</div>} />
+                                    <Route path="minhas-adocoes" element={<div className="card">Minhas Adoções</div>} />
+                                    <Route path="pracas" element={<div className="card">Praças Disponíveis</div>} />
+                                    <Route path="perfil" element={<div className="card">Meu Perfil</div>} />
+                                </Route>
+                            </Route>
+                        </Route>
+
+                        {/* Error Routes */}
+                        <Route path="/acesso-negado" element={<UnauthorizedAccess />} />
+                        <Route path="/404" element={<NotFound />} />
+                        <Route path="*" element={<Navigate to="/404" replace />} />
+                    </Routes>
+                );
+            }
+
+            export default AppRoutes;

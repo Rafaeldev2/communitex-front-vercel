@@ -1,24 +1,16 @@
-import { Outlet } from "react-router-dom";
-import SidebarAdmin from "../../components/Sidebars/SidebarAdmin";
+import React from 'react';
+import BaseLayout from '../baseLayout.jsx';
+import Menu from '../../components/Menu/Menu';
+import SidebarAdmin from '../../components/sidebars/SidebarAdmin';
 
-/**
- * Layout para páginas administrativas
- * Inclui Sidebar específica para administradores
- */
-export default function AdminLayout() {
+function AdminLayout() {
     return (
-        <div className="flex min-h-screen bg-gray-50">
-            {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-lg">
-                <SidebarAdmin />
-            </aside>
-
-            {/* Área de conteúdo principal */}
-            <main className="flex-1 overflow-x-hidden">
-                <div className="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
-                    <Outlet />
-                </div>
-            </main>
-        </div>
+        <BaseLayout
+            header={<Menu />}
+            sidebar={<SidebarAdmin />}
+            showFooter={true}
+        />
     );
 }
+
+export default AdminLayout;
