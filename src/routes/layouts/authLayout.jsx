@@ -7,6 +7,7 @@ import React from 'react';
         return (
             <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-highlight-50 dark:from-neutral-950 dark:via-primary-950 dark:to-secondary-950 flex items-center justify-center p-4">
 
+                <ThemeToggle/>
                 {/* Auth Card */}
                 <div className="w-full max-w-md">
                     <div className="text-center mb-3">
