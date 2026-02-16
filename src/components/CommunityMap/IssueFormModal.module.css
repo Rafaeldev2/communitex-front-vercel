@@ -1,0 +1,368 @@
+/* /src/components/CommunityMap/IssueFormModal.module.css */
+
+/* ========== Overlay ========== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0;
+  backdrop-filter: blur(4px);
+}
+
+/* ========== Modal ========== */
+.modal {
+  background: #ffffff;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 20px 20px 0 0;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .overlay {
+    align-items: center;
+    padding: 20px;
+  }
+
+  .modal {
+    border-radius: 20px;
+    max-height: 85vh;
+  }
+}
+
+/* ========== Header ========== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 10;
+}
+
+.title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* ========== Form ========== */
+.form {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.locationInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #e3f2fd;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #1565c0;
+}
+
+.locationIcon {
+  font-size: 18px;
+}
+
+.locationText {
+  font-family: monospace;
+}
+
+/* ========== Fields ========== */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.required {
+  color: #f44336;
+}
+
+.input,
+.textarea {
+  padding: 14px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background: #fafafa;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #2196f3;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+}
+
+.inputError {
+  border-color: #f44336;
+  background: #fff8f8;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.charCount {
+  text-align: right;
+  font-size: 12px;
+  color: #888;
+}
+
+.error {
+  font-size: 13px;
+  color: #f44336;
+}
+
+/* ========== Type Grid ========== */
+.typeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 400px) {
+  .typeGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.typeButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 8px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.typeButton:hover {
+  border-color: #bdbdbd;
+  background: #f5f5f5;
+}
+
+.typeButtonActive {
+  border-color: #2196f3;
+  background: #e3f2fd;
+}
+
+.typeIcon {
+  font-size: 24px;
+}
+
+.typeLabel {
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ========== Photo Upload ========== */
+.uploadArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 30px 20px;
+  border: 2px dashed #bdbdbd;
+  border-radius: 12px;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.uploadArea:hover {
+  border-color: #2196f3;
+  background: #e3f2fd;
+}
+
+.uploadIcon {
+  font-size: 40px;
+}
+
+.uploadText {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.uploadHint {
+  font-size: 12px;
+  color: #888;
+}
+
+.fileInput {
+  display: none;
+}
+
+.photoPreviewContainer {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.photoPreview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
+}
+
+.removePhotoButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.removePhotoButton:hover {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+/* ========== Submit Error ========== */
+.submitError {
+  padding: 14px;
+  background: #fff3f3;
+  border: 1px solid #ffcdd2;
+  border-radius: 10px;
+  color: #c62828;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ========== Actions ========== */
+.actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 10px;
+  padding-bottom: env(safe-area-inset-bottom, 10px);
+}
+
+.cancelButton,
+.submitButton {
+  flex: 1;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cancelButton {
+  background: #ffffff;
+  color: #666;
+  border: 2px solid #e0e0e0;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background: #f5f5f5;
+  border-color: #bdbdbd;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+  border: none;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.submitButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ========== Spinner ========== */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

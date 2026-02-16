@@ -16,6 +16,7 @@ import RegisterPessoaFisica from './components/Register/RegisterPessoaFisica';
 import AdminRoute from './components/Auth/AdminRoute';
 import UserRoute from './components/Auth/UserRoute';
 import PracaForm from './components/Pracas/PracaForm';
+import { CommunityMap, IssueList } from './components/CommunityMap';
 
 
 // Componente de Rota Protegida (sem alterações)
@@ -27,6 +28,22 @@ const ProtectedRoute = ({ children }) => {
 // Componente de Dashboard com tema verde sustentável
 const AppLayout = ({ children }) => {
   const { user, logout } = useAuth();
+
+  const navButtonStyle = {
+    background: 'rgba(255, 255, 255, 0.2)',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    color: 'white',
+    cursor: 'pointer',
+    fontWeight: '600',
+    padding: '0.6rem 1.2rem',
+    borderRadius: '6px',
+    fontSize: '0.95rem',
+    transition: 'all 0.3s ease',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    textDecoration: 'none'
+  };
 
   // Layout com header verde sustentável
   return (
@@ -50,6 +67,21 @@ const AppLayout = ({ children }) => {
         }}>
           🌿 Communitex - Bem-vindo, {user?.sub}
         </span>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <a 
+            href="/denuncias" 
+            style={navButtonStyle}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+              e.target.style.transform = 'translateY(-2px)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+              e.target.style.transform = 'translateY(0)';
+            }}
+          >
+            📍 Denúncias
+          </a>
         <button onClick={logout} style={{
           background: 'rgba(255, 255, 255, 0.2)',
           border: '1px solid rgba(255, 255, 255, 0.3)',
@@ -74,6 +106,7 @@ const AppLayout = ({ children }) => {
         }}>
           ← Sair
         </button>
+        </div>
       </header>
       <main>
         {children}
@@ -144,6 +177,15 @@ function App() {
             element={<UserRoute><AppLayout><PracaForm /></AppLayout></UserRoute>}
           />
 
+          {/* === ROTA DE DENÚNCIAS COMUNITÁRIAS === */}
+          <Route
+            path="/denuncias"
+            element={<ProtectedRoute><CommunityMap /></ProtectedRoute>}
+          />
+          <Route
+            path="/denuncias/lista"
+            element={<ProtectedRoute><IssueList /></ProtectedRoute>}
+          />
 
         </Routes>
       </BrowserRouter>

@@ -69,6 +69,9 @@ const PracaList = () => {
   const [pracas, setPracas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchNome, setSearchNome] = useState('');
+  const [searchCidade, setSearchCidade] = useState('');
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const { user } = useAuth(); 
 
@@ -77,23 +80,55 @@ const PracaList = () => {
   const isUser = user && user.roles && user.roles.includes('ROLE_USER');
   
   console.log("Usuário:", user, "isAdmin:", isAdmin, "isEmpresa:", isEmpresa, "isUser:", isUser);
-  useEffect(() => {
-    const fetchPracas = async () => {
-      try {
+  
+  const fetchPracas = async (nome = '', cidade = '') => {
+    try {
+      if (isInitialLoad) {
         setLoading(true);
-        const response = await PracaService.listarPracas();
-        setPracas(response);
-        setError(null);
-      } catch (err) {
-        console.error("Erro ao buscar praças:", err);
-        setError('Não foi possível carregar as praças.');
-      } finally {
-        setLoading(false);
       }
-    };
+      const params = new URLSearchParams();
+      if (nome) params.append('nome', nome);
+      if (cidade) params.append('cidade', cidade);
+      
+      const queryString = params.toString();
+      const endpoint = queryString ? `/api/pracas?${queryString}` : '/api/pracas';
+      const response = await api.get(endpoint);
+      setPracas(response.data);
+      setError(null);
+    } catch (err) {
+      console.error("Erro ao buscar praças:", err);
+      setError('Não foi possível carregar as praças.');
+    } finally {
+      if (isInitialLoad) {
+        setLoading(false);
+        setIsInitialLoad(false);
+      }
+    }
+  };
 
+  useEffect(() => {
     fetchPracas();
   }, []);
+
+  useEffect(() => {
+    const searchTimer = setTimeout(() => {
+      const nomeLength = searchNome.trim().length;
+      const cidadeLength = searchCidade.trim().length;
+      
+      if (nomeLength >= 3 || cidadeLength >= 3) {
+        fetchPracas(searchNome, searchCidade);
+      } else if (nomeLength === 0 && cidadeLength === 0) {
+        fetchPracas('', '');
+      }
+    }, 500);
+
+    return () => clearTimeout(searchTimer);
+  }, [searchNome, searchCidade]);
+
+  const handleClearFilters = () => {
+    setSearchNome('');
+    setSearchCidade('');
+  };
   
   if (loading) {
     return (
@@ -148,6 +183,38 @@ const PracaList = () => {
               <Link to="/minhas-propostas" className={styles.minhasAdocoesButton}>
                 📋 Minhas Adoções
               </Link>
+            )}
+          </div>
+        </div>
+
+        <div className={styles.searchForm}>
+          <div className={styles.searchContainer}>
+            <div className={styles.searchField}>
+              <input
+                type="text"
+                placeholder="Buscar por nome da praça..."
+                value={searchNome}
+                onChange={(e) => setSearchNome(e.target.value)}
+                className={styles.searchInput}
+              />
+            </div>
+            <div className={styles.searchField}>
+              <input
+                type="text"
+                placeholder="Buscar por cidade..."
+                value={searchCidade}
+                onChange={(e) => setSearchCidade(e.target.value)}
+                className={styles.searchInput}
+              />
+            </div>
+            {(searchNome || searchCidade) && (
+              <button 
+                type="button" 
+                className={styles.clearButton}
+                onClick={handleClearFilters}
+              >
+                ✕ Limpar Filtros
+              </button>
             )}
           </div>
         </div>
