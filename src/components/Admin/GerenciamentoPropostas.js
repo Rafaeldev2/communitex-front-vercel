@@ -1,37 +1,58 @@
 // /src/components/Admin/GerenciamentoPropostas.js
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../../services/api';
-import styles from './GerenciamentoPropostas.module.css';
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Chip,
+  Button,
+  CircularProgress,
+  Alert,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Stack,
+} from '@mui/material';
+import {
+  AdminPanelSettings as AdminIcon,
+  CheckCircle as ApproveIcon,
+  Cancel as RejectIcon,
+} from '@mui/icons-material';
 
-// Reutilizando o StatusBadge da tela "MinhasAdoções"
-// (Idealmente, este seria um componente separado em /src/components/common/StatusBadge.js)
-const StatusBadge = ({ status }) => {
-  let statusClass = '';
-  let statusText = '';
+const getStatusConfig = (status) => {
   switch (status) {
-    case 'PENDENTE': statusClass = styles.statusPendente; statusText = 'Pendente'; break;
-    case 'APROVADA': statusClass = styles.statusAprovada; statusText = 'Aprovada'; break;
-    case 'REPROVADA': statusClass = styles.statusReprovada; statusText = 'Reprovada'; break;
-    default: statusClass = styles.statusDefault; statusText = status;
+    case 'PENDENTE':
+      return { label: 'Pendente', color: 'warning' };
+    case 'APROVADA':
+      return { label: 'Aprovada', color: 'success' };
+    case 'REPROVADA':
+      return { label: 'Reprovada', color: 'error' };
+    default:
+      return { label: status, color: 'default' };
   }
-  return <span className={`${styles.statusBadge} ${statusClass}`}>{statusText}</span>;
 };
-
 
 const GerenciamentoPropostas = () => {
   const [propostas, setPropostas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [confirmDialog, setConfirmDialog] = useState({ open: false, propostaId: null, novoStatus: '' });
 
-  // Usamos useCallback para evitar recriação desnecessária da função
   const fetchPropostas = useCallback(async () => {
     try {
       setLoading(true);
-      // Endpoint que busca TODAS as propostas (diferente da tela do usuário)
       const response = await api.get('/api/propostas');
-      
-      // Ordena por data, da mais recente para a mais antiga
-      const propostasOrdenadas = response.data.sort((a, b) => 
+      const propostasOrdenadas = response.data.sort((a, b) =>
         new Date(b.dataProposta) - new Date(a.dataProposta)
       );
       setPropostas(propostasOrdenadas);
@@ -44,111 +65,147 @@ const GerenciamentoPropostas = () => {
     }
   }, []);
 
-  // Busca inicial
   useEffect(() => {
     fetchPropostas();
   }, [fetchPropostas]);
 
-  // Função para aprovar ou reprovar
-  const handleUpdateStatus = async (propostaId, novoStatus) => {
-    // Confirmação para evitar cliques acidentais
-    const acao = novoStatus === 'APROVADA' ? 'Aprovar' : 'Reprovar';
-    if (!window.confirm(`Tem certeza que deseja ${acao.toLowerCase()} esta proposta?`)) {
-      return;
-    }
+  const handleOpenConfirm = (propostaId, novoStatus) => {
+    setConfirmDialog({ open: true, propostaId, novoStatus });
+  };
 
+  const handleCloseConfirm = () => {
+    setConfirmDialog({ open: false, propostaId: null, novoStatus: '' });
+  };
+
+  const handleUpdateStatus = async () => {
+    const { propostaId, novoStatus } = confirmDialog;
     try {
-      // Usando o endpoint: PUT /api/propostas/{id}/status
-      // O DTO esperado é { "status": "NOVO_STATUS" }
       await api.put(`/api/propostas/${propostaId}/status`, { status: novoStatus });
-      
-      // Sucesso! Atualiza o estado localmente sem refazer o fetch
-      setPropostas(prevPropostas => 
-        prevPropostas.map(proposta => 
+      setPropostas(prevPropostas =>
+        prevPropostas.map(proposta =>
           proposta.id === propostaId ? { ...proposta, status: novoStatus } : proposta
         )
       );
-      
-      alert(`Proposta ${acao.toLowerCase()}da com sucesso!`);
-
+      handleCloseConfirm();
     } catch (err) {
-      console.error(`Erro ao ${acao.toLowerCase()} proposta:`, err);
-      alert(`Não foi possível ${acao.toLowerCase()} a proposta. Tente novamente.`);
+      console.error(`Erro ao atualizar proposta:`, err);
+      alert(`Não foi possível atualizar a proposta. Tente novamente.`);
     }
   };
 
   if (loading) {
-    return <div className={styles.message}>Carregando propostas...</div>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <div className={styles.messageError}>{error}</div>;
+    return <Alert severity="error">{error}</Alert>;
   }
 
   return (
-    <div className={styles.container}>
-      <h1>Gerenciamento de Propostas</h1>
-      <p>Analise e responda às solicitações de adoção.</p>
+    <Box>
+      <Typography variant="h4" fontWeight={700} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <AdminIcon color="primary" /> Gerenciamento de Propostas
+      </Typography>
+      <Typography color="text.secondary" sx={{ mb: 3 }}>
+        Analise e responda às solicitações de adoção.
+      </Typography>
 
       {propostas.length === 0 ? (
-        <div className={styles.message}>Nenhuma proposta pendente ou registrada no momento.</div>
+        <Card>
+          <CardContent sx={{ textAlign: 'center', py: 4 }}>
+            <Typography color="text.secondary">
+              Nenhuma proposta pendente ou registrada no momento.
+            </Typography>
+          </CardContent>
+        </Card>
       ) : (
-        <table className={styles.propostasTable}>
-          <thead>
-            <tr>
-              <th>Praça</th>
-              <th>Empresa Proponente</th>
-              <th>Data da Proposta</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {propostas.map(proposta => (
-              <tr key={proposta.id}>
-                <td>
-                  {/* O DTO GET /api/propostas/ deve trazer o praçaNome */}
-                  {proposta.praçaNome || 'Praça (ID ' + proposta.praçaId + ')'}
-                </td>
-                <td>
-                  {/* ... e também o empresaNome */}
-                  {proposta.empresaNome || 'Empresa (ID ' + proposta.empresaId + ')'}
-                </td>
-                <td>
-                  {new Date(proposta.dataProposta).toLocaleDateString('pt-BR')}
-                </td>
-                <td>
-                  <StatusBadge status={proposta.status} />
-                </td>
-                <td className={styles.actionCell}>
-                  {/* Só mostra botões de Ação se o status for PENDENTE */}
-                  {proposta.status === 'PENDENTE' && (
-                    <>
-                      <button 
-                        className={`${styles.actionButton} ${styles.approveButton}`}
-                        onClick={() => handleUpdateStatus(proposta.id, 'APROVADA')}
-                      >
-                        Aprovar
-                      </button>
-                      <button 
-                        className={`${styles.actionButton} ${styles.rejectButton}`}
-                        onClick={() => handleUpdateStatus(proposta.id, 'REPROVADA')}
-                      >
-                        Reprovar
-                      </button>
-                    </>
-                  )}
-                  {/* Se não estiver pendente, exibe N/A */}
-                  {proposta.status !== 'PENDENTE' && (
-                    <span className={styles.noAction}>N/A</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell><strong>Praça</strong></TableCell>
+                <TableCell><strong>Empresa Proponente</strong></TableCell>
+                <TableCell><strong>Data da Proposta</strong></TableCell>
+                <TableCell><strong>Status</strong></TableCell>
+                <TableCell><strong>Ações</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {propostas.map(proposta => {
+                const statusConfig = getStatusConfig(proposta.status);
+                return (
+                  <TableRow key={proposta.id} hover>
+                    <TableCell>
+                      {proposta.praçaNome || `Praça (ID ${proposta.praçaId})`}
+                    </TableCell>
+                    <TableCell>
+                      {proposta.empresaNome || `Empresa (ID ${proposta.empresaId})`}
+                    </TableCell>
+                    <TableCell>
+                      {new Date(proposta.dataProposta).toLocaleDateString('pt-BR')}
+                    </TableCell>
+                    <TableCell>
+                      <Chip label={statusConfig.label} color={statusConfig.color} size="small" />
+                    </TableCell>
+                    <TableCell>
+                      {proposta.status === 'PENDENTE' ? (
+                        <Stack direction="row" spacing={1}>
+                          <Button
+                            size="small"
+                            color="success"
+                            variant="contained"
+                            startIcon={<ApproveIcon />}
+                            onClick={() => handleOpenConfirm(proposta.id, 'APROVADA')}
+                          >
+                            Aprovar
+                          </Button>
+                          <Button
+                            size="small"
+                            color="error"
+                            variant="outlined"
+                            startIcon={<RejectIcon />}
+                            onClick={() => handleOpenConfirm(proposta.id, 'REPROVADA')}
+                          >
+                            Reprovar
+                          </Button>
+                        </Stack>
+                      ) : (
+                        <Typography variant="body2" color="text.secondary">N/A</Typography>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </div>
+
+      <Dialog open={confirmDialog.open} onClose={handleCloseConfirm}>
+        <DialogTitle>
+          {confirmDialog.novoStatus === 'APROVADA' ? 'Aprovar Proposta' : 'Reprovar Proposta'}
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            Tem certeza que deseja {confirmDialog.novoStatus === 'APROVADA' ? 'aprovar' : 'reprovar'} esta proposta?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfirm}>Cancelar</Button>
+          <Button
+            onClick={handleUpdateStatus}
+            variant="contained"
+            color={confirmDialog.novoStatus === 'APROVADA' ? 'success' : 'error'}
+          >
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 

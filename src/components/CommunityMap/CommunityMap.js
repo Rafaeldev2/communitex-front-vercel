@@ -10,7 +10,30 @@ import useIssuesMap from '../../hooks/useIssuesMap';
 import IssueService from '../../services/IssueService';
 import IssueFormModal from './IssueFormModal';
 import IssueCard from './IssueCard';
-import styles from './CommunityMap.module.css';
+
+import {
+  Box,
+  Paper,
+  Typography,
+  Button,
+  IconButton,
+  CircularProgress,
+  Alert,
+  Fab,
+  Chip,
+  useTheme,
+  alpha,
+  Backdrop,
+} from '@mui/material';
+import {
+  Add as AddIcon,
+  MyLocation as MyLocationIcon,
+  Refresh as RefreshIcon,
+  List as ListIcon,
+  Close as CloseIcon,
+  TouchApp as TouchAppIcon,
+  Report as ReportIcon,
+} from '@mui/icons-material';
 
 // Fix para ícones do Leaflet em React
 delete L.Icon.Default.prototype._getIconUrl;
@@ -42,7 +65,7 @@ const createCustomIcon = (tipo) => {
   const config = ISSUE_ICONS[tipo] || ISSUE_ICONS.OUTRO;
   
   return L.divIcon({
-    className: styles.customMarker,
+    className: 'custom-marker',
     html: `
       <div style="
         background-color: ${config.color};
@@ -69,7 +92,7 @@ const createCustomIcon = (tipo) => {
  * Ícone do usuário
  */
 const userIcon = L.divIcon({
-  className: styles.userMarker,
+  className: 'user-marker',
   html: `
     <div style="
       background: linear-gradient(135deg, #2196f3, #1976d2);
@@ -131,6 +154,7 @@ const MapCenterTracker = ({ onCenterChange }) => {
  * Componente principal do mapa comunitário
  */
 const CommunityMap = () => {
+  const theme = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   
@@ -284,41 +308,84 @@ const CommunityMap = () => {
   // Loading state
   if (locationLoading) {
     return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.loadingSpinner}></div>
-        <p className={styles.loadingText}>Obtendo sua localização...</p>
-        <p className={styles.loadingSubtext}>Permita o acesso à localização para uma melhor experiência</p>
-      </div>
+      <Box
+        sx={{
+          height: 'calc(100vh - 64px)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+          color: 'white',
+          gap: 2,
+        }}
+      >
+        <CircularProgress color="inherit" size={60} />
+        <Typography variant="h6">Obtendo sua localização...</Typography>
+        <Typography variant="body2" sx={{ opacity: 0.8 }}>
+          Permita o acesso à localização para uma melhor experiência
+        </Typography>
+      </Box>
     );
   }
 
   const initialPosition = userPosition || { lat: -26.3045, lng: -48.8487 };
 
   return (
-    <div className={styles.container}>
+    <Box
+      sx={{
+        position: 'relative',
+        height: 'calc(100vh - 64px)',
+        width: '100%',
+        overflow: 'hidden',
+      }}
+    >
       {/* Notificações de erro */}
       {showLocationError && locationError && (
-        <div className={styles.notification}>
-          <span className={styles.notificationIcon}>📍</span>
+        <Alert
+          severity="warning"
+          sx={{
+            position: 'absolute',
+            top: 16,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1100,
+            maxWidth: 'calc(100% - 32px)',
+            boxShadow: 3,
+          }}
+          onClose={() => setShowLocationError(false)}
+        >
           {locationError}
-        </div>
+        </Alert>
       )}
 
       {issuesError && (
-        <div className={styles.errorNotification}>
-          <span className={styles.notificationIcon}>⚠️</span>
+        <Alert
+          severity="error"
+          sx={{
+            position: 'absolute',
+            top: 16,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1100,
+            maxWidth: 'calc(100% - 32px)',
+            boxShadow: 3,
+          }}
+          action={
+            <Button color="inherit" size="small" onClick={refetchIssues}>
+              Tentar novamente
+            </Button>
+          }
+        >
           {issuesError}
-          <button className={styles.retryButton} onClick={refetchIssues}>
-            Tentar novamente
-          </button>
-        </div>
+        </Alert>
       )}
 
       {/* Mapa */}
       <MapContainer
         center={[initialPosition.lat, initialPosition.lng]}
         zoom={15}
-        className={styles.map}
+        style={{ height: '100%', width: '100%' }}
         zoomControl={false}
       >
         <TileLayer
@@ -334,9 +401,9 @@ const CommunityMap = () => {
         {userPosition && (
           <Marker position={[userPosition.lat, userPosition.lng]} icon={userIcon}>
             <Popup>
-              <div className={styles.userPopup}>
-                <strong>📍 Você está aqui</strong>
-              </div>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                📍 Você está aqui
+              </Typography>
             </Popup>
           </Marker>
         )}
@@ -346,55 +413,120 @@ const CommunityMap = () => {
       </MapContainer>
 
       {/* Controles do mapa */}
-      <div className={styles.controls}>
-        <button 
-          className={styles.controlButton}
+      <Paper
+        elevation={3}
+        sx={{
+          position: 'absolute',
+          bottom: 160,
+          right: 16,
+          zIndex: 1000,
+          borderRadius: 3,
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <IconButton
           onClick={() => navigate('/denuncias/lista')}
           title="Ver lista de denúncias"
+          sx={{
+            borderRadius: 0,
+            p: 1.5,
+            '&:hover': {
+              bgcolor: alpha(theme.palette.primary.main, 0.1),
+            },
+          }}
         >
-          📋
-        </button>
-        <button 
-          className={styles.controlButton}
+          <ListIcon />
+        </IconButton>
+        <IconButton
           onClick={recenterOnUser}
           title="Centralizar na minha localização"
+          sx={{
+            borderRadius: 0,
+            p: 1.5,
+            borderTop: `1px solid ${alpha(theme.palette.divider, 0.5)}`,
+            '&:hover': {
+              bgcolor: alpha(theme.palette.primary.main, 0.1),
+            },
+          }}
         >
-          📍
-        </button>
-        <button 
-          className={styles.controlButton}
+          <MyLocationIcon />
+        </IconButton>
+        <IconButton
           onClick={refetchIssues}
           title="Atualizar denúncias"
           disabled={issuesLoading}
+          sx={{
+            borderRadius: 0,
+            p: 1.5,
+            borderTop: `1px solid ${alpha(theme.palette.divider, 0.5)}`,
+            '&:hover': {
+              bgcolor: alpha(theme.palette.primary.main, 0.1),
+            },
+          }}
         >
-          {issuesLoading ? '⏳' : '🔄'}
-        </button>
-      </div>
+          {issuesLoading ? <CircularProgress size={24} /> : <RefreshIcon />}
+        </IconButton>
+      </Paper>
 
       {/* Botão flutuante para nova denúncia */}
-      <button 
-        className={styles.fabButton}
+      <Fab
+        variant="extended"
+        color="primary"
         onClick={() => {
           if (mapCenter) {
             setClickedPosition(mapCenter);
             setIsModalOpen(true);
           }
         }}
+        sx={{
+          position: 'absolute',
+          bottom: 100,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 1000,
+          px: 3,
+          gap: 1,
+          boxShadow: 4,
+        }}
       >
-        <span className={styles.fabIcon}>+</span>
-        <span className={styles.fabLabel}>Denunciar</span>
-      </button>
+        <AddIcon />
+        Denunciar
+      </Fab>
 
       {/* Legenda/Info */}
-      <div className={styles.legend}>
-        <div className={styles.legendItem}>
-          <span className={styles.legendDot} style={{ background: '#4caf50' }}></span>
-          <span>Toque no mapa para denunciar</span>
-        </div>
-        <div className={styles.legendCount}>
-          {issues.length} denúncia{issues.length !== 1 ? 's' : ''} na região
-        </div>
-      </div>
+      <Paper
+        elevation={3}
+        sx={{
+          position: 'absolute',
+          bottom: 24,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 1000,
+          px: 2.5,
+          py: 1.5,
+          borderRadius: 3,
+          bgcolor: alpha(theme.palette.background.paper, 0.95),
+          backdropFilter: 'blur(10px)',
+          textAlign: 'center',
+          maxWidth: 'calc(100% - 32px)',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mb: 0.5 }}>
+          <TouchAppIcon fontSize="small" color="primary" />
+          <Typography variant="body2" color="text.secondary">
+            Toque no mapa para denunciar
+          </Typography>
+        </Box>
+        <Chip
+          icon={<ReportIcon />}
+          label={`${issues.length} denúncia${issues.length !== 1 ? 's' : ''} na região`}
+          size="small"
+          color="primary"
+          variant="outlined"
+        />
+      </Paper>
 
       {/* Modal de formulário */}
       <IssueFormModal
@@ -407,17 +539,51 @@ const CommunityMap = () => {
 
       {/* Card de detalhes da denúncia */}
       {selectedIssueCard && (
-        <div className={styles.issueCardOverlay} onClick={handleCloseIssueCard}>
-          <div className={styles.issueCardContainer} onClick={(e) => e.stopPropagation()}>
+        <Backdrop
+          open={true}
+          onClick={handleCloseIssueCard}
+          sx={{
+            zIndex: 1200,
+            alignItems: 'flex-end',
+            p: 2,
+          }}
+        >
+          <Paper
+            elevation={6}
+            onClick={(e) => e.stopPropagation()}
+            sx={{
+              width: '100%',
+              maxWidth: 500,
+              maxHeight: '80vh',
+              overflow: 'auto',
+              borderRadius: 3,
+              position: 'relative',
+            }}
+          >
+            <IconButton
+              onClick={handleCloseIssueCard}
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                zIndex: 1,
+                bgcolor: alpha(theme.palette.background.paper, 0.8),
+                '&:hover': {
+                  bgcolor: alpha(theme.palette.error.light, 0.2),
+                },
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
             <IssueCard
               issue={selectedIssueCard}
               onClose={handleCloseIssueCard}
               onSupport={handleSupport}
             />
-          </div>
-        </div>
+          </Paper>
+        </Backdrop>
       )}
-    </div>
+    </Box>
   );
 };
 

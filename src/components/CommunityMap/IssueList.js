@@ -2,32 +2,70 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IssueService from '../../services/IssueService';
-import styles from './IssueList.module.css';
+
+import {
+  Box,
+  Paper,
+  Typography,
+  Button,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  InputAdornment,
+  Chip,
+  Card,
+  CardContent,
+  CardActionArea,
+  Grid,
+  CircularProgress,
+  Alert,
+  Fab,
+  useTheme,
+  alpha,
+  Avatar,
+  Stack,
+  IconButton,
+} from '@mui/material';
+import {
+  Search as SearchIcon,
+  Map as MapIcon,
+  Clear as ClearIcon,
+  ThumbUp as ThumbUpIcon,
+  ChatBubble as ChatBubbleIcon,
+  CalendarToday as CalendarIcon,
+  Person as PersonIcon,
+  LocationOn as LocationIcon,
+  Add as AddIcon,
+  ReportProblem as ReportIcon,
+  FilterList as FilterIcon,
+} from '@mui/icons-material';
 
 /**
  * Tipos de denúncia disponíveis
  */
 const ISSUE_TYPES = {
-  ILUMINACAO: { icon: '💡', label: 'Iluminação' },
-  BURACO: { icon: '🕳️', label: 'Buraco' },
-  LIXO: { icon: '🗑️', label: 'Lixo' },
-  PODA_ARVORE: { icon: '🌳', label: 'Poda de Árvore' },
-  VAZAMENTO: { icon: '💧', label: 'Vazamento' },
-  PICHACAO: { icon: '🎨', label: 'Pichação' },
-  CALCADA_DANIFICADA: { icon: '🚧', label: 'Calçada Danificada' },
-  SINALIZACAO: { icon: '🚦', label: 'Sinalização' },
-  OUTRO: { icon: '❓', label: 'Outro' }
+  ILUMINACAO: { icon: '💡', label: 'Iluminação', color: '#ffc107' },
+  BURACO: { icon: '🕳️', label: 'Buraco', color: '#795548' },
+  LIXO: { icon: '🗑️', label: 'Lixo', color: '#607d8b' },
+  PODA_ARVORE: { icon: '🌳', label: 'Poda de Árvore', color: '#4caf50' },
+  VAZAMENTO: { icon: '💧', label: 'Vazamento', color: '#2196f3' },
+  PICHACAO: { icon: '🎨', label: 'Pichação', color: '#9c27b0' },
+  CALCADA_DANIFICADA: { icon: '🚧', label: 'Calçada Danificada', color: '#ff5722' },
+  SINALIZACAO: { icon: '🚦', label: 'Sinalização', color: '#f44336' },
+  OUTRO: { icon: '❓', label: 'Outro', color: '#9e9e9e' }
 };
 
 /**
  * Status disponíveis
  */
 const STATUS_CONFIG = {
-  ABERTA: { label: 'Aberta', color: '#ff9800' },
-  EM_ANALISE: { label: 'Em Análise', color: '#2196f3' },
-  EM_ANDAMENTO: { label: 'Em Andamento', color: '#9c27b0' },
-  RESOLVIDA: { label: 'Resolvida', color: '#4caf50' },
-  REJEITADA: { label: 'Rejeitada', color: '#f44336' }
+  ABERTA: { label: 'Aberta', color: 'warning' },
+  EM_ANALISE: { label: 'Em Análise', color: 'info' },
+  EM_ANDAMENTO: { label: 'Em Andamento', color: 'secondary' },
+  RESOLVIDA: { label: 'Resolvida', color: 'success' },
+  REJEITADA: { label: 'Rejeitada', color: 'error' }
 };
 
 /**
@@ -47,54 +85,109 @@ const formatDate = (dateString) => {
  * Componente de Card individual
  */
 const IssueListCard = ({ issue, onClick }) => {
+  const theme = useTheme();
   const typeConfig = ISSUE_TYPES[issue.tipo] || ISSUE_TYPES.OUTRO;
   const statusConfig = STATUS_CONFIG[issue.status] || STATUS_CONFIG.ABERTA;
 
   return (
-    <div className={styles.card} onClick={() => onClick(issue)}>
-      <div className={styles.cardHeader}>
-        <span className={styles.typeIcon}>{typeConfig.icon}</span>
-        <span 
-          className={styles.statusBadge}
-          style={{ backgroundColor: statusConfig.color }}
-        >
-          {statusConfig.label}
-        </span>
-      </div>
-      
-      <h3 className={styles.cardTitle}>{issue.titulo}</h3>
-      
-      <p className={styles.cardDescription}>
-        {issue.descricao?.substring(0, 120)}
-        {issue.descricao?.length > 120 ? '...' : ''}
-      </p>
-      
-      <div className={styles.cardMeta}>
-        <span className={styles.metaItem}>
-          <span className={styles.metaIcon}>👤</span>
-          {issue.autorNome || 'Anônimo'}
-        </span>
-        <span className={styles.metaItem}>
-          <span className={styles.metaIcon}>📅</span>
-          {formatDate(issue.dataCriacao)}
-        </span>
-      </div>
-      
-      <div className={styles.cardStats}>
-        <span className={styles.stat}>
-          👍 {issue.totalApoios || 0}
-        </span>
-        <span className={styles.stat}>
-          💬 {issue.totalInteracoes || 0}
-        </span>
-      </div>
-      
-      <div className={styles.cardFooter}>
-        <span className={styles.viewOnMap}>
-          📍 Ver no Mapa →
-        </span>
-      </div>
-    </div>
+    <Card
+      sx={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: 6,
+        },
+      }}
+    >
+      <CardActionArea onClick={() => onClick(issue)} sx={{ flexGrow: 1 }}>
+        <CardContent sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+          {/* Header com tipo e status */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Avatar
+              sx={{
+                bgcolor: typeConfig.color,
+                width: 44,
+                height: 44,
+                fontSize: '1.5rem',
+              }}
+            >
+              {typeConfig.icon}
+            </Avatar>
+            <Chip
+              label={statusConfig.label}
+              color={statusConfig.color}
+              size="small"
+              sx={{ fontWeight: 500 }}
+            />
+          </Box>
+
+          {/* Título */}
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 1, lineHeight: 1.3 }}>
+            {issue.titulo}
+          </Typography>
+
+          {/* Descrição */}
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              mb: 2,
+              flexGrow: 1,
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
+            {issue.descricao}
+          </Typography>
+
+          {/* Meta info */}
+          <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <PersonIcon fontSize="small" color="action" />
+              <Typography variant="caption" color="text.secondary">
+                {issue.autorNome || 'Anônimo'}
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <CalendarIcon fontSize="small" color="action" />
+              <Typography variant="caption" color="text.secondary">
+                {formatDate(issue.dataCriacao)}
+              </Typography>
+            </Box>
+          </Stack>
+
+          {/* Stats e ação */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Stack direction="row" spacing={1.5}>
+              <Chip
+                icon={<ThumbUpIcon />}
+                label={issue.totalApoios || 0}
+                size="small"
+                variant="outlined"
+              />
+              <Chip
+                icon={<ChatBubbleIcon />}
+                label={issue.totalInteracoes || 0}
+                size="small"
+                variant="outlined"
+              />
+            </Stack>
+            <Chip
+              icon={<LocationIcon />}
+              label="Ver no Mapa"
+              size="small"
+              color="primary"
+              clickable
+            />
+          </Box>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 };
 
@@ -102,6 +195,7 @@ const IssueListCard = ({ issue, onClick }) => {
  * Componente principal de listagem de denúncias
  */
 const IssueList = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [issues, setIssues] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -195,159 +289,241 @@ const IssueList = () => {
 
   if (isLoading) {
     return (
-      <div className={styles.loadingContainer}>
-        <div className={styles.spinner}></div>
-        <p>Carregando denúncias...</p>
-      </div>
+      <Box
+        sx={{
+          minHeight: '60vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={50} color="primary" />
+        <Typography color="text.secondary">Carregando denúncias...</Typography>
+      </Box>
     );
   }
 
   if (error) {
     return (
-      <div className={styles.errorContainer}>
-        <span className={styles.errorIcon}>⚠️</span>
-        <p>{error}</p>
-        <button 
-          className={styles.retryButton}
-          onClick={() => window.location.reload()}
+      <Box sx={{ p: 3, textAlign: 'center' }}>
+        <Alert
+          severity="error"
+          action={
+            <Button color="inherit" size="small" onClick={() => window.location.reload()}>
+              Tentar novamente
+            </Button>
+          }
         >
-          Tentar novamente
-        </button>
-      </div>
+          {error}
+        </Alert>
+      </Box>
     );
   }
 
   return (
-    <div className={styles.container}>
+    <Box sx={{ minHeight: '100%' }}>
       {/* Header */}
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <h1 className={styles.title}>📋 Denúncias Comunitárias</h1>
-          <p className={styles.subtitle}>
-            {issues.length} denúncia{issues.length !== 1 ? 's' : ''} registrada{issues.length !== 1 ? 's' : ''}
-          </p>
-        </div>
-        <button 
-          className={styles.mapButton}
-          onClick={() => navigate('/denuncias')}
-        >
-          🗺️ Ver Mapa
-        </button>
-      </header>
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 3,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+          color: 'white',
+          borderRadius: 3,
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+              <ReportIcon />
+              <Typography variant="h5" fontWeight={700}>
+                Denúncias Comunitárias
+              </Typography>
+            </Box>
+            <Typography variant="body2" sx={{ opacity: 0.9 }}>
+              {issues.length} denúncia{issues.length !== 1 ? 's' : ''} registrada{issues.length !== 1 ? 's' : ''}
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            color="inherit"
+            startIcon={<MapIcon />}
+            onClick={() => navigate('/denuncias')}
+            sx={{
+              bgcolor: 'white',
+              color: theme.palette.primary.main,
+              '&:hover': {
+                bgcolor: alpha('#fff', 0.9),
+              },
+            }}
+          >
+            Ver Mapa
+          </Button>
+        </Box>
+      </Paper>
 
       {/* Filtros */}
-      <div className={styles.filters}>
-        <div className={styles.searchContainer}>
-          <span className={styles.searchIcon}>🔍</span>
-          <input
-            type="text"
-            placeholder="Buscar por título, descrição ou autor..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className={styles.searchInput}
-          />
-        </div>
-
-        <div className={styles.filterRow}>
-          <select
-            value={filterType}
-            onChange={(e) => setFilterType(e.target.value)}
-            className={styles.filterSelect}
-          >
-            <option value="">Todos os Tipos</option>
-            {Object.entries(ISSUE_TYPES).map(([key, { icon, label }]) => (
-              <option key={key} value={key}>
-                {icon} {label}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className={styles.filterSelect}
-          >
-            <option value="">Todos os Status</option>
-            {Object.entries(STATUS_CONFIG).map(([key, { label }]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
-
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            className={styles.filterSelect}
-          >
-            <option value="recent">Mais Recentes</option>
-            <option value="oldest">Mais Antigas</option>
-            <option value="mostSupported">Mais Apoiadas</option>
-            <option value="mostCommented">Mais Comentadas</option>
-          </select>
-        </div>
+      <Paper elevation={1} sx={{ p: 2, mb: 3, borderRadius: 2 }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="Buscar por título, descrição ou autor..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon color="action" />
+                  </InputAdornment>
+                ),
+                endAdornment: searchTerm && (
+                  <InputAdornment position="end">
+                    <IconButton size="small" onClick={() => setSearchTerm('')}>
+                      <ClearIcon fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 4, md: 2.5 }}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Tipo</InputLabel>
+              <Select
+                value={filterType}
+                label="Tipo"
+                onChange={(e) => setFilterType(e.target.value)}
+              >
+                <MenuItem value="">Todos os Tipos</MenuItem>
+                {Object.entries(ISSUE_TYPES).map(([key, { icon, label }]) => (
+                  <MenuItem key={key} value={key}>
+                    {icon} {label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 4, md: 2.5 }}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={filterStatus}
+                label="Status"
+                onChange={(e) => setFilterStatus(e.target.value)}
+              >
+                <MenuItem value="">Todos os Status</MenuItem>
+                {Object.entries(STATUS_CONFIG).map(([key, { label }]) => (
+                  <MenuItem key={key} value={key}>
+                    {label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 4, md: 2.5 }}>
+            <FormControl fullWidth size="small">
+              <InputLabel>Ordenar</InputLabel>
+              <Select
+                value={sortBy}
+                label="Ordenar"
+                onChange={(e) => setSortBy(e.target.value)}
+              >
+                <MenuItem value="recent">Mais Recentes</MenuItem>
+                <MenuItem value="oldest">Mais Antigas</MenuItem>
+                <MenuItem value="mostSupported">Mais Apoiadas</MenuItem>
+                <MenuItem value="mostCommented">Mais Comentadas</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
 
         {hasActiveFilters && (
-          <div className={styles.activeFilters}>
-            <span className={styles.filterCount}>
-              {filteredIssues.length} resultado{filteredIssues.length !== 1 ? 's' : ''}
-            </span>
-            <button 
-              className={styles.clearFiltersButton}
-              onClick={clearFilters}
-            >
-              ✕ Limpar Filtros
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* Lista de Issues */}
-      {filteredIssues.length === 0 ? (
-        <div className={styles.emptyState}>
-          <span className={styles.emptyIcon}>📭</span>
-          <h3>Nenhuma denúncia encontrada</h3>
-          <p>
-            {hasActiveFilters 
-              ? 'Tente ajustar os filtros para ver mais resultados.'
-              : 'Seja o primeiro a registrar uma denúncia!'}
-          </p>
-          {hasActiveFilters && (
-            <button 
-              className={styles.clearFiltersButtonAlt}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2, pt: 2, borderTop: 1, borderColor: 'divider' }}>
+            <Chip
+              icon={<FilterIcon />}
+              label={`${filteredIssues.length} resultado${filteredIssues.length !== 1 ? 's' : ''}`}
+              color="primary"
+              variant="outlined"
+              size="small"
+            />
+            <Button
+              size="small"
+              startIcon={<ClearIcon />}
               onClick={clearFilters}
             >
               Limpar Filtros
-            </button>
-          )}
-          <button 
-            className={styles.newIssueButton}
-            onClick={() => navigate('/denuncias')}
-          >
-            + Nova Denúncia
-          </button>
-        </div>
+            </Button>
+          </Box>
+        )}
+      </Paper>
+
+      {/* Lista de Issues */}
+      {filteredIssues.length === 0 ? (
+        <Paper
+          elevation={1}
+          sx={{
+            p: 6,
+            textAlign: 'center',
+            borderRadius: 2,
+          }}
+        >
+          <Box sx={{ fontSize: '4rem', mb: 2 }}>📭</Box>
+          <Typography variant="h6" gutterBottom>
+            Nenhuma denúncia encontrada
+          </Typography>
+          <Typography color="text.secondary" sx={{ mb: 3 }}>
+            {hasActiveFilters 
+              ? 'Tente ajustar os filtros para ver mais resultados.'
+              : 'Seja o primeiro a registrar uma denúncia!'}
+          </Typography>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            {hasActiveFilters && (
+              <Button variant="outlined" onClick={clearFilters}>
+                Limpar Filtros
+              </Button>
+            )}
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => navigate('/denuncias')}
+            >
+              Nova Denúncia
+            </Button>
+          </Stack>
+        </Paper>
       ) : (
-        <div className={styles.grid}>
+        <Grid container spacing={3}>
           {filteredIssues.map((issue) => (
-            <IssueListCard 
-              key={issue.id} 
-              issue={issue} 
-              onClick={handleIssueClick}
-            />
+            <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={issue.id}>
+              <IssueListCard 
+                issue={issue} 
+                onClick={handleIssueClick}
+              />
+            </Grid>
           ))}
-        </div>
+        </Grid>
       )}
 
       {/* FAB para nova denúncia */}
-      <button 
-        className={styles.fab}
+      <Fab
+        color="primary"
         onClick={() => navigate('/denuncias')}
-        title="Nova Denúncia"
+        sx={{
+          position: 'fixed',
+          bottom: 24,
+          right: 24,
+          boxShadow: 4,
+          zIndex: (theme) => theme.zIndex.speedDial,
+        }}
       >
-        +
-      </button>
-    </div>
+        <AddIcon />
+      </Fab>
+    </Box>
   );
 };
 

@@ -1,9 +1,41 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import api from '../../services/api';
-import styles from './PracaForm.module.css';
+import {
+  Box,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  CircularProgress,
+  Paper,
+  Stack,
+  MenuItem,
+  useTheme,
+  alpha,
+  Snackbar,
+  InputAdornment,
+  Grid,
+} from '@mui/material';
+import {
+  Park as ParkIcon,
+  LocationOn as LocationIcon,
+  Home as HomeIcon,
+  LocationCity as CityIcon,
+  Map as MapIcon,
+  SquareFoot as SquareFootIcon,
+  Description as DescriptionIcon,
+  Image as ImageIcon,
+  ArrowBack as ArrowBackIcon,
+  ArrowForward as ArrowForwardIcon,
+  CheckCircle as CheckCircleIcon,
+  Settings as SettingsIcon,
+  Save as SaveIcon,
+} from '@mui/icons-material';
 
 const statusOptions = [
   { value: 'DISPONIVEL', label: 'Disponível para Adoção' },
@@ -49,9 +81,9 @@ const PracaSchema = Yup.object().shape({
 });
 
 const PracaForm = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [serverError, setServerError] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -74,7 +106,6 @@ const PracaForm = () => {
       await api.post('/api/pracas', pracaRequestDTO);
 
       setSubmitting(false);
-      setSuccessMessage('Praça cadastrada com sucesso!');
       setShowSuccess(true);
 
       setTimeout(() => {
@@ -89,31 +120,54 @@ const PracaForm = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.container}>
-        <Link to="/pracas" className={styles.backButton}>
-          ← Voltar para a lista
-        </Link>
+    <Box sx={{ minHeight: '100%' }}>
+      {/* Header */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 3,
+          mb: 3,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+          color: 'white',
+          borderRadius: 3,
+        }}
+      >
+        <Button
+          component={Link}
+          to="/pracas"
+          startIcon={<ArrowBackIcon />}
+          sx={{ 
+            color: 'white', 
+            mb: 2, 
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' } 
+          }}
+        >
+          Voltar para a lista
+        </Button>
 
-        {/* Toast de Sucesso */}
-        {showSuccess && (
-          <div className={styles.successToast}>
-            <div className={styles.toastContent}>
-              <span className={styles.toastIcon}>✓</span>
-              <div>
-                <strong>{successMessage}</strong>
-                <p>Redirecionando para a lista...</p>
-              </div>
-            </div>
-          </div>
-        )}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <ParkIcon />
+          <Typography variant="h5" fontWeight={700}>
+            Cadastrar Nova Praça
+          </Typography>
+        </Box>
+        <Typography variant="body2" sx={{ opacity: 0.9, mt: 1 }}>
+          Preencha as informações do novo espaço público para a plataforma
+        </Typography>
+      </Paper>
 
-        <div className={styles.formWrapper}>
-          <div className={styles.formHeader}>
-            <h1>🌳 Cadastrar Nova Praça</h1>
-            <p>Preencha as informações do novo espaço público para a plataforma</p>
-          </div>
+      <Snackbar
+        open={showSuccess}
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert severity="success" icon={<CheckCircleIcon />} sx={{ borderRadius: 2 }}>
+          <strong>Praça cadastrada com sucesso!</strong> Redirecionando para a lista...
+        </Alert>
+      </Snackbar>
 
+      <Paper elevation={1} sx={{ borderRadius: 2, overflow: 'hidden' }}>
+        <CardContent sx={{ p: { xs: 3, md: 4 } }}>
           <Formik
             initialValues={{
               nome: '',
@@ -130,115 +184,263 @@ const PracaForm = () => {
             validationSchema={PracaSchema}
             onSubmit={handleSubmit}
           >
-            {({ isSubmitting }) => (
-              <Form className={styles.form}>
+            {({ isSubmitting, values, errors, touched, handleChange, handleBlur }) => (
+              <Form>
                 {serverError && (
-                  <div className={styles.errorBox}>
-                    <span className={styles.errorIcon}>⚠️</span>
-                    <p>{serverError}</p>
-                  </div>
+                  <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+                    {serverError}
+                  </Alert>
                 )}
 
-                <fieldset className={styles.fieldset}>
-                  <legend className={styles.legend}>📋 Informações Básicas</legend>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="nome">Nome da Praça</label>
-                    <Field id="nome" type="text" name="nome" placeholder="Ex: Praça Central do Parque" />
-                    <ErrorMessage name="nome" component="div" className={styles.error} />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="fotoUrl">URL da Foto Principal (Opcional)</label>
-                    <Field id="fotoUrl" type="text" name="fotoUrl" placeholder="http://exemplo.com/foto.jpg" />
-                    <ErrorMessage name="fotoUrl" component="div" className={styles.error} />
-                  </div>
-                </fieldset>
-
-                <fieldset className={styles.fieldset}>
-                  <legend className={styles.legend}>📍 Localização</legend>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="logradouro">Logradouro (Opcional)</label>
-                    <Field id="logradouro" type="text" name="logradouro" placeholder="Ex: Av. Principal, 100" />
-                    <ErrorMessage name="logradouro" component="div" className={styles.error} />
-                  </div>
-
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor="bairro">Bairro (Opcional)</label>
-                      <Field id="bairro" type="text" name="bairro" placeholder="Ex: Centro" />
-                      <ErrorMessage name="bairro" component="div" className={styles.error} />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label htmlFor="cidade">Cidade</label>
-                      <Field id="cidade" type="text" name="cidade" placeholder="Ex: São Paulo" />
-                      <ErrorMessage name="cidade" component="div" className={styles.error} />
-                    </div>
-                  </div>
-
-                  {/* --- Coordenadas --- */}
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor="latitude">Latitude (Opcional)</label>
-                      <Field id="latitude" type="number" name="latitude" step="any" placeholder="-27.5969" />
-                      <ErrorMessage name="latitude" component="div" className={styles.error} />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label htmlFor="longitude">Longitude (Opcional)</label>
-                      <Field id="longitude" name="longitude" type="number" step="any" placeholder="-48.5495" />
-                      <ErrorMessage name="longitude" component="div" className={styles.error} />
-                    </div>
-                  </div>
-                </fieldset>
-
-                <fieldset className={styles.fieldset}>
-                  <legend className={styles.legend}>📏 Características</legend>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="metragemM2">Metragem (m²) (Opcional)</label>
-                    <Field id="metragemM2" type="number" name="metragemM2" step="0.01" placeholder="Ex: 2500.50" />
-                    <ErrorMessage name="metragemM2" component="div" className={styles.error} />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label htmlFor="status">Status da Praça</label>
-                    <Field as="select" id="status" name="status" className={styles.selectInput}>
+                {/* Informações Básicas */}
+                <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <ParkIcon color="primary" /> Informações Básicas
+                </Typography>
+                <Grid container spacing={2} sx={{ mb: 4 }}>
+                  <Grid size={{ xs: 12, md: 8 }}>
+                    <TextField
+                      fullWidth
+                      label="Nome da Praça"
+                      name="nome"
+                      value={values.nome}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.nome && Boolean(errors.nome)}
+                      helperText={touched.nome && errors.nome}
+                      placeholder="Ex: Praça Central do Parque"
+                      required
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <ParkIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, md: 4 }}>
+                    <TextField
+                      fullWidth
+                      select
+                      label="Status da Praça"
+                      name="status"
+                      value={values.status}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.status && Boolean(errors.status)}
+                      helperText={touched.status && errors.status}
+                      required
+                    >
                       {statusOptions.map(option => (
-                        <option key={option.value} value={option.value}>
+                        <MenuItem key={option.value} value={option.value}>
                           {option.label}
-                        </option>
+                        </MenuItem>
                       ))}
-                    </Field>
-                    <ErrorMessage name="status" component="div" className={styles.error} />
-                  </div>
+                    </TextField>
+                  </Grid>
+                  <Grid size={{ xs: 12 }}>
+                    <TextField
+                      fullWidth
+                      label="URL da Foto Principal (Opcional)"
+                      name="fotoUrl"
+                      value={values.fotoUrl}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.fotoUrl && Boolean(errors.fotoUrl)}
+                      helperText={touched.fotoUrl && errors.fotoUrl}
+                      placeholder="http://exemplo.com/foto.jpg"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <ImageIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                </Grid>
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="descricao">Descrição (Opcional)</label>
-                    <Field as="textarea" id="descricao" name="descricao" rows={4}
-                      placeholder="Descreva brevemente a praça, infraestrutura existente, equipamentos, etc." />
-                    <ErrorMessage name="descricao" component="div" className={styles.error} />
-                  </div>
-                </fieldset>
+                {/* Localização */}
+                <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <LocationIcon color="primary" /> Localização
+                </Typography>
+                <Grid container spacing={2} sx={{ mb: 4 }}>
+                  <Grid size={{ xs: 12 }}>
+                    <TextField
+                      fullWidth
+                      label="Logradouro (Opcional)"
+                      name="logradouro"
+                      value={values.logradouro}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="Ex: Av. Principal, 100"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <LocationIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      fullWidth
+                      label="Bairro (Opcional)"
+                      name="bairro"
+                      value={values.bairro}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      placeholder="Ex: Centro"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <HomeIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      fullWidth
+                      label="Cidade"
+                      name="cidade"
+                      value={values.cidade}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.cidade && Boolean(errors.cidade)}
+                      helperText={touched.cidade && errors.cidade}
+                      placeholder="Ex: São Paulo"
+                      required
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <CityIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      fullWidth
+                      label="Latitude (Opcional)"
+                      name="latitude"
+                      type="number"
+                      value={values.latitude}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.latitude && Boolean(errors.latitude)}
+                      helperText={touched.latitude && errors.latitude}
+                      placeholder="-27.5969"
+                      inputProps={{ step: 'any' }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MapIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      fullWidth
+                      label="Longitude (Opcional)"
+                      name="longitude"
+                      type="number"
+                      value={values.longitude}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.longitude && Boolean(errors.longitude)}
+                      helperText={touched.longitude && errors.longitude}
+                      placeholder="-48.5495"
+                      inputProps={{ step: 'any' }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MapIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                </Grid>
 
-                <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <>
-                      <span className={styles.spinner}></span>
-                      Salvando...
-                    </>
-                  ) : (
-                    '🌿 Salvar Praça'
-                  )}
-                </button>
+                {/* Características */}
+                <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <SettingsIcon color="primary" /> Características
+                </Typography>
+                <Grid container spacing={2} sx={{ mb: 4 }}>
+                  <Grid size={{ xs: 12, sm: 6 }}>
+                    <TextField
+                      fullWidth
+                      label="Metragem (m²) (Opcional)"
+                      name="metragemM2"
+                      type="number"
+                      value={values.metragemM2}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.metragemM2 && Boolean(errors.metragemM2)}
+                      helperText={touched.metragemM2 && errors.metragemM2}
+                      placeholder="Ex: 2500.50"
+                      inputProps={{ step: '0.01' }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SquareFootIcon color="action" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid size={{ xs: 12 }}>
+                    <TextField
+                      fullWidth
+                      label="Descrição (Opcional)"
+                      name="descricao"
+                      multiline
+                      rows={4}
+                      value={values.descricao}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.descricao && Boolean(errors.descricao)}
+                      helperText={touched.descricao && errors.descricao ? errors.descricao : `${(values.descricao || '').length}/1000 caracteres`}
+                      placeholder="Descreva brevemente a praça, infraestrutura existente, equipamentos, etc."
+                    />
+                  </Grid>
+                </Grid>
+
+                {/* Submit Button */}
+                <Stack direction="row" spacing={2} justifyContent="flex-end">
+                  <Button
+                    component={Link}
+                    to="/pracas"
+                    variant="outlined"
+                    disabled={isSubmitting}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={isSubmitting}
+                    startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
+                    sx={{ 
+                      px: 4,
+                      boxShadow: '0 4px 12px rgba(46, 158, 87, 0.3)',
+                    }}
+                  >
+                    {isSubmitting ? 'Salvando...' : 'Salvar Praça'}
+                  </Button>
+                </Stack>
               </Form>
             )}
           </Formik>
-        </div>
-      </div>
-    </div>
+        </CardContent>
+      </Paper>
+    </Box>
   );
 };
 

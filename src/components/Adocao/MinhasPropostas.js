@@ -2,45 +2,47 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
-import styles from './MinhasPropostas.module.css';
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Chip,
+  Button,
+  CircularProgress,
+  Alert,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Tooltip,
+} from '@mui/material';
+import {
+  Description as DescriptionIcon,
+  Visibility as VisibilityIcon,
+} from '@mui/icons-material';
 
-const StatusBadge = ({ status }) => {
-  let statusClass = '';
-  let statusText = '';
-
+const getStatusConfig = (status) => {
   switch (status) {
     case 'PROPOSTA':
-      statusClass = styles.statusProposta;
-      statusText = 'Proposta';
-      break;
+      return { label: 'Proposta', color: 'info' };
     case 'EM_ANALISE':
-      statusClass = styles.statusAnalise;
-      statusText = 'Em Análise';
-      break;
+      return { label: 'Em Análise', color: 'warning' };
     case 'APROVADA':
-      statusClass = styles.statusAprovada;
-      statusText = 'Aprovada';
-      break;
+      return { label: 'Aprovada', color: 'success' };
     case 'REJEITADA':
-      statusClass = styles.statusRejeitada;
-      statusText = 'Rejeitada';
-      break;
+      return { label: 'Rejeitada', color: 'error' };
     case 'CONCLUIDA':
-      statusClass = styles.statusConcluida;
-      statusText = 'Concluída';
-      break;
+      return { label: 'Concluída', color: 'success' };
     case 'FINALIZADA':
-      statusClass = styles.statusFinalizada;
-      statusText = 'Finalizada';
-      break;
+      return { label: 'Finalizada', color: 'default' };
     default:
-      statusClass = styles.statusDefault;
-      statusText = status || 'N/A';
+      return { label: status || 'N/A', color: 'default' };
   }
-
-  return <span className={`${styles.statusBadge} ${statusClass}`}>{statusText}</span>;
 };
-
 
 const MinhasPropostas = () => {
   const [propostas, setPropostas] = useState([]);
@@ -52,14 +54,10 @@ const MinhasPropostas = () => {
     const fetchPropostas = async () => {
       try {
         setLoading(true);
-        // Novo endpoint - backend obtém empresaId do token
         const response = await api.get('/api/adocao/minhas-propostas');
-
-        // Ordena por data de registro (mais recentes primeiro)
         const propostasOrdenadas = response.data.sort((a, b) =>
           new Date(b.dataRegistro) - new Date(a.dataRegistro)
         );
-
         setPropostas(propostasOrdenadas);
         setError('');
       } catch (err) {
@@ -74,67 +72,92 @@ const MinhasPropostas = () => {
   }, []);
 
   if (loading) {
-    return <div className={styles.message}>Carregando propostas...</div>;
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 300 }}>
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
-    return <div className={styles.messageError}>{error}</div>;
+    return <Alert severity="error">{error}</Alert>;
   }
 
   return (
-    <div className={styles.container}>
-      <h1>Minhas Propostas</h1>
-      <p>Acompanhe suas propostas de interesse em adoção de praças.</p>
+    <Box>
+      <Typography variant="h4" fontWeight={700} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <DescriptionIcon color="primary" /> Minhas Propostas
+      </Typography>
+      <Typography color="text.secondary" sx={{ mb: 3 }}>
+        Acompanhe suas propostas de interesse em adoção de praças.
+      </Typography>
 
       {propostas.length === 0 ? (
-        <div className={styles.message}>
-          Sua empresa ainda não enviou propostas de interesse.
-          <Link to="/pracas"> Ver praças disponíveis</Link>
-        </div>
+        <Card>
+          <CardContent sx={{ textAlign: 'center', py: 4 }}>
+            <Typography color="text.secondary" gutterBottom>
+              Sua empresa ainda não enviou propostas de interesse.
+            </Typography>
+            <Button component={Link} to="/pracas" variant="contained" sx={{ mt: 2 }}>
+              Ver praças disponíveis
+            </Button>
+          </CardContent>
+        </Card>
       ) : (
-        <table className={styles.adocoesTable}>
-          <thead>
-            <tr>
-              <th>Praça</th>
-              <th>Data da Proposta</th>
-              <th>Proposta</th>
-              <th>Status</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {propostas.map(proposta => (
-              <tr key={proposta.id}>
-                <td>
-                  <strong>{proposta.nomePraca || 'Praça não disponível'}</strong>
-                </td>
-                <td>
-                  {new Date(proposta.dataRegistro).toLocaleDateString('pt-BR')}
-                </td>
-                <td>
-                  <div className={styles.propostaText}>
-                    {proposta.proposta.length > 100
-                      ? `${proposta.proposta.substring(0, 100)}...`
-                      : proposta.proposta}
-                  </div>
-                </td>
-                <td>
-                  <StatusBadge status={proposta.status} />
-                </td>
-                <td>
-                  <Link
-                    to={`/pracas/${proposta.pracaId}`}
-                    className={styles.actionButton}
-                  >
-                    Ver Praça
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell><strong>Praça</strong></TableCell>
+                <TableCell><strong>Data da Proposta</strong></TableCell>
+                <TableCell><strong>Proposta</strong></TableCell>
+                <TableCell><strong>Status</strong></TableCell>
+                <TableCell><strong>Ações</strong></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {propostas.map(proposta => {
+                const statusConfig = getStatusConfig(proposta.status);
+                return (
+                  <TableRow key={proposta.id} hover>
+                    <TableCell>
+                      <Typography fontWeight={600}>
+                        {proposta.nomePraca || 'Praça não disponível'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      {new Date(proposta.dataRegistro).toLocaleDateString('pt-BR')}
+                    </TableCell>
+                    <TableCell sx={{ maxWidth: 300 }}>
+                      <Tooltip title={proposta.proposta} arrow>
+                        <Typography variant="body2" noWrap>
+                          {proposta.proposta.length > 100
+                            ? `${proposta.proposta.substring(0, 100)}...`
+                            : proposta.proposta}
+                        </Typography>
+                      </Tooltip>
+                    </TableCell>
+                    <TableCell>
+                      <Chip label={statusConfig.label} color={statusConfig.color} size="small" />
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        component={Link}
+                        to={`/pracas/${proposta.pracaId}`}
+                        size="small"
+                        startIcon={<VisibilityIcon />}
+                      >
+                        Ver Praça
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </div>
+    </Box>
   );
 };
 

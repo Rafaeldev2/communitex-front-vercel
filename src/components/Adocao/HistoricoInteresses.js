@@ -1,51 +1,79 @@
 import React from 'react';
-import styles from './HistoricoInteresses.module.css';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  CircularProgress,
+  Stack,
+  Chip,
+} from '@mui/material';
+import {
+  History as HistoryIcon,
+  Business as BusinessIcon,
+} from '@mui/icons-material';
 
 const HistoricoInteresses = ({ interesses, loading = false }) => {
   if (loading) {
     return (
-      <div className={styles.container}>
-        <h2>Histórico de Interesses</h2>
-        <div className={styles.loading}>Carregando histórico...</div>
-      </div>
+      <Box>
+        <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <HistoryIcon color="primary" /> Histórico de Interesses
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+          <CircularProgress />
+        </Box>
+      </Box>
     );
   }
 
   if (!interesses || interesses.length === 0) {
     return (
-      <div className={styles.container}>
-        <h2>Histórico de Interesses</h2>
-        <div className={styles.empty}>
-          <p>Nenhuma empresa manifestou interesse nesta praça ainda.</p>
-        </div>
-      </div>
+      <Box>
+        <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <HistoryIcon color="primary" /> Histórico de Interesses
+        </Typography>
+        <Card variant="outlined">
+          <CardContent>
+            <Typography color="text.secondary" textAlign="center">
+              Nenhuma empresa manifestou interesse nesta praça ainda.
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <h2>Histórico de Interesses ({interesses.length})</h2>
-      
-      <div className={styles.historicoList}>
-        {interesses.map((interesse, index) => (
-          <div key={index} className={styles.interesseCard}>
-            <div className={styles.empresaHeader}>
-              <h3 className={styles.empresaNome}>
-                {interesse.nomeEmpresa}
-              </h3>
-              <span className={styles.empresaId}>ID: {interesse.empresaId}</span>
-            </div>
+    <Box>
+      <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <HistoryIcon color="primary" /> Histórico de Interesses
+        <Chip label={interesses.length} size="small" color="primary" />
+      </Typography>
 
-            <div className={styles.propostaContainer}>
-              <h4>Proposta de Adoção:</h4>
-              <p className={styles.proposta}>
+      <Stack spacing={2}>
+        {interesses.map((interesse, index) => (
+          <Card key={index} variant="outlined">
+            <CardContent>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                <Typography variant="subtitle1" fontWeight={600} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <BusinessIcon fontSize="small" color="primary" />
+                  {interesse.nomeEmpresa}
+                </Typography>
+                <Chip label={`ID: ${interesse.empresaId}`} size="small" variant="outlined" />
+              </Box>
+
+              <Typography variant="body2" color="text.secondary" gutterBottom fontWeight={500}>
+                Proposta de Adoção:
+              </Typography>
+              <Typography variant="body2" sx={{ bgcolor: 'grey.50', p: 1.5, borderRadius: 1 }}>
                 {interesse.proposta}
-              </p>
-            </div>
-          </div>
+              </Typography>
+            </CardContent>
+          </Card>
         ))}
-      </div>
-    </div>
+      </Stack>
+    </Box>
   );
 };
 

@@ -3,21 +3,46 @@ import React, { useState, useRef } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import IssueService from '../../services/IssueService';
-import styles from './IssueFormModal.module.css';
+
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Box,
+  Typography,
+  Button,
+  TextField,
+  IconButton,
+  Alert,
+  CircularProgress,
+  Chip,
+  useTheme,
+  alpha,
+  Grid,
+  Paper,
+} from '@mui/material';
+import {
+  Close as CloseIcon,
+  LocationOn as LocationIcon,
+  PhotoCamera as PhotoCameraIcon,
+  Delete as DeleteIcon,
+  Send as SendIcon,
+} from '@mui/icons-material';
 
 /**
  * Tipos de denúncia disponíveis
  */
 const ISSUE_TYPES = [
-  { value: 'BURACO', label: 'Buraco na Via', icon: '🕳️' },
-  { value: 'ILUMINACAO', label: 'Problema de Iluminação', icon: '💡' },
-  { value: 'LIXO', label: 'Lixo/Entulho', icon: '🗑️' },
-  { value: 'PODA_ARVORE', label: 'Poda de Árvore', icon: '🌳' },
-  { value: 'VAZAMENTO', label: 'Vazamento de Água', icon: '💧' },
-  { value: 'PICHACAO', label: 'Pichação/Vandalismo', icon: '🎨' },
-  { value: 'CALCADA_DANIFICADA', label: 'Calçada Danificada', icon: '🚧' },
-  { value: 'SINALIZACAO', label: 'Sinalização', icon: '🚦' },
-  { value: 'OUTRO', label: 'Outro Problema', icon: '❓' }
+  { value: 'BURACO', label: 'Buraco na Via', icon: '🕳️', color: '#795548' },
+  { value: 'ILUMINACAO', label: 'Iluminação', icon: '💡', color: '#ffc107' },
+  { value: 'LIXO', label: 'Lixo/Entulho', icon: '🗑️', color: '#607d8b' },
+  { value: 'PODA_ARVORE', label: 'Poda de Árvore', icon: '🌳', color: '#4caf50' },
+  { value: 'VAZAMENTO', label: 'Vazamento de Água', icon: '💧', color: '#2196f3' },
+  { value: 'PICHACAO', label: 'Pichação/Vandalismo', icon: '🎨', color: '#9c27b0' },
+  { value: 'CALCADA_DANIFICADA', label: 'Calçada Danificada', icon: '🚧', color: '#ff5722' },
+  { value: 'SINALIZACAO', label: 'Sinalização', icon: '🚦', color: '#f44336' },
+  { value: 'OUTRO', label: 'Outro Problema', icon: '❓', color: '#9e9e9e' }
 ];
 
 /**
@@ -47,6 +72,7 @@ const IssueFormModal = ({
   latitude, 
   longitude 
 }) => {
+  const theme = useTheme();
   const [photoPreview, setPhotoPreview] = useState(null);
   const [photoFile, setPhotoFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -73,28 +99,20 @@ const IssueFormModal = ({
           longitude
         };
 
-        // Se tiver uma foto via URL (para simplicidade, pode ser expandido para upload real)
-        // Por enquanto, a API espera fotoUrl como string
-        // Em produção, você implementaria upload para S3/CloudStorage
         if (photoPreview && photoFile) {
-          // Converter para base64 ou usar URL de upload
-          // Por simplicidade, deixamos sem foto ou usamos uma URL placeholder
-          // issueData.fotoUrl = await uploadPhoto(photoFile);
+          // Upload logic would go here
         }
 
         await IssueService.create(issueData);
         
-        // Limpa o formulário
         formik.resetForm();
         setPhotoPreview(null);
         setPhotoFile(null);
         
-        // Callback de sucesso
         if (onSuccess) {
           onSuccess();
         }
         
-        // Fecha o modal
         onClose();
       } catch (err) {
         console.error('Erro ao criar denúncia:', err);
@@ -118,13 +136,11 @@ const IssueFormModal = ({
     const file = event.target.files?.[0];
     if (!file) return;
 
-    // Valida tipo de arquivo
     if (!file.type.startsWith('image/')) {
       setSubmitError('Por favor, selecione apenas arquivos de imagem.');
       return;
     }
 
-    // Valida tamanho (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       setSubmitError('A imagem deve ter no máximo 5MB.');
       return;
@@ -133,7 +149,6 @@ const IssueFormModal = ({
     setPhotoFile(file);
     setSubmitError(null);
 
-    // Cria preview
     const reader = new FileReader();
     reader.onloadend = () => {
       setPhotoPreview(reader.result);
@@ -157,172 +172,232 @@ const IssueFormModal = ({
     onClose();
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className={styles.overlay} onClick={handleClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.header}>
-          <h2 className={styles.title}>📍 Nova Denúncia</h2>
-          <button className={styles.closeButton} onClick={handleClose}>
-            ✕
-          </button>
-        </div>
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      maxWidth="sm"
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: 3,
+          maxHeight: '90vh',
+        },
+      }}
+    >
+      <DialogTitle
+        sx={{
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          py: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <LocationIcon />
+          <Typography variant="h6" fontWeight={600}>
+            Nova Denúncia
+          </Typography>
+        </Box>
+        <IconButton onClick={handleClose} sx={{ color: 'white' }}>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
 
-        <form onSubmit={formik.handleSubmit} className={styles.form}>
-          <div className={styles.locationInfo}>
-            <span className={styles.locationIcon}>📌</span>
-            <span className={styles.locationText}>
-              Lat: {latitude?.toFixed(6)} | Lng: {longitude?.toFixed(6)}
-            </span>
-          </div>
+      <form onSubmit={formik.handleSubmit}>
+        <DialogContent sx={{ pt: 3 }}>
+          {/* Localização */}
+          <Chip
+            icon={<LocationIcon />}
+            label={`Lat: ${latitude?.toFixed(6)} | Lng: ${longitude?.toFixed(6)}`}
+            variant="outlined"
+            color="primary"
+            sx={{ mb: 3 }}
+          />
 
           {/* Tipo do Problema */}
-          <div className={styles.field}>
-            <label className={styles.label}>
-              Tipo do Problema <span className={styles.required}>*</span>
-            </label>
-            <div className={styles.typeGrid}>
-              {ISSUE_TYPES.map((type) => (
-                <button
-                  key={type.value}
-                  type="button"
-                  className={`${styles.typeButton} ${
-                    formik.values.tipo === type.value ? styles.typeButtonActive : ''
-                  }`}
+          <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
+            Tipo do Problema *
+          </Typography>
+          <Grid container spacing={1} sx={{ mb: 3 }}>
+            {ISSUE_TYPES.map((type) => (
+              <Grid size={{ xs: 6, sm: 4 }} key={type.value}>
+                <Paper
+                  elevation={formik.values.tipo === type.value ? 4 : 0}
                   onClick={() => formik.setFieldValue('tipo', type.value)}
+                  sx={{
+                    p: 1.5,
+                    cursor: 'pointer',
+                    textAlign: 'center',
+                    border: '2px solid',
+                    borderColor: formik.values.tipo === type.value 
+                      ? type.color 
+                      : 'divider',
+                    bgcolor: formik.values.tipo === type.value 
+                      ? alpha(type.color, 0.1) 
+                      : 'transparent',
+                    borderRadius: 2,
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      borderColor: type.color,
+                      bgcolor: alpha(type.color, 0.05),
+                    },
+                  }}
                 >
-                  <span className={styles.typeIcon}>{type.icon}</span>
-                  <span className={styles.typeLabel}>{type.label}</span>
-                </button>
-              ))}
-            </div>
-            {formik.touched.tipo && formik.errors.tipo && (
-              <span className={styles.error}>{formik.errors.tipo}</span>
-            )}
-          </div>
+                  <Typography sx={{ fontSize: '1.5rem', mb: 0.5 }}>
+                    {type.icon}
+                  </Typography>
+                  <Typography variant="caption" sx={{ fontWeight: 500 }}>
+                    {type.label}
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+          {formik.touched.tipo && formik.errors.tipo && (
+            <Typography color="error" variant="caption" sx={{ mb: 2, display: 'block' }}>
+              {formik.errors.tipo}
+            </Typography>
+          )}
 
           {/* Título */}
-          <div className={styles.field}>
-            <label htmlFor="titulo" className={styles.label}>
-              Título <span className={styles.required}>*</span>
-            </label>
-            <input
-              id="titulo"
-              name="titulo"
-              type="text"
-              placeholder="Ex: Buraco grande na Rua das Flores"
-              className={`${styles.input} ${
-                formik.touched.titulo && formik.errors.titulo ? styles.inputError : ''
-              }`}
-              {...formik.getFieldProps('titulo')}
-            />
-            {formik.touched.titulo && formik.errors.titulo && (
-              <span className={styles.error}>{formik.errors.titulo}</span>
-            )}
-          </div>
+          <TextField
+            fullWidth
+            label="Título"
+            name="titulo"
+            placeholder="Ex: Buraco grande na Rua das Flores"
+            value={formik.values.titulo}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.titulo && Boolean(formik.errors.titulo)}
+            helperText={formik.touched.titulo && formik.errors.titulo}
+            required
+            sx={{ mb: 3 }}
+          />
 
           {/* Descrição */}
-          <div className={styles.field}>
-            <label htmlFor="descricao" className={styles.label}>
-              Descrição <span className={styles.required}>*</span>
-            </label>
-            <textarea
-              id="descricao"
-              name="descricao"
-              placeholder="Descreva o problema em detalhes. Quanto mais informações, melhor!"
-              rows={4}
-              className={`${styles.textarea} ${
-                formik.touched.descricao && formik.errors.descricao ? styles.inputError : ''
-              }`}
-              {...formik.getFieldProps('descricao')}
-            />
-            <div className={styles.charCount}>
-              {formik.values.descricao.length}/2000
-            </div>
-            {formik.touched.descricao && formik.errors.descricao && (
-              <span className={styles.error}>{formik.errors.descricao}</span>
-            )}
-          </div>
+          <TextField
+            fullWidth
+            label="Descrição"
+            name="descricao"
+            placeholder="Descreva o problema em detalhes. Quanto mais informações, melhor!"
+            multiline
+            rows={4}
+            value={formik.values.descricao}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.descricao && Boolean(formik.errors.descricao)}
+            helperText={
+              (formik.touched.descricao && formik.errors.descricao) ||
+              `${formik.values.descricao.length}/2000`
+            }
+            required
+            sx={{ mb: 3 }}
+          />
 
           {/* Upload de Foto */}
-          <div className={styles.field}>
-            <label className={styles.label}>Foto (opcional)</label>
-            
-            {photoPreview ? (
-              <div className={styles.photoPreviewContainer}>
-                <img 
-                  src={photoPreview} 
-                  alt="Preview" 
-                  className={styles.photoPreview}
-                />
-                <button 
-                  type="button" 
-                  className={styles.removePhotoButton}
-                  onClick={removePhoto}
-                >
-                  ✕ Remover
-                </button>
-              </div>
-            ) : (
-              <div 
-                className={styles.uploadArea}
-                onClick={() => fileInputRef.current?.click()}
+          <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 600 }}>
+            Foto (opcional)
+          </Typography>
+          
+          {photoPreview ? (
+            <Box
+              sx={{
+                position: 'relative',
+                borderRadius: 2,
+                overflow: 'hidden',
+                mb: 2,
+              }}
+            >
+              <img
+                src={photoPreview}
+                alt="Preview"
+                style={{
+                  width: '100%',
+                  maxHeight: 200,
+                  objectFit: 'cover',
+                }}
+              />
+              <IconButton
+                onClick={removePhoto}
+                sx={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  bgcolor: alpha(theme.palette.error.main, 0.9),
+                  color: 'white',
+                  '&:hover': {
+                    bgcolor: theme.palette.error.dark,
+                  },
+                }}
               >
-                <span className={styles.uploadIcon}>📷</span>
-                <span className={styles.uploadText}>
-                  Clique para adicionar uma foto
-                </span>
-                <span className={styles.uploadHint}>
-                  JPG, PNG ou GIF (máx. 5MB)
-                </span>
-              </div>
-            )}
-            
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handlePhotoChange}
-              className={styles.fileInput}
-            />
-          </div>
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          ) : (
+            <Paper
+              variant="outlined"
+              onClick={() => fileInputRef.current?.click()}
+              sx={{
+                p: 3,
+                textAlign: 'center',
+                cursor: 'pointer',
+                borderStyle: 'dashed',
+                borderRadius: 2,
+                bgcolor: alpha(theme.palette.grey[500], 0.05),
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  borderColor: theme.palette.primary.main,
+                  bgcolor: alpha(theme.palette.primary.main, 0.05),
+                },
+              }}
+            >
+              <PhotoCameraIcon sx={{ fontSize: 40, color: 'text.secondary', mb: 1 }} />
+              <Typography variant="body2" color="text.secondary">
+                Clique para adicionar uma foto
+              </Typography>
+              <Typography variant="caption" color="text.disabled">
+                JPG, PNG ou GIF (máx. 5MB)
+              </Typography>
+            </Paper>
+          )}
+          
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handlePhotoChange}
+            style={{ display: 'none' }}
+          />
 
           {/* Erro de submit */}
           {submitError && (
-            <div className={styles.submitError}>
-              ⚠️ {submitError}
-            </div>
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {submitError}
+            </Alert>
           )}
+        </DialogContent>
 
-          {/* Botões de ação */}
-          <div className={styles.actions}>
-            <button 
-              type="button" 
-              className={styles.cancelButton}
-              onClick={handleClose}
-              disabled={isSubmitting}
-            >
-              Cancelar
-            </button>
-            <button 
-              type="submit" 
-              className={styles.submitButton}
-              disabled={isSubmitting || !formik.isValid}
-            >
-              {isSubmitting ? (
-                <>
-                  <span className={styles.spinner}></span>
-                  Enviando...
-                </>
-              ) : (
-                '📤 Enviar Denúncia'
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <DialogActions sx={{ p: 2, pt: 0 }}>
+          <Button
+            onClick={handleClose}
+            disabled={isSubmitting}
+          >
+            Cancelar
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={isSubmitting || !formik.isValid}
+            startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
+          >
+            {isSubmitting ? 'Enviando...' : 'Enviar Denúncia'}
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
   );
 };
 
