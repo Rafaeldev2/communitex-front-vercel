@@ -1,0 +1,2380 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Communitex API",
+        "description": "API do projeto Communitex - Sistema de Gestão para adocão de praças",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "Generated server url"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Adoções",
+            "description": "Endpoints para gerenciamento de adoções de praças"
+        },
+        {
+            "name": "Denúncias",
+            "description": "Endpoints para gerenciamento de denúncias comunitárias"
+        },
+        {
+            "name": "Pessoas Físicas",
+            "description": "Endpoints para gerenciamento de pessoas físicas"
+        },
+        {
+            "name": "Representantes",
+            "description": "Endpoints para gerenciamento de representantes de empresas"
+        },
+        {
+            "name": "Praças",
+            "description": "Endpoints para gerenciamento de praças"
+        },
+        {
+            "name": "Empresas",
+            "description": "Endpoints para gerenciamento de empresas"
+        },
+        {
+            "name": "Autenticação",
+            "description": "Endpoints para autenticação e gerenciamento de usuários"
+        }
+    ],
+    "paths": {
+        "/api/representantes/{id}": {
+            "get": {
+                "tags": [
+                    "Representantes"
+                ],
+                "summary": "Buscar representante por ID",
+                "operationId": "findById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Representante encontrado com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Representante não encontrado",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Representantes"
+                ],
+                "summary": "Atualizar representante existente",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RepresentanteEmpresaRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Representante atualizado com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Representante não encontrado",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Representantes"
+                ],
+                "summary": "Excluir representante",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Representante excluído com sucesso"
+                    },
+                    "404": {
+                        "description": "Representante não encontrado"
+                    }
+                }
+            }
+        },
+        "/api/pracas/{id}": {
+            "get": {
+                "tags": [
+                    "Praças"
+                ],
+                "summary": "Buscar praça por ID",
+                "operationId": "findById_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Praça encontrada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PracaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Praça não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PracaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Praças"
+                ],
+                "summary": "Atualizar praça existente",
+                "operationId": "update_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PracaRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Praça atualizada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PracaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Praça não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PracaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Praças"
+                ],
+                "summary": "Excluir praça",
+                "operationId": "delete_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Praça excluída com sucesso"
+                    },
+                    "404": {
+                        "description": "Praça não encontrada"
+                    }
+                }
+            }
+        },
+        "/api/pessoas-fisicas/{id}": {
+            "get": {
+                "tags": [
+                    "Pessoas Físicas"
+                ],
+                "summary": "Buscar pessoa física por ID",
+                "operationId": "findById_2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Pessoa física não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PessoaFisicaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Pessoa física encontrada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PessoaFisicaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Pessoas Físicas"
+                ],
+                "summary": "Atualizar pessoa física existente",
+                "operationId": "update_2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaFisicaRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Pessoa física atualizada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PessoaFisicaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Pessoa física não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PessoaFisicaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Pessoas Físicas"
+                ],
+                "summary": "Excluir pessoa física",
+                "operationId": "delete_2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Pessoa física excluída com sucesso"
+                    },
+                    "404": {
+                        "description": "Pessoa física não encontrada"
+                    }
+                }
+            }
+        },
+        "/api/empresas/{id}": {
+            "get": {
+                "tags": [
+                    "Empresas"
+                ],
+                "summary": "Buscar empresa por ID",
+                "operationId": "findById_3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Empresa encontrada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Empresa não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Empresas"
+                ],
+                "summary": "Atualizar empresa existente",
+                "operationId": "update_3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmpresaRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Empresa atualizada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Empresa não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Empresas"
+                ],
+                "summary": "Excluir empresa",
+                "operationId": "delete_3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Empresa não encontrada"
+                    },
+                    "204": {
+                        "description": "Empresa excluída com sucesso"
+                    }
+                }
+            }
+        },
+        "/api/representantes": {
+            "get": {
+                "tags": [
+                    "Representantes"
+                ],
+                "summary": "Listar todos os representantes",
+                "operationId": "findAll",
+                "responses": {
+                    "200": {
+                        "description": "Lista de representantes retornada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Representantes"
+                ],
+                "summary": "Criar novo representante",
+                "operationId": "create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RepresentanteEmpresaRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Representante criado com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RepresentanteEmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/pracas": {
+            "get": {
+                "tags": [
+                    "Praças"
+                ],
+                "summary": "Listar todas as praças",
+                "description": "Lista praças com filtros opcionais: id, nome e cidade. Todos os parâmetros são opcionais e podem ser combinados.",
+                "operationId": "findAll_1",
+                "parameters": [
+                    {
+                        "name": "pesquisaDTO",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/PracaPesquisaDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de praças retornada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PracaResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Praças"
+                ],
+                "summary": "Criar nova praça",
+                "description": "Cria uma nova praça. A pessoa física cadastrante é obtida automaticamente do token JWT.",
+                "operationId": "create_1",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PracaRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PracaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Praça criada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PracaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Acesso negado - apenas pessoas físicas podem cadastrar praças",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PracaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pessoas-fisicas": {
+            "get": {
+                "tags": [
+                    "Pessoas Físicas"
+                ],
+                "summary": "Listar todas as pessoas físicas",
+                "operationId": "findAll_2",
+                "responses": {
+                    "200": {
+                        "description": "Lista de pessoas físicas retornada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PessoaFisicaResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Pessoas Físicas"
+                ],
+                "summary": "Criar nova pessoa física",
+                "operationId": "create_2",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PessoaFisicaRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Pessoa física criada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PessoaFisicaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PessoaFisicaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/issues": {
+            "get": {
+                "tags": [
+                    "Denúncias"
+                ],
+                "summary": "Listar todas as denúncias",
+                "operationId": "findAll_3",
+                "responses": {
+                    "200": {
+                        "description": "Lista de denúncias retornada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/IssueResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Denúncias"
+                ],
+                "summary": "Criar nova denúncia",
+                "description": "Cria uma nova denúncia comunitária. Verifica automaticamente se existe denúncia similar do mesmo tipo em um raio de 20 metros. O autor é obtido automaticamente do token JWT.",
+                "operationId": "create_3",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IssueRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Denúncia criada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Já existe uma denúncia similar próxima",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/issues/{id}/interacoes": {
+            "get": {
+                "tags": [
+                    "Denúncias"
+                ],
+                "summary": "Listar interações de uma denúncia",
+                "operationId": "findInteractions",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Denúncia não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/IssueInteractionResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Lista de interações retornada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/IssueInteractionResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Denúncias"
+                ],
+                "summary": "Adicionar interação à denúncia",
+                "description": "Adiciona um comentário, apoio ou curtida à denúncia. Cada usuário pode dar apenas um apoio e uma curtida por denúncia.",
+                "operationId": "addInteraction",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/IssueInteractionRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "404": {
+                        "description": "Denúncia não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueInteractionResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos ou interação duplicada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueInteractionResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Interação adicionada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueInteractionResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/empresas": {
+            "get": {
+                "tags": [
+                    "Empresas"
+                ],
+                "summary": "Listar todas as empresas",
+                "operationId": "findAll_4",
+                "responses": {
+                    "200": {
+                        "description": "Lista de empresas retornada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/EmpresaResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Empresas"
+                ],
+                "summary": "Criar nova empresa",
+                "operationId": "create_4",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmpresaRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Empresa criada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmpresaResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/register": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Registrar novo usuário",
+                "operationId": "registerUser",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuário registrado com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Nome de usuário já existe ou dados inválidos",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/refresh": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Renovar token de acesso",
+                "operationId": "refreshToken",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefreshRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "401": {
+                        "description": "Refresh token inválido ou expirado",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Token renovado com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Autenticar usuário",
+                "operationId": "createAuthenticationToken",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Autenticação realizada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/adocao/interesse": {
+            "post": {
+                "tags": [
+                    "Adoções"
+                ],
+                "summary": "Registrar interesse de adoção",
+                "description": "Permite que uma empresa registre interesse em adotar uma praça. O responsável pela praça será notificado por email.",
+                "operationId": "registrarInteresse",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InteresseAdocaoRequestDTO"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "403": {
+                        "description": "Acesso negado - apenas empresas podem registrar interesse",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InteresseAdocaoResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Dados inválidos",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InteresseAdocaoResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Interesse registrado com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InteresseAdocaoResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Praça ou empresa não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InteresseAdocaoResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/issues/{id}/status": {
+            "patch": {
+                "tags": [
+                    "Denúncias"
+                ],
+                "summary": "Atualizar status da denúncia",
+                "description": "Atualiza o status de uma denúncia. Status válidos: ABERTA, EM_ANALISE, EM_ANDAMENTO, RESOLVIDA, REJEITADA",
+                "operationId": "updateStatus",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "404": {
+                        "description": "Denúncia não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Status atualizado com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Status inválido",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/pracas/{id}/detalhes": {
+            "get": {
+                "tags": [
+                    "Praças"
+                ],
+                "summary": "Buscar praça por ID com detalhes completos",
+                "description": "Retorna informações detalhadas da praça incluindo dados do cadastrante e histórico de interesses",
+                "operationId": "findByIdWithDetails",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Praça encontrada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PracaDetailResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Praça não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PracaDetailResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/issues/{id}": {
+            "get": {
+                "tags": [
+                    "Denúncias"
+                ],
+                "summary": "Buscar denúncia por ID",
+                "operationId": "findById_4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Denúncia encontrada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Denúncia não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/issues/{id}/detalhes": {
+            "get": {
+                "tags": [
+                    "Denúncias"
+                ],
+                "summary": "Buscar denúncia por ID com detalhes completos",
+                "description": "Retorna informações detalhadas da denúncia incluindo todas as interações (comentários, apoios, curtidas)",
+                "operationId": "findByIdWithDetails_1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Denúncia encontrada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueDetailResponseDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Denúncia não encontrada",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IssueDetailResponseDTO"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/issues/proximidade": {
+            "get": {
+                "tags": [
+                    "Denúncias"
+                ],
+                "summary": "Listar denúncias por proximidade",
+                "description": "Retorna denúncias dentro de um raio especificado (em metros) a partir das coordenadas informadas",
+                "operationId": "findByProximity",
+                "parameters": [
+                    {
+                        "name": "latitude",
+                        "in": "query",
+                        "description": "Latitude do ponto de referência",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "format": "double"
+                        }
+                    },
+                    {
+                        "name": "longitude",
+                        "in": "query",
+                        "description": "Longitude do ponto de referência",
+                        "required": true,
+                        "schema": {
+                            "type": "number",
+                            "format": "double"
+                        }
+                    },
+                    {
+                        "name": "raioMetros",
+                        "in": "query",
+                        "description": "Raio de busca em metros (padrão: 1000)",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "double",
+                            "default": 1000.0
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de denúncias próximas retornada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/IssueResponseDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/adocao/minhas-propostas": {
+            "get": {
+                "tags": [
+                    "Adoções"
+                ],
+                "summary": "Listar minhas propostas",
+                "description": "Lista todas as propostas de adoção da empresa autenticada. A empresa é identificada automaticamente pelo token JWT.",
+                "operationId": "listarMinhasPropostas",
+                "responses": {
+                    "403": {
+                        "description": "Acesso negado - apenas empresas podem visualizar suas propostas",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PropostaEmpresaDTO"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Lista de propostas retornada com sucesso",
+                        "content": {
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PropostaEmpresaDTO"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/issues/{issueId}/interacoes/{interactionId}": {
+            "delete": {
+                "tags": [
+                    "Denúncias"
+                ],
+                "summary": "Remover interação de uma denúncia",
+                "description": "Remove uma interação (comentário, apoio ou curtida). Apenas o autor da interação pode removê-la.",
+                "operationId": "removeInteraction",
+                "parameters": [
+                    {
+                        "name": "issueId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "interactionId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Denúncia ou interação não encontrada"
+                    },
+                    "204": {
+                        "description": "Interação removida com sucesso"
+                    },
+                    "403": {
+                        "description": "Sem permissão para remover esta interação"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Adocao": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "dataInicio": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "dataFim": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "descricaoProjeto": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "PROPOSTA",
+                            "EM_ANALISE",
+                            "APROVADA",
+                            "CONCLUIDA",
+                            "REJEITADA",
+                            "FINALIZADA"
+                        ]
+                    }
+                }
+            },
+            "Empresa": {
+                "required": [
+                    "cnpj",
+                    "email",
+                    "razaoSocial"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "razaoSocial": {
+                        "type": "string"
+                    },
+                    "cnpj": {
+                        "pattern": "\\d{14}",
+                        "type": "string"
+                    },
+                    "nomeFantasia": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "pattern": "\\d{10,11}",
+                        "type": "string"
+                    }
+                }
+            },
+            "RepresentanteEmpresa": {
+                "required": [
+                    "ativo",
+                    "email",
+                    "nome"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "ativo": {
+                        "type": "boolean"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "empresa": {
+                        "$ref": "#/components/schemas/Empresa"
+                    }
+                }
+            },
+            "RepresentanteEmpresaRequestDTO": {
+                "required": [
+                    "ativo",
+                    "email",
+                    "empresaId",
+                    "nome"
+                ],
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "string"
+                    },
+                    "ativo": {
+                        "type": "boolean"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "empresaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                }
+            },
+            "RepresentanteEmpresaResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "ativo": {
+                        "type": "boolean"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "empresaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "empresaNomeFantasia": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PracaRequestDTO": {
+                "required": [
+                    "cidade",
+                    "nome"
+                ],
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "string"
+                    },
+                    "logradouro": {
+                        "type": "string"
+                    },
+                    "bairro": {
+                        "type": "string"
+                    },
+                    "cidade": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "descricao": {
+                        "maxLength": 1000,
+                        "minLength": 0,
+                        "type": "string"
+                    },
+                    "fotoUrl": {
+                        "type": "string"
+                    },
+                    "metragemM2": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DISPONIVEL",
+                            "EM_PROCESSO",
+                            "ADOTADA"
+                        ]
+                    }
+                }
+            },
+            "PracaResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "logradouro": {
+                        "type": "string"
+                    },
+                    "bairro": {
+                        "type": "string"
+                    },
+                    "cidade": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "descricao": {
+                        "type": "string"
+                    },
+                    "fotoUrl": {
+                        "type": "string"
+                    },
+                    "metragemM2": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DISPONIVEL",
+                            "EM_PROCESSO",
+                            "ADOTADA"
+                        ]
+                    }
+                }
+            },
+            "PessoaFisicaRequestDTO": {
+                "required": [
+                    "cpf",
+                    "email",
+                    "nome",
+                    "senha"
+                ],
+                "type": "object",
+                "properties": {
+                    "nome": {
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "pattern": "\\d{11}",
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "pattern": "\\d{10,11}",
+                        "type": "string"
+                    },
+                    "senha": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PessoaFisicaResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "cpf": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "type": "string"
+                    }
+                }
+            },
+            "EmpresaRequestDTO": {
+                "required": [
+                    "cnpj",
+                    "email",
+                    "emailRepresentante",
+                    "nomeRepresentante",
+                    "razaoSocial",
+                    "senhaRepresentante"
+                ],
+                "type": "object",
+                "properties": {
+                    "razaoSocial": {
+                        "type": "string"
+                    },
+                    "cnpj": {
+                        "type": "string"
+                    },
+                    "nomeFantasia": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "type": "string"
+                    },
+                    "representanteEmpresa": {
+                        "$ref": "#/components/schemas/RepresentanteEmpresa"
+                    },
+                    "nomeRepresentante": {
+                        "type": "string"
+                    },
+                    "emailRepresentante": {
+                        "type": "string"
+                    },
+                    "senhaRepresentante": {
+                        "type": "string"
+                    }
+                }
+            },
+            "EmpresaResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nomeSocial": {
+                        "type": "string"
+                    },
+                    "cnpj": {
+                        "type": "string"
+                    },
+                    "nomeFantasia": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "type": "string"
+                    },
+                    "representanteEmpresa": {
+                        "$ref": "#/components/schemas/RepresentanteEmpresa"
+                    },
+                    "adocaos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Adocao"
+                        }
+                    }
+                }
+            },
+            "IssueRequestDTO": {
+                "required": [
+                    "descricao",
+                    "latitude",
+                    "longitude",
+                    "tipo",
+                    "titulo"
+                ],
+                "type": "object",
+                "properties": {
+                    "titulo": {
+                        "maxLength": 150,
+                        "minLength": 0,
+                        "type": "string"
+                    },
+                    "descricao": {
+                        "maxLength": 2000,
+                        "minLength": 0,
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "fotoUrl": {
+                        "maxLength": 500,
+                        "minLength": 0,
+                        "type": "string"
+                    },
+                    "tipo": {
+                        "type": "string",
+                        "enum": [
+                            "ILUMINACAO",
+                            "BURACO",
+                            "LIXO",
+                            "PODA_ARVORE",
+                            "VAZAMENTO",
+                            "PICHACAO",
+                            "CALCADA_DANIFICADA",
+                            "SINALIZACAO",
+                            "OUTRO"
+                        ]
+                    }
+                }
+            },
+            "IssueResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "titulo": {
+                        "type": "string"
+                    },
+                    "descricao": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "fotoUrl": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "ABERTA",
+                            "EM_ANALISE",
+                            "EM_ANDAMENTO",
+                            "RESOLVIDA",
+                            "REJEITADA"
+                        ]
+                    },
+                    "tipo": {
+                        "type": "string",
+                        "enum": [
+                            "ILUMINACAO",
+                            "BURACO",
+                            "LIXO",
+                            "PODA_ARVORE",
+                            "VAZAMENTO",
+                            "PICHACAO",
+                            "CALCADA_DANIFICADA",
+                            "SINALIZACAO",
+                            "OUTRO"
+                        ]
+                    },
+                    "dataCriacao": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "autorId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "autorNome": {
+                        "type": "string"
+                    },
+                    "totalInteracoes": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalApoios": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "IssueInteractionRequestDTO": {
+                "required": [
+                    "tipo"
+                ],
+                "type": "object",
+                "properties": {
+                    "tipo": {
+                        "type": "string",
+                        "enum": [
+                            "COMENTARIO",
+                            "APOIO",
+                            "CURTIDA"
+                        ]
+                    },
+                    "conteudo": {
+                        "maxLength": 1000,
+                        "minLength": 0,
+                        "type": "string"
+                    }
+                }
+            },
+            "IssueInteractionResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "tipo": {
+                        "type": "string",
+                        "enum": [
+                            "COMENTARIO",
+                            "APOIO",
+                            "CURTIDA"
+                        ]
+                    },
+                    "conteudo": {
+                        "type": "string"
+                    },
+                    "dataCriacao": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "usuarioId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "usuarioNome": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RegisterRequest": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "role": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RefreshRequest": {
+                "type": "object",
+                "properties": {
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AuthResponse": {
+                "type": "object",
+                "properties": {
+                    "accessToken": {
+                        "type": "string"
+                    },
+                    "refreshToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AuthRequest": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "InteresseAdocaoRequestDTO": {
+                "required": [
+                    "pracaId",
+                    "proposta"
+                ],
+                "type": "object",
+                "properties": {
+                    "pracaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "proposta": {
+                        "type": "string"
+                    }
+                }
+            },
+            "InteresseAdocaoResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "pracaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nomePraca": {
+                        "type": "string"
+                    },
+                    "empresaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nomeEmpresa": {
+                        "type": "string"
+                    },
+                    "proposta": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "PROPOSTA",
+                            "EM_ANALISE",
+                            "APROVADA",
+                            "CONCLUIDA",
+                            "REJEITADA",
+                            "FINALIZADA"
+                        ]
+                    },
+                    "dataRegistro": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "PracaPesquisaDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "cidade": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AdocaoHistoricoDTO": {
+                "type": "object",
+                "properties": {
+                    "empresaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nomeEmpresa": {
+                        "type": "string"
+                    },
+                    "proposta": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PessoaFisicaSimpleDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "telefone": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PracaDetailResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nome": {
+                        "type": "string"
+                    },
+                    "logradouro": {
+                        "type": "string"
+                    },
+                    "bairro": {
+                        "type": "string"
+                    },
+                    "cidade": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "descricao": {
+                        "type": "string"
+                    },
+                    "fotoUrl": {
+                        "type": "string"
+                    },
+                    "metragemM2": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "DISPONIVEL",
+                            "EM_PROCESSO",
+                            "ADOTADA"
+                        ]
+                    },
+                    "cadastradoPor": {
+                        "$ref": "#/components/schemas/PessoaFisicaSimpleDTO"
+                    },
+                    "historicoInteresses": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AdocaoHistoricoDTO"
+                        }
+                    }
+                }
+            },
+            "IssueDetailResponseDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "titulo": {
+                        "type": "string"
+                    },
+                    "descricao": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "fotoUrl": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "ABERTA",
+                            "EM_ANALISE",
+                            "EM_ANDAMENTO",
+                            "RESOLVIDA",
+                            "REJEITADA"
+                        ]
+                    },
+                    "tipo": {
+                        "type": "string",
+                        "enum": [
+                            "ILUMINACAO",
+                            "BURACO",
+                            "LIXO",
+                            "PODA_ARVORE",
+                            "VAZAMENTO",
+                            "PICHACAO",
+                            "CALCADA_DANIFICADA",
+                            "SINALIZACAO",
+                            "OUTRO"
+                        ]
+                    },
+                    "dataCriacao": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "autorId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "autorNome": {
+                        "type": "string"
+                    },
+                    "totalApoios": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "totalCurtidas": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "interacoes": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/IssueInteractionResponseDTO"
+                        }
+                    }
+                }
+            },
+            "PropostaEmpresaDTO": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "pracaId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nomePraca": {
+                        "type": "string"
+                    },
+                    "cidadePraca": {
+                        "type": "string"
+                    },
+                    "proposta": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "PROPOSTA",
+                            "EM_ANALISE",
+                            "APROVADA",
+                            "CONCLUIDA",
+                            "REJEITADA",
+                            "FINALIZADA"
+                        ]
+                    },
+                    "dataRegistro": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "dataInicio": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "dataFim": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            }
+        }
+    }
+}

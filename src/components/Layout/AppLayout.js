@@ -17,6 +17,7 @@ import {
   Avatar,
   useTheme,
   useMediaQuery,
+  Tooltip,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -27,9 +28,11 @@ import {
   ReportProblem as ReportIcon,
   Person as PersonIcon,
   ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
 } from '@mui/icons-material';
 
-const drawerWidth = 260;
+const drawerWidthExpanded = 260;
+const drawerWidthCollapsed = 72;
 
 const AppLayout = ({ children }) => {
   const { user, logout } = useAuth();
@@ -39,9 +42,16 @@ const AppLayout = ({ children }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [drawerCollapsed, setDrawerCollapsed] = useState(false);
+
+  const drawerWidth = drawerCollapsed ? drawerWidthCollapsed : drawerWidthExpanded;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleDrawerCollapse = () => {
+    setDrawerCollapsed(!drawerCollapsed);
   };
 
   const handleLogout = () => {
@@ -92,84 +102,111 @@ const AppLayout = ({ children }) => {
       {/* Header do Drawer */}
       <Box
         sx={{
-          p: 2,
+          p: drawerCollapsed ? 1 : 2,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: drawerCollapsed ? 'center' : 'space-between',
           background: 'linear-gradient(135deg, #1d7a3d 0%, #2e9e57 100%)',
           color: 'white',
+          minHeight: 64,
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography variant="h6" fontWeight={700}>
-            🌿 Communitex
-          </Typography>
-        </Box>
-        {isMobile && (
+        {!drawerCollapsed && (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="h6" fontWeight={700}>
+              🌿 Communitex
+            </Typography>
+          </Box>
+        )}
+        {drawerCollapsed && (
+          <Typography sx={{ fontSize: 24 }}>🌿</Typography>
+        )}
+        {isMobile ? (
           <IconButton onClick={handleDrawerToggle} sx={{ color: 'white' }}>
             <ChevronLeftIcon />
+          </IconButton>
+        ) : (
+          <IconButton 
+            onClick={handleDrawerCollapse}
+            sx={{ 
+              color: 'white',
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' },
+            }}
+          >
+            {drawerCollapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         )}
       </Box>
 
       {/* Informações do Usuário */}
-      <Box sx={{ p: 2, bgcolor: 'grey.50' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Avatar sx={{ bgcolor: 'primary.main', width: 40, height: 40 }}>
-            <PersonIcon />
-          </Avatar>
-          <Box>
-            <Typography variant="subtitle2" fontWeight={600}>
-              {user?.username || user?.sub || 'Usuário'}
-            </Typography>
-            <Typography variant="caption" color="text.secondary">
-              {isAdmin ? 'Administrador' : isEmpresa ? 'Empresa' : 'Usuário'}
-            </Typography>
-          </Box>
+      <Box sx={{ p: drawerCollapsed ? 1 : 2, bgcolor: 'grey.50' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, justifyContent: drawerCollapsed ? 'center' : 'flex-start' }}>
+          <Tooltip title={drawerCollapsed ? (user?.username || user?.sub || 'Usuário') : ''} placement="right">
+            <Avatar sx={{ bgcolor: 'primary.main', width: 40, height: 40 }}>
+              <PersonIcon />
+            </Avatar>
+          </Tooltip>
+          {!drawerCollapsed && (
+            <Box>
+              <Typography variant="subtitle2" fontWeight={600}>
+                {user?.username || user?.sub || 'Usuário'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {isAdmin ? 'Administrador' : isEmpresa ? 'Empresa' : 'Usuário'}
+              </Typography>
+            </Box>
+          )}
         </Box>
       </Box>
 
       <Divider />
 
       {/* Menu de Navegação */}
-      <List sx={{ flex: 1, px: 1 }}>
+      <List sx={{ flex: 1, px: drawerCollapsed ? 0.5 : 1 }}>
         {menuItems
           .filter((item) => item.show)
           .map((item) => (
             <ListItem key={item.path} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                onClick={() => handleNavigation(item.path)}
-                selected={location.pathname === item.path}
-                sx={{
-                  borderRadius: 2,
-                  '&.Mui-selected': {
-                    bgcolor: 'primary.light',
-                    color: 'primary.contrastText',
-                    '& .MuiListItemIcon-root': {
+              <Tooltip title={drawerCollapsed ? item.text : ''} placement="right">
+                <ListItemButton
+                  onClick={() => handleNavigation(item.path)}
+                  selected={location.pathname === item.path}
+                  sx={{
+                    borderRadius: 2,
+                    justifyContent: drawerCollapsed ? 'center' : 'flex-start',
+                    px: drawerCollapsed ? 2 : 2,
+                    '&.Mui-selected': {
+                      bgcolor: 'primary.light',
                       color: 'primary.contrastText',
+                      '& .MuiListItemIcon-root': {
+                        color: 'primary.contrastText',
+                      },
+                      '&:hover': {
+                        bgcolor: 'primary.main',
+                      },
                     },
                     '&:hover': {
-                      bgcolor: 'primary.main',
+                      bgcolor: 'grey.100',
                     },
-                  },
-                  '&:hover': {
-                    bgcolor: 'grey.100',
-                  },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 40,
-                    color: location.pathname === item.path ? 'inherit' : 'primary.main',
                   }}
                 >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={item.text}
-                  primaryTypographyProps={{ fontWeight: 500 }}
-                />
-              </ListItemButton>
+                  <ListItemIcon
+                    sx={{
+                      minWidth: drawerCollapsed ? 0 : 40,
+                      mr: drawerCollapsed ? 0 : 'auto',
+                      color: location.pathname === item.path ? 'inherit' : 'primary.main',
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  {!drawerCollapsed && (
+                    <ListItemText
+                      primary={item.text}
+                      primaryTypographyProps={{ fontWeight: 500 }}
+                    />
+                  )}
+                </ListItemButton>
+              </Tooltip>
             </ListItem>
           ))}
       </List>
@@ -177,26 +214,31 @@ const AppLayout = ({ children }) => {
       <Divider />
 
       {/* Botão de Logout */}
-      <List sx={{ px: 1, pb: 2 }}>
+      <List sx={{ px: drawerCollapsed ? 0.5 : 1, pb: 1 }}>
         <ListItem disablePadding>
-          <ListItemButton
-            onClick={handleLogout}
-            sx={{
-              borderRadius: 2,
-              color: 'error.main',
-              '&:hover': {
-                bgcolor: 'error.lighter',
-              },
-            }}
-          >
-            <ListItemIcon sx={{ minWidth: 40, color: 'error.main' }}>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary="Sair"
-              primaryTypographyProps={{ fontWeight: 500 }}
-            />
-          </ListItemButton>
+          <Tooltip title={drawerCollapsed ? 'Sair' : ''} placement="right">
+            <ListItemButton
+              onClick={handleLogout}
+              sx={{
+                borderRadius: 2,
+                justifyContent: drawerCollapsed ? 'center' : 'flex-start',
+                color: 'error.main',
+                '&:hover': {
+                  bgcolor: 'error.lighter',
+                },
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: drawerCollapsed ? 0 : 40, color: 'error.main' }}>
+                <LogoutIcon />
+              </ListItemIcon>
+              {!drawerCollapsed && (
+                <ListItemText
+                  primary="Sair"
+                  primaryTypographyProps={{ fontWeight: 500 }}
+                />
+              )}
+            </ListItemButton>
+          </Tooltip>
         </ListItem>
       </List>
     </Box>
@@ -212,6 +254,10 @@ const AppLayout = ({ children }) => {
           ml: { md: `${drawerWidth}px` },
           background: 'linear-gradient(135deg, #1d7a3d 0%, #2e9e57 100%)',
           boxShadow: '0 4px 12px rgba(46, 158, 87, 0.15)',
+          transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
         }}
       >
         <Toolbar>
@@ -247,14 +293,14 @@ const AppLayout = ({ children }) => {
           display: { xs: 'block', md: 'none' },
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
-            width: drawerWidth,
+            width: drawerWidthExpanded,
           },
         }}
       >
         {drawerContent}
       </Drawer>
 
-      {/* Drawer Desktop (permanente) */}
+      {/* Drawer Desktop (retrátil) */}
       <Drawer
         variant="permanent"
         sx={{
@@ -264,6 +310,11 @@ const AppLayout = ({ children }) => {
             width: drawerWidth,
             borderRight: '1px solid',
             borderColor: 'divider',
+            transition: theme.transitions.create('width', {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
+            overflowX: 'hidden',
           },
         }}
         open
@@ -282,6 +333,10 @@ const AppLayout = ({ children }) => {
           bgcolor: location.pathname === '/denuncias' ? 'transparent' : 'grey.50',
           minHeight: '100vh',
           mt: '64px',
+          transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
         }}
       >
         {children}

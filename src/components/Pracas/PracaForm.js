@@ -3,6 +3,10 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import api from '../../services/api';
+
+// Constantes centralizadas
+import { PRACA_STATUS_OPTIONS } from '../../constants';
+
 import {
   Box,
   Card,
@@ -37,12 +41,6 @@ import {
   Save as SaveIcon,
 } from '@mui/icons-material';
 
-const statusOptions = [
-  { value: 'DISPONIVEL', label: 'Disponível para Adoção' },
-  { value: 'EM_PROCESSO', label: 'Em Processo de Adoção' },
-  { value: 'ADOTADA', label: 'Adotada' },
-];
-
 const PracaSchema = Yup.object().shape({
   nome: Yup.string()
     .min(5, 'O nome deve ter pelo menos 5 caracteres')
@@ -76,7 +74,7 @@ const PracaSchema = Yup.object().shape({
     .nullable(),
 
   status: Yup.string()
-    .oneOf(statusOptions.map(opt => opt.value), 'Status inválido')
+    .oneOf(PRACA_STATUS_OPTIONS.map(opt => opt.value), 'Status inválido')
     .required('O status é obrigatório'),
 });
 
@@ -231,7 +229,7 @@ const PracaForm = () => {
                       helperText={touched.status && errors.status}
                       required
                     >
-                      {statusOptions.map(option => (
+                      {PRACA_STATUS_OPTIONS.map(option => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}
                         </MenuItem>

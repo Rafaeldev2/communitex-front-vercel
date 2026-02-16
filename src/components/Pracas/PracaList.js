@@ -3,6 +3,10 @@ import api from '../../services/api';
 import PracaService from '../../services/PracaService';
 import { Link, useNavigate } from 'react-router-dom'; 
 import { useAuth } from '../../context/AuthContext';
+
+// Constantes centralizadas
+import { PRACA_STATUS, getPracaStatusConfig } from '../../constants';
+
 import {
   Box,
   Card,
@@ -46,15 +50,17 @@ import {
   FilterList as FilterIcon,
 } from '@mui/icons-material';
 
-const STATUS_CONFIG = {
-  DISPONIVEL: { color: 'success', icon: <CheckCircleIcon />, label: 'Disponível' },
-  EM_PROCESSO: { color: 'warning', icon: <HourglassIcon />, label: 'Em Processo' },
-  ADOTADA: { color: 'error', icon: <BlockIcon />, label: 'Adotada' },
+// Ícones para status (usado apenas internamente)
+const STATUS_ICONS = {
+  DISPONIVEL: <CheckCircleIcon />,
+  EM_PROCESSO: <HourglassIcon />,
+  ADOTADA: <BlockIcon />,
 };
 
 const PracaCard = ({ praca, isEmpresa, onClick }) => {
   const theme = useTheme();
-  const statusConfig = STATUS_CONFIG[praca.status] || STATUS_CONFIG.DISPONIVEL;
+  const statusConfig = getPracaStatusConfig(praca.status);
+  const statusIcon = STATUS_ICONS[praca.status];
 
   return (
     <Card
@@ -84,7 +90,7 @@ const PracaCard = ({ praca, isEmpresa, onClick }) => {
               <ParkIcon />
             </Avatar>
             <Chip
-              icon={statusConfig.icon}
+              icon={statusIcon}
               label={statusConfig.label}
               color={statusConfig.color}
               size="small"
@@ -378,7 +384,7 @@ const PracaList = () => {
                 onChange={(e) => setFilterStatus(e.target.value)}
               >
                 <MenuItem value="">Todos os Status</MenuItem>
-                {Object.entries(STATUS_CONFIG).map(([key, { label }]) => (
+                {Object.entries(PRACA_STATUS).map(([key, { label }]) => (
                   <MenuItem key={key} value={key}>
                     {label}
                   </MenuItem>

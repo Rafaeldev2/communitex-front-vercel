@@ -1,47 +1,39 @@
 // /src/components/CommunityMap/IssueCard.js
 import React, { useState } from 'react';
-import styles from './IssueCard.module.css';
 
-/**
- * Mapeamento de tipos de denúncia para ícones e labels
- */
-const ISSUE_TYPES = {
-  ILUMINACAO: { icon: '💡', label: 'Iluminação' },
-  BURACO: { icon: '🕳️', label: 'Buraco' },
-  LIXO: { icon: '🗑️', label: 'Lixo' },
-  PODA_ARVORE: { icon: '🌳', label: 'Poda de Árvore' },
-  VAZAMENTO: { icon: '💧', label: 'Vazamento' },
-  PICHACAO: { icon: '🎨', label: 'Pichação' },
-  CALCADA_DANIFICADA: { icon: '🚧', label: 'Calçada Danificada' },
-  SINALIZACAO: { icon: '🚦', label: 'Sinalização' },
-  OUTRO: { icon: '❓', label: 'Outro' }
-};
+// Constantes centralizadas
+import { getIssueTypeConfig, getIssueStatusConfig } from '../../constants';
 
-/**
- * Mapeamento de status para estilos
- */
-const STATUS_CONFIG = {
-  ABERTA: { label: 'Aberta', color: '#ff9800' },
-  EM_ANALISE: { label: 'Em Análise', color: '#2196f3' },
-  EM_ANDAMENTO: { label: 'Em Andamento', color: '#9c27b0' },
-  RESOLVIDA: { label: 'Resolvida', color: '#4caf50' },
-  REJEITADA: { label: 'Rejeitada', color: '#f44336' }
-};
+// Utilitários
+import { formatDateTime } from '../../utils';
 
-/**
- * Formata data para exibição
- */
-const formatDate = (dateString) => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-};
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Chip,
+  IconButton,
+  TextField,
+  Stack,
+  Avatar,
+  Alert,
+  CircularProgress,
+  useTheme,
+  alpha,
+  Divider,
+} from '@mui/material';
+import {
+  Close as CloseIcon,
+  ThumbUp as ThumbUpIcon,
+  ChatBubble as ChatBubbleIcon,
+  Person as PersonIcon,
+  CalendarToday as CalendarIcon,
+  Send as SendIcon,
+  Cancel as CancelIcon,
+  Visibility as VisibilityIcon,
+} from '@mui/icons-material';
 
 /**
  * Componente de Card para visualização de uma denúncia
@@ -53,6 +45,7 @@ const IssueCard = ({
   onViewDetails,
   isCompact = false 
 }) => {
+  const theme = useTheme();
   const [isSupporting, setIsSupporting] = useState(false);
   const [supportError, setSupportError] = useState(null);
   const [showCommentInput, setShowCommentInput] = useState(false);
@@ -61,8 +54,8 @@ const IssueCard = ({
 
   if (!issue) return null;
 
-  const typeConfig = ISSUE_TYPES[issue.tipo] || ISSUE_TYPES.OUTRO;
-  const statusConfig = STATUS_CONFIG[issue.status] || STATUS_CONFIG.ABERTA;
+  const typeConfig = getIssueTypeConfig(issue.tipo);
+  const statusConfig = getIssueStatusConfig(issue.status);
 
   const handleSupport = async () => {
     if (!onSupport || isSupporting) return;
@@ -106,186 +99,271 @@ const IssueCard = ({
   // Versão compacta para popup do mapa
   if (isCompact) {
     return (
-      <div className={styles.compactCard}>
-        <div className={styles.compactHeader}>
-          <span className={styles.typeIcon}>{typeConfig.icon}</span>
-          <h4 className={styles.compactTitle}>{issue.titulo}</h4>
-        </div>
-        <p className={styles.compactDescription}>
-          {issue.descricao?.substring(0, 100)}
-          {issue.descricao?.length > 100 ? '...' : ''}
-        </p>
-        <div className={styles.compactActions}>
-          <button 
-            className={styles.supportButton}
-            onClick={handleSupport}
-            disabled={isSupporting}
-          >
-            👍 {issue.totalApoios || 0}
-          </button>
-          {onViewDetails && (
-            <button 
-              className={styles.detailsButton}
-              onClick={() => onViewDetails(issue)}
+      <Card elevation={2} sx={{ minWidth: 250, maxWidth: 300, borderRadius: 2 }}>
+        <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+            <Typography sx={{ fontSize: 20 }}>{typeConfig.icon}</Typography>
+            <Typography variant="subtitle2" fontWeight={700} sx={{ flex: 1 }}>
+              {issue.titulo}
+            </Typography>
+          </Box>
+          
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+            {issue.descricao?.substring(0, 100)}
+            {issue.descricao?.length > 100 ? '...' : ''}
+          </Typography>
+          
+          <Stack direction="row" spacing={1}>
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={isSupporting ? <CircularProgress size={14} /> : <ThumbUpIcon />}
+              onClick={handleSupport}
+              disabled={isSupporting}
             >
-              Ver Detalhes
-            </button>
-          )}
-        </div>
-      </div>
+              {issue.totalApoios || 0}
+            </Button>
+            {onViewDetails && (
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<VisibilityIcon />}
+                onClick={() => onViewDetails(issue)}
+              >
+                Detalhes
+              </Button>
+            )}
+          </Stack>
+        </CardContent>
+      </Card>
     );
   }
 
   // Versão completa
   return (
-    <div className={styles.card}>
-      <div className={styles.cardHeader}>
-        <div className={styles.headerLeft}>
-          <span className={styles.typeIcon}>{typeConfig.icon}</span>
-          <span className={styles.typeLabel}>{typeConfig.label}</span>
-        </div>
-        <div className={styles.headerRight}>
-          <span 
-            className={styles.statusBadge}
-            style={{ backgroundColor: statusConfig.color }}
-          >
-            {statusConfig.label}
-          </span>
-          {onClose && (
-            <button className={styles.closeButton} onClick={onClose}>
-              ✕
-            </button>
-          )}
-        </div>
-      </div>
-
-      {issue.fotoUrl && (
-        <div className={styles.imageContainer}>
-          <img 
-            src={issue.fotoUrl} 
-            alt={issue.titulo}
-            className={styles.image}
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
+    <Card 
+      elevation={3} 
+      sx={{ 
+        borderRadius: 3, 
+        overflow: 'hidden',
+        border: '1px solid',
+        borderColor: 'divider',
+      }}
+    >
+      {/* Header */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          px: 2,
+          py: 1.5,
+          bgcolor: alpha(typeConfig.color, 0.1),
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Typography sx={{ fontSize: 24 }}>{typeConfig.icon}</Typography>
+          <Typography variant="subtitle1" fontWeight={600}>{typeConfig.label}</Typography>
+        </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Chip
+            label={statusConfig.label}
+            color={statusConfig.color}
+            size="small"
+            sx={{ fontWeight: 600 }}
           />
-        </div>
+          {onClose && (
+            <IconButton size="small" onClick={onClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          )}
+        </Box>
+      </Box>
+
+      {/* Imagem */}
+      {issue.fotoUrl && (
+        <Box
+          component="img"
+          src={issue.fotoUrl}
+          alt={issue.titulo}
+          sx={{
+            width: '100%',
+            height: 200,
+            objectFit: 'cover',
+          }}
+          onError={(e) => {
+            e.target.style.display = 'none';
+          }}
+        />
       )}
 
-      <div className={styles.cardBody}>
-        <h3 className={styles.title}>{issue.titulo}</h3>
-        <p className={styles.description}>{issue.descricao}</p>
+      {/* Conteúdo */}
+      <CardContent sx={{ p: 2.5 }}>
+        <Typography variant="h6" fontWeight={700} gutterBottom>
+          {issue.titulo}
+        </Typography>
         
-        <div className={styles.meta}>
-          <div className={styles.metaItem}>
-            <span className={styles.metaIcon}>👤</span>
-            <span>{issue.autorNome || 'Anônimo'}</span>
-          </div>
-          <div className={styles.metaItem}>
-            <span className={styles.metaIcon}>📅</span>
-            <span>{formatDate(issue.dataCriacao)}</span>
-          </div>
-        </div>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+          {issue.descricao}
+        </Typography>
 
-        <div className={styles.stats}>
-          <div className={styles.stat}>
-            <span className={styles.statIcon}>👍</span>
-            <span className={styles.statValue}>{issue.totalApoios || 0}</span>
-            <span className={styles.statLabel}>apoios</span>
-          </div>
-          <div className={styles.stat}>
-            <span className={styles.statIcon}>💬</span>
-            <span className={styles.statValue}>{issue.totalInteracoes || 0}</span>
-            <span className={styles.statLabel}>interações</span>
-          </div>
-        </div>
+        {/* Meta info */}
+        <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <PersonIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+            <Typography variant="caption" color="text.secondary">
+              {issue.autorNome || 'Anônimo'}
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <CalendarIcon sx={{ fontSize: 16, color: 'text.secondary' }} />
+            <Typography variant="caption" color="text.secondary">
+              {formatDateTime(issue.dataCriacao)}
+            </Typography>
+          </Box>
+        </Stack>
 
+        {/* Estatísticas */}
+        <Stack direction="row" spacing={3} sx={{ mb: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <ThumbUpIcon sx={{ fontSize: 18, color: 'primary.main' }} />
+            <Typography variant="body2" fontWeight={600}>
+              {issue.totalApoios || 0}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">apoios</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <ChatBubbleIcon sx={{ fontSize: 18, color: 'primary.main' }} />
+            <Typography variant="body2" fontWeight={600}>
+              {issue.totalInteracoes || 0}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">interações</Typography>
+          </Box>
+        </Stack>
+
+        {/* Erro */}
         {supportError && (
-          <div className={styles.errorMessage}>
+          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setSupportError(null)}>
             {supportError}
-          </div>
+          </Alert>
         )}
 
         {/* Seção de Comentários */}
         {issue.interacoes && issue.interacoes.length > 0 && (
-          <div className={styles.commentsSection}>
-            <h4 className={styles.commentsTitle}>💬 Comentários</h4>
-            <div className={styles.commentsList}>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 1 }}>
+              <ChatBubbleIcon sx={{ fontSize: 16, mr: 0.5, verticalAlign: 'text-bottom' }} />
+              Comentários
+            </Typography>
+            <Stack spacing={1}>
               {issue.interacoes
                 .filter(i => i.tipo === 'COMENTARIO')
                 .slice(0, 5)
                 .map((comment) => (
-                  <div key={comment.id} className={styles.commentItem}>
-                    <div className={styles.commentHeader}>
-                      <span className={styles.commentAuthor}>{comment.usuarioNome}</span>
-                      <span className={styles.commentDate}>{formatDate(comment.dataCriacao)}</span>
-                    </div>
-                    <p className={styles.commentText}>{comment.conteudo}</p>
-                  </div>
+                  <Box
+                    key={comment.id}
+                    sx={{
+                      p: 1.5,
+                      bgcolor: 'grey.50',
+                      borderRadius: 2,
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" fontWeight={600}>
+                        {comment.usuarioNome}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {formatDateTime(comment.dataCriacao)}
+                      </Typography>
+                    </Box>
+                    <Typography variant="body2">{comment.conteudo}</Typography>
+                  </Box>
                 ))}
-            </div>
-          </div>
+            </Stack>
+          </Box>
         )}
 
         {/* Input de Comentário */}
         {showCommentInput && (
-          <div className={styles.commentInputSection}>
-            <textarea
-              className={styles.commentInput}
+          <Box sx={{ mb: 2 }}>
+            <TextField
+              multiline
+              rows={3}
+              fullWidth
               placeholder="Digite seu comentário..."
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              rows={3}
-              maxLength={1000}
+              inputProps={{ maxLength: 1000 }}
+              size="small"
+              sx={{ mb: 1 }}
             />
-            <div className={styles.commentInputActions}>
-              <span className={styles.charCount}>{commentText.length}/1000</span>
-              <button
-                className={styles.cancelCommentButton}
-                onClick={() => {
-                  setShowCommentInput(false);
-                  setCommentText('');
-                }}
-                disabled={isSubmittingComment}
-              >
-                Cancelar
-              </button>
-              <button
-                className={styles.submitCommentButton}
-                onClick={handleCommentSubmit}
-                disabled={isSubmittingComment || !commentText.trim()}
-              >
-                {isSubmittingComment ? '⏳' : '📤'} Enviar
-              </button>
-            </div>
-          </div>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="caption" color="text.secondary">
+                {commentText.length}/1000
+              </Typography>
+              <Stack direction="row" spacing={1}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<CancelIcon />}
+                  onClick={() => {
+                    setShowCommentInput(false);
+                    setCommentText('');
+                  }}
+                  disabled={isSubmittingComment}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  startIcon={isSubmittingComment ? <CircularProgress size={14} /> : <SendIcon />}
+                  onClick={handleCommentSubmit}
+                  disabled={isSubmittingComment || !commentText.trim()}
+                >
+                  Enviar
+                </Button>
+              </Stack>
+            </Box>
+          </Box>
         )}
-      </div>
+      </CardContent>
 
-      <div className={styles.cardActions}>
-        <button 
-          className={styles.supportActionButton}
+      <Divider />
+
+      {/* Actions */}
+      <Stack direction="row" spacing={1} sx={{ p: 1.5 }}>
+        <Button
+          size="small"
+          variant="outlined"
+          startIcon={isSupporting ? <CircularProgress size={14} /> : <ThumbUpIcon />}
           onClick={handleSupport}
           disabled={isSupporting}
         >
-          {isSupporting ? '⏳' : '👍'} Apoiar
-        </button>
-        <button 
-          className={styles.commentActionButton}
+          Apoiar
+        </Button>
+        <Button
+          size="small"
+          variant="outlined"
+          startIcon={<ChatBubbleIcon />}
           onClick={() => setShowCommentInput(!showCommentInput)}
         >
-          💬 Comentar
-        </button>
+          Comentar
+        </Button>
         {onViewDetails && (
-          <button 
-            className={styles.detailsActionButton}
+          <Button
+            size="small"
+            variant="contained"
+            startIcon={<VisibilityIcon />}
             onClick={() => onViewDetails(issue)}
           >
-            📋 Ver Detalhes
-          </button>
+            Ver Detalhes
+          </Button>
         )}
-      </div>
-    </div>
+      </Stack>
+    </Card>
   );
 };
 

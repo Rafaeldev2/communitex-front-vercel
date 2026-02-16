@@ -4,6 +4,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import IssueService from '../../services/IssueService';
 
+// Constantes centralizadas
+import { ISSUE_TYPES_ARRAY } from '../../constants';
+
 import {
   Dialog,
   DialogTitle,
@@ -31,21 +34,6 @@ import {
 } from '@mui/icons-material';
 
 /**
- * Tipos de denúncia disponíveis
- */
-const ISSUE_TYPES = [
-  { value: 'BURACO', label: 'Buraco na Via', icon: '🕳️', color: '#795548' },
-  { value: 'ILUMINACAO', label: 'Iluminação', icon: '💡', color: '#ffc107' },
-  { value: 'LIXO', label: 'Lixo/Entulho', icon: '🗑️', color: '#607d8b' },
-  { value: 'PODA_ARVORE', label: 'Poda de Árvore', icon: '🌳', color: '#4caf50' },
-  { value: 'VAZAMENTO', label: 'Vazamento de Água', icon: '💧', color: '#2196f3' },
-  { value: 'PICHACAO', label: 'Pichação/Vandalismo', icon: '🎨', color: '#9c27b0' },
-  { value: 'CALCADA_DANIFICADA', label: 'Calçada Danificada', icon: '🚧', color: '#ff5722' },
-  { value: 'SINALIZACAO', label: 'Sinalização', icon: '🚦', color: '#f44336' },
-  { value: 'OUTRO', label: 'Outro Problema', icon: '❓', color: '#9e9e9e' }
-];
-
-/**
  * Schema de validação do formulário
  */
 const validationSchema = Yup.object({
@@ -59,7 +47,7 @@ const validationSchema = Yup.object({
     .max(2000, 'Descrição deve ter no máximo 2000 caracteres'),
   tipo: Yup.string()
     .required('Selecione o tipo do problema')
-    .oneOf(ISSUE_TYPES.map(t => t.value), 'Tipo inválido')
+    .oneOf(ISSUE_TYPES_ARRAY.map(t => t.value), 'Tipo inválido')
 });
 
 /**
@@ -222,7 +210,7 @@ const IssueFormModal = ({
             Tipo do Problema *
           </Typography>
           <Grid container spacing={1} sx={{ mb: 3 }}>
-            {ISSUE_TYPES.map((type) => (
+            {ISSUE_TYPES_ARRAY.map((type) => (
               <Grid size={{ xs: 6, sm: 4 }} key={type.value}>
                 <Paper
                   elevation={formik.values.tipo === type.value ? 4 : 0}

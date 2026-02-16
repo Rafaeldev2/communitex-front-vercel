@@ -3,6 +3,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IssueService from '../../services/IssueService';
 
+// Constantes centralizadas
+import { ISSUE_TYPES, ISSUE_STATUS, getIssueTypeConfig, getIssueStatusConfig } from '../../constants';
+
+// Utilitários
+import { formatDate } from '../../utils';
+
 import {
   Box,
   Paper,
@@ -43,51 +49,12 @@ import {
 } from '@mui/icons-material';
 
 /**
- * Tipos de denúncia disponíveis
- */
-const ISSUE_TYPES = {
-  ILUMINACAO: { icon: '💡', label: 'Iluminação', color: '#ffc107' },
-  BURACO: { icon: '🕳️', label: 'Buraco', color: '#795548' },
-  LIXO: { icon: '🗑️', label: 'Lixo', color: '#607d8b' },
-  PODA_ARVORE: { icon: '🌳', label: 'Poda de Árvore', color: '#4caf50' },
-  VAZAMENTO: { icon: '💧', label: 'Vazamento', color: '#2196f3' },
-  PICHACAO: { icon: '🎨', label: 'Pichação', color: '#9c27b0' },
-  CALCADA_DANIFICADA: { icon: '🚧', label: 'Calçada Danificada', color: '#ff5722' },
-  SINALIZACAO: { icon: '🚦', label: 'Sinalização', color: '#f44336' },
-  OUTRO: { icon: '❓', label: 'Outro', color: '#9e9e9e' }
-};
-
-/**
- * Status disponíveis
- */
-const STATUS_CONFIG = {
-  ABERTA: { label: 'Aberta', color: 'warning' },
-  EM_ANALISE: { label: 'Em Análise', color: 'info' },
-  EM_ANDAMENTO: { label: 'Em Andamento', color: 'secondary' },
-  RESOLVIDA: { label: 'Resolvida', color: 'success' },
-  REJEITADA: { label: 'Rejeitada', color: 'error' }
-};
-
-/**
- * Formata data para exibição
- */
-const formatDate = (dateString) => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
-};
-
-/**
  * Componente de Card individual
  */
 const IssueListCard = ({ issue, onClick }) => {
   const theme = useTheme();
-  const typeConfig = ISSUE_TYPES[issue.tipo] || ISSUE_TYPES.OUTRO;
-  const statusConfig = STATUS_CONFIG[issue.status] || STATUS_CONFIG.ABERTA;
+  const typeConfig = getIssueTypeConfig(issue.tipo);
+  const statusConfig = getIssueStatusConfig(issue.status);
 
   return (
     <Card
@@ -417,7 +384,7 @@ const IssueList = () => {
                 onChange={(e) => setFilterStatus(e.target.value)}
               >
                 <MenuItem value="">Todos os Status</MenuItem>
-                {Object.entries(STATUS_CONFIG).map(([key, { label }]) => (
+                {Object.entries(ISSUE_STATUS).map(([key, { label }]) => (
                   <MenuItem key={key} value={key}>
                     {label}
                   </MenuItem>
