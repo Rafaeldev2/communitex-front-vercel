@@ -1,0 +1,142 @@
+/* Estilo base do botão */
+.petrobras-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Arial', sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.petrobras-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 64, 26, 0.3);
+}
+
+/* Variantes de cor */
+.primary {
+  background-color: var(--petrobras-green);
+  color: var(--white);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--petrobras-dark-green);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.secondary {
+  background-color: var(--petrobras-yellow);
+  color: var(--dark-gray);
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: var(--petrobras-light-yellow);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.outline {
+  background-color: transparent;
+  color: var(--petrobras-green);
+  border: 2px solid var(--petrobras-green);
+}
+
+.outline:hover:not(:disabled) {
+  background-color: rgba(0, 64, 26, 0.1);
+}
+
+.text {
+  background-color: transparent;
+  color: var(--petrobras-green);
+  box-shadow: none;
+}
+
+.text:hover:not(:disabled) {
+  background-color: rgba(0, 64, 26, 0.1);
+}
+
+/* Tamanhos */
+.small {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  height: 32px;
+}
+
+.medium {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  height: 40px;
+}
+
+.large {
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  height: 48px;
+}
+
+/* Estado disabled */
+.petrobras-btn:disabled {
+  background-color: var(--disabled-bg);
+  color: var(--disabled-text);
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.outline:disabled {
+  background-color: transparent;
+  border-color: var(--disabled-bg);
+}
+
+.text:disabled {
+  background-color: transparent;
+}
+
+/* Largura total */
+.full-width {
+  width: 100%;
+}
+
+/* Ícones */
+.btn-icon {
+  font-size: 0.9em;
+}
+
+.btn-icon.left {
+  margin-right: 0.5rem;
+}
+
+.btn-icon.right {
+  margin-left: 0.5rem;
+}
+
+/* Efeito de loading */
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.secondary .loading-spinner,
+.outline .loading-spinner,
+.text .loading-spinner {
+  border-top-color: var(--petrobras-green);
+}
