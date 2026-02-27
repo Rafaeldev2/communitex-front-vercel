@@ -1,7 +1,20 @@
 import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import styles from './ManifestacaoInteresseModal.module.css';
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  CircularProgress,
+  IconButton,
+  Box,
+} from '@mui/material';
+import { Close as CloseIcon, Park as ParkIcon } from '@mui/icons-material';
 
 const manifestacaoSchema = Yup.object().shape({
   proposta: Yup.string()
@@ -18,8 +31,6 @@ const ManifestacaoInteresseModal = ({
   isLoading = false,
   error = null,
 }) => {
-  if (!isOpen) return null;
-
   const handleFormSubmit = async (values, { setSubmitting }) => {
     try {
       await onSubmit(values.proposta);
@@ -31,95 +42,65 @@ const ManifestacaoInteresseModal = ({
   };
 
   return (
-    <>
-      {/* Overlay */}
-      <div className={styles.overlay} onClick={onClose} />
+    <Dialog open={isOpen} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <ParkIcon color="primary" />
+          Manifestar Interesse - {pracaNome}
+        </Box>
+        <IconButton onClick={onClose} size="small">
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
 
-      {/* Modal */}
-      <div className={styles.modal}>
-        <div className={styles.modalHeader}>
-          <h2>Manifestar Interesse - {pracaNome}</h2>
-          <button
-            className={styles.closeButton}
-            onClick={onClose}
-            aria-label="Fechar modal"
-          >
-            ✕
-          </button>
-        </div>
+      <Formik
+        initialValues={{ proposta: '' }}
+        validationSchema={manifestacaoSchema}
+        onSubmit={handleFormSubmit}
+      >
+        {({ isSubmitting, values, handleChange, handleBlur, errors, touched }) => (
+          <Form>
+            <DialogContent>
+              {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
+              )}
 
-        <div className={styles.modalContent}>
-          {error && (
-            <div className={styles.errorMessage}>
-              <span className={styles.errorIcon}>⚠️</span>
-              {error}
-            </div>
-          )}
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Explique como sua empresa planeja cuidar da praça, quais melhorias pretende realizar e o cronograma.
+              </Typography>
 
-          <Formik
-            initialValues={{ proposta: '' }}
-            validationSchema={manifestacaoSchema}
-            onSubmit={handleFormSubmit}
-          >
-            {({ isSubmitting, values, errors, touched }) => (
-              <Form className={styles.form}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="proposta">
-                    Descreva sua proposta de adoção *
-                  </label>
-                  <p className={styles.helperText}>
-                    Explique como sua empresa planeja cuidar da praça, quais melhorias pretende realizar e o cronograma.
-                  </p>
-                  <Field
-                    as="textarea"
-                    id="proposta"
-                    name="proposta"
-                    placeholder="Ex: Nossa empresa pretende realizar manutenção mensal incluindo jardinagem, limpeza e pequenos reparos. Também instalaremos bancos e lixeiras novas. Estimamos 6 meses para conclusão das obras iniciais..."
-                    rows={6}
-                    className={`${styles.textarea} ${
-                      touched.proposta && errors.proposta ? styles.error : ''
-                    }`}
-                  />
-                  <div className={styles.characterCount}>
-                    {values.proposta.length} / 2000 caracteres
-                  </div>
-                  <ErrorMessage
-                    name="proposta"
-                    component="div"
-                    className={styles.errorText}
-                  />
-                </div>
+              <TextField
+                fullWidth
+                multiline
+                rows={6}
+                name="proposta"
+                label="Descreva sua proposta de adoção *"
+                placeholder="Ex: Nossa empresa pretende realizar manutenção mensal incluindo jardinagem, limpeza e pequenos reparos. Também instalaremos bancos e lixeiras novas. Estimamos 6 meses para conclusão das obras iniciais..."
+                value={values.proposta}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.proposta && Boolean(errors.proposta)}
+                helperText={(touched.proposta && errors.proposta) || `${values.proposta.length} / 2000 caracteres`}
+              />
+            </DialogContent>
 
-                <div className={styles.formActions}>
-                  <button
-                    type="button"
-                    className={styles.cancelButton}
-                    onClick={onClose}
-                    disabled={isSubmitting}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className={styles.submitButton}
-                    disabled={isSubmitting || isLoading}
-                  >
-                    {isSubmitting || isLoading ? (
-                      <>
-                        <span className={styles.spinner}></span>
-                        Enviando...
-                      </>
-                    ) : (
-                      'Enviar Manifestação'
-                    )}
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </div>
-    </>
+            <DialogActions sx={{ px: 3, pb: 2 }}>
+              <Button onClick={onClose} disabled={isSubmitting}>
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={isSubmitting || isLoading}
+                startIcon={isSubmitting || isLoading ? <CircularProgress size={20} color="inherit" /> : <ParkIcon />}
+              >
+                {isSubmitting || isLoading ? 'Enviando...' : 'Enviar Manifestação'}
+              </Button>
+            </DialogActions>
+          </Form>
+        )}
+      </Formik>
+    </Dialog>
   );
 };
 

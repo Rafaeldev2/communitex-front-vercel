@@ -1,9 +1,30 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import api from '../../services/api';
-import styles from './ManifestacaoInteresse.module.css';
+import {
+  Box,
+  Card,
+  CardContent,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  CircularProgress,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
+import {
+  ArrowBack as ArrowBackIcon,
+  Park as ParkIcon,
+  LightbulbOutlined as LightbulbIcon,
+  CheckCircleOutline as CheckIcon,
+  HelpOutline as HelpIcon,
+} from '@mui/icons-material';
 
 const manifestacaoSchema = Yup.object().shape({
   proposta: Yup.string()
@@ -30,8 +51,6 @@ const ManifestacaoInteresse = () => {
         proposta: values.proposta,
       };
 
-      console.log('Enviando interesse:', interesseDTO);
-
       await api.post('/api/adocao/interesse', interesseDTO);
 
       navigate(`/pracas/${id}`, { 
@@ -46,114 +65,117 @@ const ManifestacaoInteresse = () => {
     }
   };
 
-  return (
-    <div className={styles.wrapper}>
-      <div className={styles.container}>
-        <button className={styles.backButton} onClick={() => navigate(`/pracas/${id}`)}>
-          ← Voltar
-        </button>
-        <h1>🌿 Manifestar Interesse - {pracaNome}</h1>
+  const tips = [
+    'Seja específico sobre as melhorias',
+    'Mencione cronograma realista',
+    'Descreva estrutura de manutenção',
+    'Inclua equipe responsável',
+  ];
 
-      <div className={styles.content}>
-        <div className={styles.formContainer}>
-          <div className={styles.infoBox}>
-            <p>
-              📋 Preencha os detalhes de sua proposta para adoção dessa praça. 
-              Seja claro e conciso sobre como sua empresa planeja cuidar do espaço.
-            </p>
-          </div>
+  return (
+    <Box>
+      <Button startIcon={<ArrowBackIcon />} onClick={() => navigate(`/pracas/${id}`)} sx={{ mb: 3 }}>
+        Voltar
+      </Button>
+
+      <Typography variant="h4" fontWeight={700} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <ParkIcon color="primary" /> Manifestar Interesse - {pracaNome}
+      </Typography>
+
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={8}>
+          <Card sx={{ mb: 3, bgcolor: 'primary.light', color: 'primary.contrastText' }}>
+            <CardContent>
+              <Typography>
+                📋 Preencha os detalhes de sua proposta para adoção dessa praça. 
+                Seja claro e conciso sobre como sua empresa planeja cuidar do espaço.
+              </Typography>
+            </CardContent>
+          </Card>
 
           {serverError && (
-            <div className={styles.errorMessage}>
-              <span className={styles.errorIcon}>⚠️</span>
-              {serverError}
-            </div>
+            <Alert severity="error" sx={{ mb: 3 }}>{serverError}</Alert>
           )}
 
-          <Formik
-            initialValues={{
-              proposta: '',
-            }}
-            validationSchema={manifestacaoSchema}
-            onSubmit={handleSubmit}
-          >
-            {({ isSubmitting, values, errors, touched }) => (
-              <Form className={styles.form}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="proposta">
-                    📝 Descrição do Projeto *
-                  </label>
-                  <p className={styles.helperText}>
-                    Descreva como sua empresa planeja cuidar da praça, quais melhorias pretende realizar e o cronograma.
-                  </p>
-                  <Field
-                    as="textarea"
-                    id="proposta"
-                    name="proposta"
-                    placeholder="Ex: Nossa empresa pretende realizar manutenção mensal incluindo jardinagem, limpeza e pequenos reparos..."
-                    rows={8}
-                    className={`${styles.textarea} ${
-                      touched.proposta && errors.proposta ? styles.error : ''
-                    }`}
-                  />
-                  <div className={styles.characterCount}>
-                    {values.proposta.length} / 2000 caracteres
-                  </div>
-                  <ErrorMessage
-                    name="proposta"
-                    component="div"
-                    className={styles.errorText}
-                  />
-                </div>
+          <Card>
+            <CardContent>
+              <Formik
+                initialValues={{ proposta: '' }}
+                validationSchema={manifestacaoSchema}
+                onSubmit={handleSubmit}
+              >
+                {({ isSubmitting, values, handleChange, handleBlur, errors, touched }) => (
+                  <Form>
+                    <Typography variant="h6" gutterBottom>📝 Descrição do Projeto *</Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                      Descreva como sua empresa planeja cuidar da praça, quais melhorias pretende realizar e o cronograma.
+                    </Typography>
 
-                <div className={styles.formActions}>
-                  <button
-                    type="button"
-                    className={styles.cancelButton}
-                    onClick={() => navigate(`/pracas/${id}`)}
-                    disabled={isSubmitting}
-                  >
-                    ✕ Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className={styles.submitButton}
-                    disabled={isSubmitting || loading}
-                  >
-                    {isSubmitting || loading ? (
-                      <>
-                        <span className={styles.spinner}></span>
-                        Enviando...
-                      </>
-                    ) : (
-                      '🌿 Enviar Manifestação'
-                    )}
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
+                    <TextField
+                      fullWidth
+                      multiline
+                      rows={8}
+                      name="proposta"
+                      placeholder="Ex: Nossa empresa pretende realizar manutenção mensal incluindo jardinagem, limpeza e pequenos reparos..."
+                      value={values.proposta}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.proposta && Boolean(errors.proposta)}
+                      helperText={(touched.proposta && errors.proposta) || `${values.proposta.length} / 2000 caracteres`}
+                    />
 
-        <div className={styles.sidebar}>
-          <div className={styles.card}>
-            <h3>💡 Dicas para sua proposta</h3>
-            <ul>
-              <li>Seja específico sobre as melhorias</li>
-              <li>Mencione cronograma realista</li>
-              <li>Descreva estrutura de manutenção</li>
-              <li>Inclua equipe responsável</li>
-            </ul>
-          </div>
+                    <Box sx={{ display: 'flex', gap: 2, mt: 3, justifyContent: 'flex-end' }}>
+                      <Button variant="outlined" onClick={() => navigate(`/pracas/${id}`)} disabled={isSubmitting}>
+                        Cancelar
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        disabled={isSubmitting || loading}
+                        startIcon={isSubmitting || loading ? <CircularProgress size={20} color="inherit" /> : <ParkIcon />}
+                      >
+                        {isSubmitting || loading ? 'Enviando...' : 'Enviar Manifestação'}
+                      </Button>
+                    </Box>
+                  </Form>
+                )}
+              </Formik>
+            </CardContent>
+          </Card>
+        </Grid>
 
-          <div className={styles.card}>
-            <h3>❓ Dúvidas?</h3>
-            <p>Entre em contato com nosso suporte através do email: suporte@communitex.com</p>
-          </div>
-        </div>
-        </div>
-      </div>
-    </div>
+        <Grid item xs={12} md={4}>
+          <Card sx={{ mb: 2 }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <LightbulbIcon color="primary" /> Dicas para sua proposta
+              </Typography>
+              <List dense>
+                {tips.map((tip, index) => (
+                  <ListItem key={index} disableGutters>
+                    <ListItemIcon sx={{ minWidth: 32 }}>
+                      <CheckIcon color="success" fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary={tip} />
+                  </ListItem>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <HelpIcon color="primary" /> Dúvidas?
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Entre em contato conosco através do email contato@communitex.com
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

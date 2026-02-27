@@ -1,153 +1,99 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+// Theme
+import theme from './theme';
+
+// Context
 import { AuthProvider, useAuth } from './context/AuthContext';
+
+// Layout
+import AppLayout from './components/Layout/AppLayout';
+
+// Pages - Auth
 import Login from './components/Login/Login';
+import Register from './components/Register/Register';
+import RegisterPessoaFisica from './components/Register/RegisterPessoaFisica';
+import { Landing } from './components/Landing/Landing';
+
+// Pages - Praças
 import PracaList from './components/Pracas/PracaList';
 import PracaDetail from './components/Pracas/PracaDetail';
+import PracaForm from './components/Pracas/PracaForm';
+
+// Pages - Adoção
 import PropostaAdocaoForm from './components/Adocao/PropostaAdocaoForm';
 import MinhasPropostas from './components/Adocao/MinhasPropostas';
 import ManifestacaoInteresse from './components/Adocao/ManifestacaoInteresse';
-import GerenciamentoPropostas from './components/Admin/GerenciamentoPropostas';
-import Landing from './components/Landing/Landing';
-import Register from './components/Register/Register';
-import RegisterPessoaFisica from './components/Register/RegisterPessoaFisica';
 
-// Componentes de Rota
+// Pages - Admin
+import GerenciamentoPropostas from './components/Admin/GerenciamentoPropostas';
+
+// Pages - Community Map
+import { CommunityMap, IssueList } from './components/CommunityMap';
+
+// Route Guards
 import AdminRoute from './components/Auth/AdminRoute';
 import UserRoute from './components/Auth/UserRoute';
-import PracaForm from './components/Pracas/PracaForm';
 
-
-// Componente de Rota Protegida (sem alterações)
+/**
+ * Componente de Rota Protegida
+ * Redireciona para landing se não autenticado
+ */
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   return isAuthenticated() ? children : <Navigate to="/" replace />;
 };
 
-// Componente de Dashboard com tema verde sustentável
-const AppLayout = ({ children }) => {
-  const { user, logout } = useAuth();
+/**
+ * Wrapper de layout para rotas protegidas
+ */
+const ProtectedLayout = ({ children }) => (
+  <ProtectedRoute>
+    <AppLayout>{children}</AppLayout>
+  </ProtectedRoute>
+);
 
-  // Layout com header verde sustentável
-  return (
-    <div>
-      <header style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '1rem 1.5rem',
-        background: 'linear-gradient(135deg, #1d7a3d 0%, #2e9e57 100%)',
-        color: 'white',
-        boxShadow: '0 4px 12px rgba(46, 158, 87, 0.15)',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif'
-      }}>
-        <span style={{
-          fontSize: '1.1rem',
-          fontWeight: '700',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem'
-        }}>
-          🌿 Communitex - Bem-vindo, {user?.sub}
-        </span>
-        <button onClick={logout} style={{
-          background: 'rgba(255, 255, 255, 0.2)',
-          border: '1px solid rgba(255, 255, 255, 0.3)',
-          color: 'white',
-          cursor: 'pointer',
-          fontWeight: '600',
-          padding: '0.6rem 1.2rem',
-          borderRadius: '6px',
-          fontSize: '0.95rem',
-          transition: 'all 0.3s ease',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem'
-        }}
-        onMouseEnter={(e) => {
-          e.target.style.background = 'rgba(255, 255, 255, 0.3)';
-          e.target.style.transform = 'translateY(-2px)';
-        }}
-        onMouseLeave={(e) => {
-          e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-          e.target.style.transform = 'translateY(0)';
-        }}>
-          ← Sair
-        </button>
-      </header>
-      <main>
-        {children}
-      </main>
-    </div>
-  );
-};
-
-
+/**
+ * Componente principal da aplicação
+ */
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* === ROTAS PÚBLICAS === */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/register/pessoa-fisica" element={<RegisterPessoaFisica />} />
 
+            {/* === ROTAS PROTEGIDAS === */}
+            <Route path="/pracas" element={<ProtectedLayout><PracaList /></ProtectedLayout>} />
+            <Route path="/pracas/:id" element={<ProtectedLayout><PracaDetail /></ProtectedLayout>} />
+            <Route path="/pracas/:id/manifestar-interesse" element={<ProtectedLayout><ManifestacaoInteresse /></ProtectedLayout>} />
+            <Route path="/pracas/:id/propor-adocao" element={<ProtectedLayout><PropostaAdocaoForm /></ProtectedLayout>} />
+            <Route path="/minhas-propostas" element={<ProtectedLayout><MinhasPropostas /></ProtectedLayout>} />
+            <Route path="/dashboard" element={<Navigate to="/pracas" replace />} />
 
-          {/* === ROTAS PÚBLICAS === */}
-          {/* 2. Landing Page é a nova rota "/" */}
-          <Route path="/" element={<Landing />} />
+            {/* === ROTAS DE ADMIN === */}
+            <Route path="/admin/pracas/nova" element={<AdminRoute><AppLayout><PracaForm /></AppLayout></AdminRoute>} />
+            <Route path="/admin/propostas" element={<AdminRoute><AppLayout><GerenciamentoPropostas /></AppLayout></AdminRoute>} />
 
-          {/* 3. Login ganha sua própria rota */}
-          <Route path="/login" element={<Login />} />
+            {/* === ROTAS PARA ROLE_USER === */}
+            <Route path="/user/pracas/nova" element={<UserRoute><AppLayout><PracaForm /></AppLayout></UserRoute>} />
 
-          <Route path="/register" element={<Register />} />
-          
-          <Route path="/register/pessoa-fisica" element={<RegisterPessoaFisica />} />
-
-
-          {/* === ROTAS PROTEGIDAS (Usuário Comum e Admin) === */}
-          <Route
-            path="/pracas"
-            element={<ProtectedRoute><AppLayout><PracaList /></AppLayout></ProtectedRoute>}
-          />
-          <Route
-            path="/pracas/:id"
-            element={<ProtectedRoute><AppLayout><PracaDetail /></AppLayout></ProtectedRoute>}
-          />
-          <Route
-            path="/pracas/:id/manifestar-interesse"
-            element={<ProtectedRoute><AppLayout><ManifestacaoInteresse /></AppLayout></ProtectedRoute>}
-          />
-          <Route
-            path="/pracas/:id/propor-adocao"
-            element={<ProtectedRoute><AppLayout><PropostaAdocaoForm /></AppLayout></ProtectedRoute>}
-          />
-          <Route
-            path="/minhas-propostas"
-            element={<ProtectedRoute><AppLayout><MinhasPropostas /></AppLayout></ProtectedRoute>}
-          />
-          <Route
-            path="/dashboard"
-            element={<Navigate to="/pracas" replace />}
-          />
-
-          {/* === ROTAS DE ADMIN === */}
-          <Route
-            path="/admin/pracas/nova"
-            element={<AdminRoute><AppLayout><PracaForm /></AppLayout></AdminRoute>}
-          />
-          <Route
-            path="/admin/propostas"
-            element={<AdminRoute><AppLayout><GerenciamentoPropostas /></AppLayout></AdminRoute>}
-          />
-
-          {/* === ROTAS PARA ROLE_USER === */}
-          <Route
-            path="/user/pracas/nova"
-            element={<UserRoute><AppLayout><PracaForm /></AppLayout></UserRoute>}
-          />
-
-
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+            {/* === DENÚNCIAS COMUNITÁRIAS === */}
+            <Route path="/denuncias" element={<ProtectedLayout><CommunityMap /></ProtectedLayout>} />
+            <Route path="/denuncias/lista" element={<ProtectedLayout><IssueList /></ProtectedLayout>} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

@@ -1,9 +1,31 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup'; // Importamos o Yup para validação
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
 import api from '../../services/api';
-import styles from './PropostaAdocaoForm.module.css';
+
+import {
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  CircularProgress,
+  Card,
+  CardContent,
+  Stack,
+  InputAdornment,
+  useTheme,
+  alpha,
+} from '@mui/material';
+import {
+  ArrowBack as ArrowBackIcon,
+  Description as DescriptionIcon,
+  CalendarToday as CalendarIcon,
+  Send as SendIcon,
+  Handshake as HandshakeIcon,
+} from '@mui/icons-material';
 
 const PropostaSchema = Yup.object().shape({
   descricaoProjeto: Yup.string()
@@ -23,6 +45,7 @@ const PropostaSchema = Yup.object().shape({
 });
 
 const PropostaAdocaoForm = () => {
+  const theme = useTheme();
   const { id: pracaId } = useParams(); 
   const navigate = useNavigate();
   const [serverError, setServerError] = useState(''); 
@@ -39,7 +62,7 @@ const PropostaAdocaoForm = () => {
     };
 
     try {
-      const response = await api.post('/api/adocoes', adocaoRequestDTO);
+      await api.post('/api/adocoes', adocaoRequestDTO);
       
       setSubmitting(false);
       navigate(`/pracas/${pracaId}`);
@@ -55,69 +78,194 @@ const PropostaAdocaoForm = () => {
     }
   };
 
+  const inputSx = {
+    '& .MuiOutlinedInput-root': { borderRadius: 2 },
+  };
+
   return (
-    <div className={styles.container}>
-      <Link to={`/pracas/${pracaId}`} className={styles.backButton}>
-        &larr; Cancelar e Voltar
-      </Link>
-      
-      <Formik
-        initialValues={{
-          descricaoProjeto: '',
-          dataInicio: '',
-          dataFim: '',
+    <Box sx={{ minHeight: '100vh', bgcolor: 'grey.50' }}>
+      {/* Header */}
+      <Paper
+        elevation={2}
+        sx={{
+          background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+          color: 'white',
+          py: { xs: 3, md: 4 },
+          px: 3,
+          borderRadius: 3,
+          mx: 3,
+          mt: 3,
         }}
-        validationSchema={PropostaSchema}
-        onSubmit={handleSubmit}
       >
-        {({ isSubmitting }) => (
-          <Form className={styles.form}>
-            <h1>Proposta de Adoção</h1>
-            <p>Preencha os detalhes do seu projeto para a praça.</p>
+        <Box sx={{ maxWidth: 800, mx: 'auto' }}>
+          <Button
+            component={Link}
+            to={`/pracas/${pracaId}`}
+            startIcon={<ArrowBackIcon />}
+            sx={{
+              color: 'white',
+              mb: 2,
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' },
+            }}
+          >
+            Cancelar e Voltar
+          </Button>
 
-            {serverError && <div className={styles.serverError}>{serverError}</div>}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box
+              sx={{
+                bgcolor: 'rgba(255,255,255,0.2)',
+                borderRadius: '50%',
+                width: 64,
+                height: 64,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <HandshakeIcon sx={{ fontSize: 36 }} />
+            </Box>
+            <Box>
+              <Typography variant="h4" fontWeight={800}>
+                Proposta de Adoção
+              </Typography>
+              <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                Preencha os detalhes do seu projeto para a praça
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Paper>
 
-            <div className={styles.formGroup}>
-              <label htmlFor="descricaoProjeto">Descrição do Projeto *</label>
-              <Field
-                as="textarea"
-                id="descricaoProjeto"
-                name="descricaoProjeto"
-                rows={6}
-                placeholder="Detalhe o que sua empresa planeja fazer na praça (ex: manutenção, novos equipamentos, paisagismo...)"
-              />
-              <ErrorMessage name="descricaoProjeto" component="div" className={styles.error} />
-            </div>
+      {/* Formulário */}
+      <Box sx={{ maxWidth: 800, mx: 'auto', px: 3, py: 4 }}>
+        <Formik
+          initialValues={{
+            descricaoProjeto: '',
+            dataInicio: '',
+            dataFim: '',
+          }}
+          validationSchema={PropostaSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ values, errors, touched, handleChange, handleBlur, isSubmitting }) => (
+            <Form>
+              {serverError && (
+                <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+                  {serverError}
+                </Alert>
+              )}
 
-            <div className={styles.dateGroup}>
-              <div className={styles.formGroup}>
-                <label htmlFor="dataInicio">Data de Início *</label>
-                <Field
-                  type="date"
-                  id="dataInicio"
-                  name="dataInicio"
-                />
-                <ErrorMessage name="dataInicio" component="div" className={styles.error} />
-              </div>
+              <Card elevation={0} sx={{ borderRadius: 3, border: '1px solid', borderColor: 'divider', mb: 3 }}>
+                <CardContent sx={{ p: { xs: 3, md: 4 } }}>
+                  {/* Descrição do Projeto */}
+                  <Paper variant="outlined" sx={{ p: 2.5, mb: 3, borderRadius: 2 }}>
+                    <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <DescriptionIcon color="primary" /> Descrição do Projeto
+                    </Typography>
 
-              <div className={styles.formGroup}>
-                <label htmlFor="dataFim">Data de Término (opcional)</label>
-                <Field
-                  type="date"
-                  id="dataFim"
-                  name="dataFim"
-                />
-                <ErrorMessage name="dataFim" component="div" className={styles.error} />
-              </div>
-            </div>
+                    <TextField
+                      fullWidth
+                      multiline
+                      rows={6}
+                      name="descricaoProjeto"
+                      label="Detalhe o que sua empresa planeja fazer *"
+                      placeholder="Descreva o que sua empresa planeja fazer na praça (ex: manutenção, novos equipamentos, paisagismo...)"
+                      value={values.descricaoProjeto}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={touched.descricaoProjeto && Boolean(errors.descricaoProjeto)}
+                      helperText={
+                        touched.descricaoProjeto && errors.descricaoProjeto
+                          ? errors.descricaoProjeto
+                          : `${(values.descricaoProjeto || '').length}/1000 caracteres`
+                      }
+                      inputProps={{ maxLength: 1000 }}
+                      sx={inputSx}
+                    />
+                  </Paper>
 
-            <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-              {isSubmitting ? 'Enviando Proposta...' : 'Enviar Proposta'}
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+                  {/* Datas */}
+                  <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 2 }}>
+                    <Typography variant="subtitle1" fontWeight={700} sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <CalendarIcon color="primary" /> Período do Projeto
+                    </Typography>
+
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                      <TextField
+                        fullWidth
+                        type="date"
+                        name="dataInicio"
+                        label="Data de Início *"
+                        value={values.dataInicio}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.dataInicio && Boolean(errors.dataInicio)}
+                        helperText={touched.dataInicio && errors.dataInicio}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <CalendarIcon color="action" />
+                            </InputAdornment>
+                          ),
+                        }}
+                        sx={inputSx}
+                      />
+
+                      <TextField
+                        fullWidth
+                        type="date"
+                        name="dataFim"
+                        label="Data de Término (opcional)"
+                        value={values.dataFim}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={touched.dataFim && Boolean(errors.dataFim)}
+                        helperText={touched.dataFim && errors.dataFim}
+                        InputLabelProps={{ shrink: true }}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <CalendarIcon color="action" />
+                            </InputAdornment>
+                          ),
+                        }}
+                        sx={inputSx}
+                      />
+                    </Stack>
+                  </Paper>
+                </CardContent>
+              </Card>
+
+              {/* Botão Submit */}
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                size="large"
+                disabled={isSubmitting}
+                endIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
+                sx={{
+                  py: 1.8,
+                  borderRadius: 2,
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                  boxShadow: '0 8px 20px rgba(46, 158, 87, 0.3)',
+                  '&:hover': {
+                    boxShadow: '0 12px 30px rgba(46, 158, 87, 0.4)',
+                    transform: 'translateY(-2px)',
+                  },
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                {isSubmitting ? 'Enviando Proposta...' : 'Enviar Proposta'}
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </Box>
+    </Box>
   );
 };
 

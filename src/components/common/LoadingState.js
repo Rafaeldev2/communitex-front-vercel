@@ -1,0 +1,35 @@
+/**
+ * LoadingState - Componente de estado de carregamento
+ * @description Exibe spinner centralizado com mensagem opcional
+ */
+import React from 'react';
+import { Box, CircularProgress, Typography } from '@mui/material';
+
+const LoadingState = ({ 
+  message = 'Carregando...', 
+  fullHeight = true,
+  size = 48 
+}) => {
+  return (
+    <Box
+      sx={{
+        minHeight: fullHeight ? '60vh' : 'auto',
+        py: fullHeight ? 0 : 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        bgcolor: 'grey.50',
+      }}
+    >
+      <CircularProgress size={size} color="primary" />
+      {message && (
+        <Typography sx={{ mt: 2 }} color="text.secondary">
+          {message}
+        </Typography>
+      )}
+    </Box>
+  );
+};
+
+export default LoadingState;

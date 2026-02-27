@@ -1,57 +1,347 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import styles from './AppLayout.module.css';
+import {
+  AppBar,
+  Box,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Toolbar,
+  Typography,
+  Divider,
+  Avatar,
+  useTheme,
+  useMediaQuery,
+  Tooltip,
+} from '@mui/material';
+import {
+  Menu as MenuIcon,
+  Park as ParkIcon,
+  Assignment as AssignmentIcon,
+  AdminPanelSettings as AdminIcon,
+  Logout as LogoutIcon,
+  ReportProblem as ReportIcon,
+  Person as PersonIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ChevronRight as ChevronRightIcon,
+} from '@mui/icons-material';
+
+const drawerWidthExpanded = 260;
+const drawerWidthCollapsed = 72;
 
 const AppLayout = ({ children }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  // ... (handleLogout) ...
+  const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [drawerCollapsed, setDrawerCollapsed] = useState(false);
+
+  const drawerWidth = drawerCollapsed ? drawerWidthCollapsed : drawerWidthExpanded;
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const handleDrawerCollapse = () => {
+    setDrawerCollapsed(!drawerCollapsed);
+  };
+
   const handleLogout = () => {
     logout();
-    navigate('/'); 
+    navigate('/');
   };
+
   const isAdmin = user && user.roles && user.roles.includes('ROLE_ADMIN');
+  const isEmpresa = user && user.roles && user.roles.includes('ROLE_EMPRESA');
+  const isUser = user && user.roles && user.roles.includes('ROLE_USER');
+
+  const menuItems = [
+    {
+      text: 'Ver Praças',
+      icon: <ParkIcon />,
+      path: '/pracas',
+      show: true,
+    },
+    {
+      text: 'Denúncias Comunitárias',
+      icon: <ReportIcon />,
+      path: '/denuncias',
+      show: true,
+    },
+    {
+      text: 'Minhas Propostas',
+      icon: <AssignmentIcon />,
+      path: '/minhas-propostas',
+      show: isEmpresa,
+    },
+    {
+      text: 'Gerenciar Propostas',
+      icon: <AdminIcon />,
+      path: '/admin/propostas',
+      show: isAdmin,
+    },
+  ];
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+  };
+
+  const drawerContent = (
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* Header do Drawer */}
+      <Box
+        sx={{
+          p: drawerCollapsed ? 1 : 2,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: drawerCollapsed ? 'center' : 'space-between',
+          background: 'linear-gradient(135deg, #1d7a3d 0%, #2e9e57 100%)',
+          color: 'white',
+          minHeight: 64,
+        }}
+      >
+        {!drawerCollapsed && (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="h6" fontWeight={700}>
+              🌿 Communitex
+            </Typography>
+          </Box>
+        )}
+        {drawerCollapsed && (
+          <Typography sx={{ fontSize: 24 }}>🌿</Typography>
+        )}
+        {isMobile ? (
+          <IconButton onClick={handleDrawerToggle} sx={{ color: 'white' }}>
+            <ChevronLeftIcon />
+          </IconButton>
+        ) : (
+          <IconButton 
+            onClick={handleDrawerCollapse}
+            sx={{ 
+              color: 'white',
+              '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' },
+            }}
+          >
+            {drawerCollapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+          </IconButton>
+        )}
+      </Box>
+
+      {/* Informações do Usuário */}
+      <Box sx={{ p: drawerCollapsed ? 1 : 2, bgcolor: 'grey.50' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, justifyContent: drawerCollapsed ? 'center' : 'flex-start' }}>
+          <Tooltip title={drawerCollapsed ? (user?.username || user?.sub || 'Usuário') : ''} placement="right">
+            <Avatar sx={{ bgcolor: 'primary.main', width: 40, height: 40 }}>
+              <PersonIcon />
+            </Avatar>
+          </Tooltip>
+          {!drawerCollapsed && (
+            <Box>
+              <Typography variant="subtitle2" fontWeight={600}>
+                {user?.username || user?.sub || 'Usuário'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {isAdmin ? 'Administrador' : isEmpresa ? 'Empresa' : 'Usuário'}
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      </Box>
+
+      <Divider />
+
+      {/* Menu de Navegação */}
+      <List sx={{ flex: 1, px: drawerCollapsed ? 0.5 : 1 }}>
+        {menuItems
+          .filter((item) => item.show)
+          .map((item) => (
+            <ListItem key={item.path} disablePadding sx={{ mb: 0.5 }}>
+              <Tooltip title={drawerCollapsed ? item.text : ''} placement="right">
+                <ListItemButton
+                  onClick={() => handleNavigation(item.path)}
+                  selected={location.pathname === item.path}
+                  sx={{
+                    borderRadius: 2,
+                    justifyContent: drawerCollapsed ? 'center' : 'flex-start',
+                    px: drawerCollapsed ? 2 : 2,
+                    '&.Mui-selected': {
+                      bgcolor: 'primary.light',
+                      color: 'primary.contrastText',
+                      '& .MuiListItemIcon-root': {
+                        color: 'primary.contrastText',
+                      },
+                      '&:hover': {
+                        bgcolor: 'primary.main',
+                      },
+                    },
+                    '&:hover': {
+                      bgcolor: 'grey.100',
+                    },
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: drawerCollapsed ? 0 : 40,
+                      mr: drawerCollapsed ? 0 : 'auto',
+                      color: location.pathname === item.path ? 'inherit' : 'primary.main',
+                    }}
+                  >
+                    {item.icon}
+                  </ListItemIcon>
+                  {!drawerCollapsed && (
+                    <ListItemText
+                      primary={item.text}
+                      primaryTypographyProps={{ fontWeight: 500 }}
+                    />
+                  )}
+                </ListItemButton>
+              </Tooltip>
+            </ListItem>
+          ))}
+      </List>
+
+      <Divider />
+
+      {/* Botão de Logout */}
+      <List sx={{ px: drawerCollapsed ? 0.5 : 1, pb: 1 }}>
+        <ListItem disablePadding>
+          <Tooltip title={drawerCollapsed ? 'Sair' : ''} placement="right">
+            <ListItemButton
+              onClick={handleLogout}
+              sx={{
+                borderRadius: 2,
+                justifyContent: drawerCollapsed ? 'center' : 'flex-start',
+                color: 'error.main',
+                '&:hover': {
+                  bgcolor: 'error.lighter',
+                },
+              }}
+            >
+              <ListItemIcon sx={{ minWidth: drawerCollapsed ? 0 : 40, color: 'error.main' }}>
+                <LogoutIcon />
+              </ListItemIcon>
+              {!drawerCollapsed && (
+                <ListItemText
+                  primary="Sair"
+                  primaryTypographyProps={{ fontWeight: 500 }}
+                />
+              )}
+            </ListItemButton>
+          </Tooltip>
+        </ListItem>
+      </List>
+    </Box>
+  );
 
   return (
-    <div className={styles.appContainer}>
-      <header className={styles.header}>
-        <div className={styles.logo}>
-          {/* O link principal do Admin também pode ser o dashboard de propostas */}
-          <Link to={isAdmin ? "/admin/propostas" : "/pracas"}>Communitex</Link>
-        </div>
-        <nav className={styles.navigation}>
-          
-          {/* --- Visão do ADMIN --- */}
-          {isAdmin && (
-            <>
-              <Link to="/pracas">Ver Praças</Link>
-              {/* 1. Novo link de Gerenciamento */}
-              <Link to="/admin/propostas">Gerenciar Propostas</Link>
-            </>
-          )}
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      {/* AppBar */}
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { md: `calc(100% - ${drawerWidth}px)` },
+          ml: { md: `${drawerWidth}px` },
+          background: 'linear-gradient(135deg, #1d7a3d 0%, #2e9e57 100%)',
+          boxShadow: '0 4px 12px rgba(46, 158, 87, 0.15)',
+          transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="abrir menu"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { md: 'none' } }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+            {location.pathname === '/pracas' && 'Praças'}
+            {location.pathname === '/denuncias' && 'Denúncias Comunitárias'}
+            {location.pathname === '/minhas-propostas' && 'Minhas Propostas'}
+            {location.pathname.includes('/admin') && 'Administração'}
+            {location.pathname.includes('/pracas/') && 'Detalhes da Praça'}
+          </Typography>
+          <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
+            Bem-vindo, {user?.username || user?.sub || 'Usuário'}
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
-          {/* --- Visão do Usuário (Empresa) --- */}
-          {!isAdmin && (
-            <>
-              <Link to="/pracas">Ver Praças</Link>
-              <Link to="/minhas-propostas">Minhas Propostas</Link>
-            </>
-          )}
-          
-        </nav>
-        <div className={styles.userMenu}>
-          {/* ... (Menu do usuário e botão Sair) ... */}
-          <span>Olá, {user?.username || 'Usuário'}</span>
-          <button onClick={handleLogout} className={styles.logoutButton}>
-            Sair
-          </button>
-        </div>
-      </header>
-      <main className={styles.content}>
+      {/* Drawer Mobile */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        ModalProps={{ keepMounted: true }}
+        sx={{
+          display: { xs: 'block', md: 'none' },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidthExpanded,
+          },
+        }}
+      >
+        {drawerContent}
+      </Drawer>
+
+      {/* Drawer Desktop (retrátil) */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+            width: drawerWidth,
+            borderRight: '1px solid',
+            borderColor: 'divider',
+            transition: theme.transitions.create('width', {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            }),
+            overflowX: 'hidden',
+          },
+        }}
+        open
+      >
+        {drawerContent}
+      </Drawer>
+
+      {/* Conteúdo Principal */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: location.pathname === '/denuncias' ? 0 : 3,
+          width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` },
+          ml: { xs: 0, md: `${drawerWidth}px` },
+          bgcolor: location.pathname === '/denuncias' ? 'transparent' : 'grey.50',
+          minHeight: '100vh',
+          mt: '64px',
+          transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+          }),
+        }}
+      >
         {children}
-      </main>
-    </div>
+      </Box>
+    </Box>
   );
 };
 
