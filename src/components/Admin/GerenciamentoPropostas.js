@@ -22,6 +22,7 @@ import {
   DialogContent,
   DialogActions,
   Stack,
+  Snackbar,
 } from '@mui/material';
 import {
   AdminPanelSettings as AdminIcon,
@@ -47,6 +48,7 @@ const GerenciamentoPropostas = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [confirmDialog, setConfirmDialog] = useState({ open: false, propostaId: null, novoStatus: '' });
+  const [snackbar, setSnackbar] = useState({ open: false, message: '' });
 
   const fetchPropostas = useCallback(async () => {
     try {
@@ -89,7 +91,8 @@ const GerenciamentoPropostas = () => {
       handleCloseConfirm();
     } catch (err) {
       console.error(`Erro ao atualizar proposta:`, err);
-      alert(`Não foi possível atualizar a proposta. Tente novamente.`);
+      setSnackbar({ open: true, message: 'Não foi possível atualizar a proposta. Tente novamente.' });
+      handleCloseConfirm();
     }
   };
 
@@ -205,6 +208,17 @@ const GerenciamentoPropostas = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={() => setSnackbar({ open: false, message: '' })}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setSnackbar({ open: false, message: '' })} severity="error" sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

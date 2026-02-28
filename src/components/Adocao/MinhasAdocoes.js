@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
+import { getPropostaStatusConfig } from '../../constants/statusConfig';
 import {
   Box,
   Typography,
@@ -24,25 +25,6 @@ import {
   Park as ParkIcon,
   Visibility as VisibilityIcon,
 } from '@mui/icons-material';
-
-const getStatusConfig = (status) => {
-  switch (status) {
-    case 'PROPOSTA':
-      return { label: 'Proposta', color: 'info' };
-    case 'EM_ANALISE':
-      return { label: 'Em Análise', color: 'warning' };
-    case 'APROVADA':
-      return { label: 'Aprovada', color: 'success' };
-    case 'REJEITADA':
-      return { label: 'Rejeitada', color: 'error' };
-    case 'CONCLUIDA':
-      return { label: 'Concluída', color: 'success' };
-    case 'FINALIZADA':
-      return { label: 'Finalizada', color: 'default' };
-    default:
-      return { label: status || 'N/A', color: 'default' };
-  }
-};
 
 const MinhasAdocoes = () => {
   const [propostas, setPropostas] = useState([]);
@@ -117,7 +99,7 @@ const MinhasAdocoes = () => {
             </TableHead>
             <TableBody>
               {propostas.map(proposta => {
-                const statusConfig = getStatusConfig(proposta.status);
+                const statusConfig = getPropostaStatusConfig(proposta.status);
                 return (
                   <TableRow key={proposta.id} hover>
                     <TableCell>

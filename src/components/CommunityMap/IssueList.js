@@ -1,5 +1,5 @@
 // /src/components/CommunityMap/IssueList.js
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IssueService from '../../services/IssueService';
 
@@ -175,24 +175,24 @@ const IssueList = () => {
   const [sortBy, setSortBy] = useState('recent');
 
   // Busca todas as denúncias
-  useEffect(() => {
-    const fetchIssues = async () => {
-      setIsLoading(true);
-      setError(null);
-      
-      try {
-        const response = await IssueService.findAll();
-        setIssues(response.data || []);
-      } catch (err) {
-        console.error('Erro ao buscar denúncias:', err);
-        setError('Não foi possível carregar as denúncias. Tente novamente.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchIssues();
+  const fetchIssues = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const response = await IssueService.findAll();
+      setIssues(response.data || []);
+    } catch (err) {
+      console.error('Erro ao buscar denúncias:', err);
+      setError('Não foi possível carregar as denúncias. Tente novamente.');
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchIssues();
+  }, [fetchIssues]);
 
   // Filtra e ordena as denúncias
   const filteredIssues = useMemo(() => {
@@ -278,7 +278,7 @@ const IssueList = () => {
         <Alert
           severity="error"
           action={
-            <Button color="inherit" size="small" onClick={() => window.location.reload()}>
+            <Button color="inherit" size="small" onClick={fetchIssues}>
               Tentar novamente
             </Button>
           }

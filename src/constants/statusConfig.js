@@ -25,7 +25,9 @@ export const PROPOSTA_STATUS = {
   PROPOSTA: { label: 'Proposta', color: 'info', value: 'PROPOSTA' },
   EM_ANALISE: { label: 'Em Análise', color: 'warning', value: 'EM_ANALISE' },
   APROVADA: { label: 'Aprovada', color: 'success', value: 'APROVADA' },
-  REJEITADA: { label: 'Rejeitada', color: 'error', value: 'REJEITADA' }
+  REJEITADA: { label: 'Rejeitada', color: 'error', value: 'REJEITADA' },
+  CONCLUIDA: { label: 'Concluída', color: 'success', value: 'CONCLUIDA' },
+  FINALIZADA: { label: 'Finalizada', color: 'default', value: 'FINALIZADA' }
 };
 
 /**

@@ -6,6 +6,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 // Theme
 import theme from './theme';
 
+// Routes
+import { PUBLIC_ROUTES, PROTECTED_ROUTES, ADMIN_ROUTES, USER_ROUTES } from './routes/paths';
+
 // Context
 import { AuthProvider, useAuth } from './context/AuthContext';
 
@@ -44,7 +47,7 @@ import UserRoute from './components/Auth/UserRoute';
  */
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  return isAuthenticated() ? children : <Navigate to="/" replace />;
+  return isAuthenticated() ? children : <Navigate to={PUBLIC_ROUTES.HOME} replace />;
 };
 
 /**
@@ -67,29 +70,29 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* === ROTAS PÚBLICAS === */}
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/register/pessoa-fisica" element={<RegisterPessoaFisica />} />
+            <Route path={PUBLIC_ROUTES.HOME} element={<Landing />} />
+            <Route path={PUBLIC_ROUTES.LOGIN} element={<Login />} />
+            <Route path={PUBLIC_ROUTES.REGISTER} element={<Register />} />
+            <Route path={PUBLIC_ROUTES.REGISTER_PESSOA_FISICA} element={<RegisterPessoaFisica />} />
 
             {/* === ROTAS PROTEGIDAS === */}
-            <Route path="/pracas" element={<ProtectedLayout><PracaList /></ProtectedLayout>} />
-            <Route path="/pracas/:id" element={<ProtectedLayout><PracaDetail /></ProtectedLayout>} />
-            <Route path="/pracas/:id/manifestar-interesse" element={<ProtectedLayout><ManifestacaoInteresse /></ProtectedLayout>} />
-            <Route path="/pracas/:id/propor-adocao" element={<ProtectedLayout><PropostaAdocaoForm /></ProtectedLayout>} />
-            <Route path="/minhas-propostas" element={<ProtectedLayout><MinhasPropostas /></ProtectedLayout>} />
-            <Route path="/dashboard" element={<Navigate to="/pracas" replace />} />
+            <Route path={PROTECTED_ROUTES.PRACAS} element={<ProtectedLayout><PracaList /></ProtectedLayout>} />
+            <Route path={PROTECTED_ROUTES.PRACA_DETAIL} element={<ProtectedLayout><PracaDetail /></ProtectedLayout>} />
+            <Route path={PROTECTED_ROUTES.PRACA_MANIFESTAR} element={<ProtectedLayout><ManifestacaoInteresse /></ProtectedLayout>} />
+            <Route path={PROTECTED_ROUTES.PRACA_PROPOR} element={<ProtectedLayout><PropostaAdocaoForm /></ProtectedLayout>} />
+            <Route path={PROTECTED_ROUTES.MINHAS_PROPOSTAS} element={<ProtectedLayout><MinhasPropostas /></ProtectedLayout>} />
+            <Route path={PROTECTED_ROUTES.DASHBOARD} element={<Navigate to={PROTECTED_ROUTES.PRACAS} replace />} />
 
             {/* === ROTAS DE ADMIN === */}
-            <Route path="/admin/pracas/nova" element={<AdminRoute><AppLayout><PracaForm /></AppLayout></AdminRoute>} />
-            <Route path="/admin/propostas" element={<AdminRoute><AppLayout><GerenciamentoPropostas /></AppLayout></AdminRoute>} />
+            <Route path={ADMIN_ROUTES.NOVA_PRACA} element={<AdminRoute><AppLayout><PracaForm /></AppLayout></AdminRoute>} />
+            <Route path={ADMIN_ROUTES.PROPOSTAS} element={<AdminRoute><AppLayout><GerenciamentoPropostas /></AppLayout></AdminRoute>} />
 
             {/* === ROTAS PARA ROLE_USER === */}
-            <Route path="/user/pracas/nova" element={<UserRoute><AppLayout><PracaForm /></AppLayout></UserRoute>} />
+            <Route path={USER_ROUTES.NOVA_PRACA} element={<UserRoute><AppLayout><PracaForm /></AppLayout></UserRoute>} />
 
             {/* === DENÚNCIAS COMUNITÁRIAS === */}
-            <Route path="/denuncias" element={<ProtectedLayout><CommunityMap /></ProtectedLayout>} />
-            <Route path="/denuncias/lista" element={<ProtectedLayout><IssueList /></ProtectedLayout>} />
+            <Route path={PROTECTED_ROUTES.DENUNCIAS} element={<ProtectedLayout><CommunityMap /></ProtectedLayout>} />
+            <Route path={PROTECTED_ROUTES.DENUNCIAS_LISTA} element={<ProtectedLayout><IssueList /></ProtectedLayout>} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

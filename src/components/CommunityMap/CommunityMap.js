@@ -10,6 +10,7 @@ import useIssuesMap from '../../hooks/useIssuesMap';
 import IssueService from '../../services/IssueService';
 import IssueFormModal from './IssueFormModal';
 import IssueCard from './IssueCard';
+import { ISSUE_TYPES } from '../../constants/issueTypes';
 
 import {
   Box,
@@ -44,25 +45,10 @@ L.Icon.Default.mergeOptions({
 });
 
 /**
- * Configuração de ícones por tipo de denúncia
- */
-const ISSUE_ICONS = {
-  ILUMINACAO: { emoji: '💡', color: '#ffc107' },
-  BURACO: { emoji: '🕳️', color: '#795548' },
-  LIXO: { emoji: '🗑️', color: '#607d8b' },
-  PODA_ARVORE: { emoji: '🌳', color: '#4caf50' },
-  VAZAMENTO: { emoji: '💧', color: '#2196f3' },
-  PICHACAO: { emoji: '🎨', color: '#9c27b0' },
-  CALCADA_DANIFICADA: { emoji: '🚧', color: '#ff5722' },
-  SINALIZACAO: { emoji: '🚦', color: '#f44336' },
-  OUTRO: { emoji: '❓', color: '#9e9e9e' }
-};
-
-/**
  * Cria um ícone customizado para o marker
  */
 const createCustomIcon = (tipo) => {
-  const config = ISSUE_ICONS[tipo] || ISSUE_ICONS.OUTRO;
+  const config = ISSUE_TYPES[tipo] || ISSUE_TYPES.OUTRO;
   
   return L.divIcon({
     className: 'custom-marker',
@@ -79,7 +65,7 @@ const createCustomIcon = (tipo) => {
         box-shadow: 0 3px 10px rgba(0,0,0,0.3);
         border: 3px solid white;
       ">
-        ${config.emoji}
+        ${config.icon}
       </div>
     `,
     iconSize: [36, 36],
@@ -171,6 +157,7 @@ const CommunityMap = () => {
     issues, 
     isLoading: issuesLoading, 
     error: issuesError,
+    warning: issuesWarning,
     refetch: refetchIssues,
     addInteraction 
   } = useIssuesMap(mapCenter || userPosition, 5000);
@@ -378,6 +365,23 @@ const CommunityMap = () => {
           }
         >
           {issuesError}
+        </Alert>
+      )}
+
+      {issuesWarning && !issuesError && (
+        <Alert
+          severity="warning"
+          sx={{
+            position: 'absolute',
+            top: 16,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1100,
+            maxWidth: 'calc(100% - 32px)',
+            boxShadow: 3,
+          }}
+        >
+          {issuesWarning}
         </Alert>
       )}
 

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { PROTECTED_ROUTES, ADMIN_ROUTES, PUBLIC_ROUTES } from '../../routes/paths';
 import {
   AppBar,
   Box,
@@ -18,6 +19,7 @@ import {
   useTheme,
   useMediaQuery,
   Tooltip,
+  alpha,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -61,31 +63,30 @@ const AppLayout = ({ children }) => {
 
   const isAdmin = user && user.roles && user.roles.includes('ROLE_ADMIN');
   const isEmpresa = user && user.roles && user.roles.includes('ROLE_EMPRESA');
-  const isUser = user && user.roles && user.roles.includes('ROLE_USER');
 
   const menuItems = [
     {
       text: 'Ver Praças',
       icon: <ParkIcon />,
-      path: '/pracas',
+      path: PROTECTED_ROUTES.PRACAS,
       show: true,
     },
     {
       text: 'Denúncias Comunitárias',
       icon: <ReportIcon />,
-      path: '/denuncias',
+      path: PROTECTED_ROUTES.DENUNCIAS,
       show: true,
     },
     {
       text: 'Minhas Propostas',
       icon: <AssignmentIcon />,
-      path: '/minhas-propostas',
+      path: PROTECTED_ROUTES.MINHAS_PROPOSTAS,
       show: isEmpresa,
     },
     {
       text: 'Gerenciar Propostas',
       icon: <AdminIcon />,
-      path: '/admin/propostas',
+      path: ADMIN_ROUTES.PROPOSTAS,
       show: isAdmin,
     },
   ];
@@ -96,6 +97,27 @@ const AppLayout = ({ children }) => {
       setMobileOpen(false);
     }
   };
+
+  // Função para obter o título da página baseado na rota
+  const pageTitle = useMemo(() => {
+    const path = location.pathname;
+    
+    // Rotas exatas
+    if (path === PROTECTED_ROUTES.PRACAS) return 'Praças';
+    if (path === PROTECTED_ROUTES.DENUNCIAS) return 'Denúncias Comunitárias';
+    if (path === PROTECTED_ROUTES.DENUNCIAS_LISTA) return 'Lista de Denúncias';
+    if (path === PROTECTED_ROUTES.MINHAS_PROPOSTAS) return 'Minhas Propostas';
+    if (path === ADMIN_ROUTES.PROPOSTAS) return 'Gerenciar Propostas';
+    if (path === ADMIN_ROUTES.NOVA_PRACA) return 'Nova Praça';
+    
+    // Rotas dinâmicas
+    if (path.startsWith('/pracas/') && path.includes('/manifestar-interesse')) return 'Manifestar Interesse';
+    if (path.startsWith('/pracas/') && path.includes('/propor-adocao')) return 'Propor Adoção';
+    if (path.startsWith('/pracas/')) return 'Detalhes da Praça';
+    if (path.startsWith('/admin')) return 'Administração';
+    
+    return 'Communitex';
+  }, [location.pathname]);
 
   const drawerContent = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -224,7 +246,7 @@ const AppLayout = ({ children }) => {
                 justifyContent: drawerCollapsed ? 'center' : 'flex-start',
                 color: 'error.main',
                 '&:hover': {
-                  bgcolor: 'error.lighter',
+                  bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
                 },
               }}
             >
@@ -271,11 +293,7 @@ const AppLayout = ({ children }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            {location.pathname === '/pracas' && 'Praças'}
-            {location.pathname === '/denuncias' && 'Denúncias Comunitárias'}
-            {location.pathname === '/minhas-propostas' && 'Minhas Propostas'}
-            {location.pathname.includes('/admin') && 'Administração'}
-            {location.pathname.includes('/pracas/') && 'Detalhes da Praça'}
+            {pageTitle}
           </Typography>
           <Typography variant="body2" sx={{ display: { xs: 'none', sm: 'block' } }}>
             Bem-vindo, {user?.username || user?.sub || 'Usuário'}
@@ -327,10 +345,10 @@ const AppLayout = ({ children }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: location.pathname === '/denuncias' ? 0 : 3,
+          p: location.pathname === PROTECTED_ROUTES.DENUNCIAS ? 0 : 3,
           width: { xs: '100%', md: `calc(100% - ${drawerWidth}px)` },
           ml: { xs: 0, md: `${drawerWidth}px` },
-          bgcolor: location.pathname === '/denuncias' ? 'transparent' : 'grey.50',
+          bgcolor: location.pathname === PROTECTED_ROUTES.DENUNCIAS ? 'transparent' : 'grey.50',
           minHeight: '100vh',
           mt: '64px',
           transition: theme.transitions.create(['width', 'margin'], {

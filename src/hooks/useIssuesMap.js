@@ -6,19 +6,21 @@ import IssueService from '../services/IssueService';
  * Hook customizado para gerenciar denúncias no mapa
  * @param {Object} center - Centro do mapa { lat, lng }
  * @param {number} raioMetros - Raio de busca em metros (padrão: 2000)
- * @returns {Object} { issues, selectedIssue, isLoading, error, refetch, selectIssue, clearSelection, addInteraction }
+ * @returns {Object} { issues, selectedIssue, isLoading, error, warning, refetch, selectIssue, clearSelection, addInteraction }
  */
 const useIssuesMap = (center, raioMetros = 2000) => {
   const [issues, setIssues] = useState([]);
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [warning, setWarning] = useState(null);
 
   const fetchIssues = useCallback(async () => {
     if (!center?.lat || !center?.lng) return;
 
     setIsLoading(true);
     setError(null);
+    setWarning(null);
 
     try {
       const response = await IssueService.findByProximity(
@@ -35,6 +37,7 @@ const useIssuesMap = (center, raioMetros = 2000) => {
         const fallbackResponse = await IssueService.findAll();
         setIssues(fallbackResponse.data || []);
         setError(null);
+        setWarning('Não foi possível buscar denúncias próximas. Exibindo todas as denúncias do sistema.');
       } catch (fallbackErr) {
         console.error('Erro no fallback:', fallbackErr);
       }
@@ -101,6 +104,7 @@ const useIssuesMap = (center, raioMetros = 2000) => {
     selectedIssue,
     isLoading,
     error,
+    warning,
     refetch: fetchIssues,
     selectIssue,
     clearSelection,
